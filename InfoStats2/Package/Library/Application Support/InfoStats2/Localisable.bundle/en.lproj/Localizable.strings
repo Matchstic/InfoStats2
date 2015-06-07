@@ -1,0 +1,7 @@
+// Main strings
+
+"UNPLUGGED" = "Unplugged";
+"CHARGING" = "Charging";
+"FULL_CHARGED" = "Fully Charged";
+"UNKNOWN" = "Unknown";
+

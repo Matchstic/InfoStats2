@@ -1,0 +1,8 @@
+// Main strings
+// Redo these too!
+
+"UNPLUGGED" = "Scollegato";
+"CHARGING" = "Ricarica";
+"FULL_CHARGED" = "Completamente Carica";
+"UNKNOWN" = "Sconosciuto";
+

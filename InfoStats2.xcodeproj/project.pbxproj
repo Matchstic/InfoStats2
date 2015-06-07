@@ -1,0 +1,562 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C9AA288C1B24BAE8005846FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
+		C9AA289E1B24BDF1005846FE /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9AA289D1B24BDF1005846FE /* main.mm */; };
+		C9AA28A31B24BE13005846FE /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AA28A01B24BE13005846FE /* IS2WeatherProvider.m */; };
+		C9AA28A41B24BE13005846FE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AA28A21B24BE13005846FE /* Reachability.m */; };
+		C9AA28A51B24BE3E005846FE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72AA01B1DCE8600C44076 /* UIKit.framework */; };
+		C9AA28A61B24BE43005846FE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A51B1F7D97006E70BE /* CoreLocation.framework */; };
+		C9AA28A71B24BE5C005846FE /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A71B1F7DD8006E70BE /* Weather.framework */; };
+		C9B048AE1B1E19BA0000CEBD /* IS2WeatherProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */; };
+		C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */; };
+		C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
+		C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9D72A871B1DC99300C44076 /* InfoStats2.mm */; };
+		C9D72A941B1DCC9400C44076 /* IS2WebView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D72A921B1DCC9400C44076 /* IS2WebView.h */; };
+		C9D72A9A1B1DCE3000C44076 /* CIWExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D72A981B1DCE3000C44076 /* CIWExtensions.h */; };
+		C9D72A9B1B1DCE3000C44076 /* CIWExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D72A991B1DCE3000C44076 /* CIWExtensions.m */; };
+		C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */; };
+		C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9E1B1DCE5F00C44076 /* libWebCycript */; };
+		C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72AA01B1DCE8600C44076 /* UIKit.framework */; };
+		C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A51B1F7D97006E70BE /* CoreLocation.framework */; };
+		C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A71B1F7DD8006E70BE /* Weather.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C9AA288B1B24BAE8005846FE /* IS2WeatherDaemon */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = IS2WeatherDaemon; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9AA28991B24BAE8005846FE /* IS2WeatherDaemon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IS2WeatherDaemon-Prefix.pch"; sourceTree = "<group>"; };
+		C9AA289D1B24BDF1005846FE /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		C9AA289F1B24BE13005846FE /* IS2WeatherProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WeatherProvider.h; sourceTree = "<group>"; };
+		C9AA28A01B24BE13005846FE /* IS2WeatherProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WeatherProvider.m; sourceTree = "<group>"; };
+		C9AA28A11B24BE13005846FE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		C9AA28A21B24BE13005846FE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WeatherProvider.h; sourceTree = "<group>"; };
+		C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WeatherProvider.m; sourceTree = "<group>"; };
+		C9D72A791B1DC99300C44076 /* InfoStats2.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = InfoStats2.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9D72A7C1B1DC99300C44076 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C9D72A811B1DC99300C44076 /* control.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = control.txt; path = Package/DEBIAN/control.txt; sourceTree = "<group>"; };
+		C9D72A821B1DC99300C44076 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
+		C9D72A841B1DC99300C44076 /* PackageVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PackageVersion.plist; sourceTree = "<group>"; };
+		C9D72A851B1DC99300C44076 /* InfoStats2-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "InfoStats2-Prefix.pch"; sourceTree = "<group>"; };
+		C9D72A861B1DC99300C44076 /* InfoStats2.xm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = InfoStats2.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		C9D72A871B1DC99300C44076 /* InfoStats2.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = InfoStats2.mm; sourceTree = "<group>"; };
+		C9D72A8C1B1DC99300C44076 /* InfoStats2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = InfoStats2.plist; path = Package/Library/MobileSubstrate/DynamicLibraries/InfoStats2.plist; sourceTree = "<group>"; };
+		C9D72A921B1DCC9400C44076 /* IS2WebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WebView.h; sourceTree = "<group>"; };
+		C9D72A981B1DCE3000C44076 /* CIWExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIWExtensions.h; sourceTree = "<group>"; };
+		C9D72A991B1DCE3000C44076 /* CIWExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CIWExtensions.m; sourceTree = "<group>"; };
+		C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsubstrate.dylib; path = ../../../../../opt/iOSOpenDev/lib/libsubstrate.dylib; sourceTree = "<group>"; };
+		C9D72A9E1B1DCE5F00C44076 /* libWebCycript */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libWebCycript; path = ../../../../../opt/iOSOpenDev/lib/libWebCycript; sourceTree = "<group>"; };
+		C9D72AA01B1DCE8600C44076 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C9E040A51B1F7D97006E70BE /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C9E040A71B1F7DD8006E70BE /* Weather.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Weather.framework; path = ../../../../../opt/iOSOpenDev/frameworks/Weather.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C9AA28881B24BAE8005846FE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9AA28A71B24BE5C005846FE /* Weather.framework in Frameworks */,
+				C9AA28A61B24BE43005846FE /* CoreLocation.framework in Frameworks */,
+				C9AA28A51B24BE3E005846FE /* UIKit.framework in Frameworks */,
+				C9AA288C1B24BAE8005846FE /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C9D72A751B1DC99300C44076 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */,
+				C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */,
+				C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */,
+				C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */,
+				C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */,
+				C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C9AA288D1B24BAE8005846FE /* IS2WeatherDaemon */ = {
+			isa = PBXGroup;
+			children = (
+				C9AA289F1B24BE13005846FE /* IS2WeatherProvider.h */,
+				C9AA28A01B24BE13005846FE /* IS2WeatherProvider.m */,
+				C9AA28A11B24BE13005846FE /* Reachability.h */,
+				C9AA28A21B24BE13005846FE /* Reachability.m */,
+				C9AA289D1B24BDF1005846FE /* main.mm */,
+				C9AA28921B24BAE8005846FE /* Supporting Files */,
+			);
+			path = IS2WeatherDaemon;
+			sourceTree = "<group>";
+		};
+		C9AA28921B24BAE8005846FE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C9AA28991B24BAE8005846FE /* IS2WeatherDaemon-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C9D72A6E1B1DC99300C44076 = {
+			isa = PBXGroup;
+			children = (
+				C9D72A7E1B1DC99300C44076 /* InfoStats2 */,
+				C9AA288D1B24BAE8005846FE /* IS2WeatherDaemon */,
+				C9D72A7B1B1DC99300C44076 /* Frameworks */,
+				C9D72A7A1B1DC99300C44076 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C9D72A7A1B1DC99300C44076 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C9D72A791B1DC99300C44076 /* InfoStats2.dylib */,
+				C9AA288B1B24BAE8005846FE /* IS2WeatherDaemon */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C9E040A71B1F7DD8006E70BE /* Weather.framework */,
+				C9E040A51B1F7D97006E70BE /* CoreLocation.framework */,
+				C9D72AA01B1DCE8600C44076 /* UIKit.framework */,
+				C9D72A9E1B1DCE5F00C44076 /* libWebCycript */,
+				C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */,
+				C9D72A7C1B1DC99300C44076 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C9D72A7E1B1DC99300C44076 /* InfoStats2 */ = {
+			isa = PBXGroup;
+			children = (
+				C9D72A921B1DCC9400C44076 /* IS2WebView.h */,
+				C9D72A981B1DCE3000C44076 /* CIWExtensions.h */,
+				C9D72A991B1DCE3000C44076 /* CIWExtensions.m */,
+				C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */,
+				C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */,
+				C9D72A861B1DC99300C44076 /* InfoStats2.xm */,
+				C9D72A871B1DC99300C44076 /* InfoStats2.mm */,
+				C9D72A7F1B1DC99300C44076 /* Package */,
+				C9D72A831B1DC99300C44076 /* Supporting Files */,
+			);
+			path = InfoStats2;
+			sourceTree = "<group>";
+		};
+		C9D72A7F1B1DC99300C44076 /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				C9D72A801B1DC99300C44076 /* DEBIAN */,
+				C9D72A891B1DC99300C44076 /* Library */,
+			);
+			name = Package;
+			sourceTree = "<group>";
+		};
+		C9D72A801B1DC99300C44076 /* DEBIAN */ = {
+			isa = PBXGroup;
+			children = (
+				C9D72A811B1DC99300C44076 /* control.txt */,
+				C9D72A821B1DC99300C44076 /* control */,
+			);
+			name = DEBIAN;
+			sourceTree = "<group>";
+		};
+		C9D72A831B1DC99300C44076 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C9D72A841B1DC99300C44076 /* PackageVersion.plist */,
+				C9D72A851B1DC99300C44076 /* InfoStats2-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C9D72A891B1DC99300C44076 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				C9D72A8A1B1DC99300C44076 /* MobileSubstrate */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		C9D72A8A1B1DC99300C44076 /* MobileSubstrate */ = {
+			isa = PBXGroup;
+			children = (
+				C9D72A8B1B1DC99300C44076 /* DynamicLibraries */,
+			);
+			name = MobileSubstrate;
+			sourceTree = "<group>";
+		};
+		C9D72A8B1B1DC99300C44076 /* DynamicLibraries */ = {
+			isa = PBXGroup;
+			children = (
+				C9D72A8C1B1DC99300C44076 /* InfoStats2.plist */,
+			);
+			name = DynamicLibraries;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C9D72A761B1DC99300C44076 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9D72A9A1B1DCE3000C44076 /* CIWExtensions.h in Headers */,
+				C9D72A941B1DCC9400C44076 /* IS2WebView.h in Headers */,
+				C9B048AE1B1E19BA0000CEBD /* IS2WeatherProvider.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C9AA288A1B24BAE8005846FE /* IS2WeatherDaemon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9AA289C1B24BAE8005846FE /* Build configuration list for PBXNativeTarget "IS2WeatherDaemon" */;
+			buildPhases = (
+				C9AA28871B24BAE8005846FE /* Sources */,
+				C9AA28881B24BAE8005846FE /* Frameworks */,
+				C9AA28891B24BAE8005846FE /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = IS2WeatherDaemon;
+			productName = IS2WeatherDaemon;
+			productReference = C9AA288B1B24BAE8005846FE /* IS2WeatherDaemon */;
+			productType = "com.apple.product-type.tool";
+		};
+		C9D72A781B1DC99300C44076 /* InfoStats2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9D72A8F1B1DC99300C44076 /* Build configuration list for PBXNativeTarget "InfoStats2" */;
+			buildPhases = (
+				C9D72A731B1DC99300C44076 /* ShellScript */,
+				C9D72A741B1DC99300C44076 /* Sources */,
+				C9D72A751B1DC99300C44076 /* Frameworks */,
+				C9D72A761B1DC99300C44076 /* Headers */,
+				C9D72A771B1DC99300C44076 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = InfoStats2;
+			productName = InfoStats2;
+			productReference = C9D72A791B1DC99300C44076 /* InfoStats2.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C9D72A6F1B1DC99300C44076 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = C9D72A721B1DC99300C44076 /* Build configuration list for PBXProject "InfoStats2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C9D72A6E1B1DC99300C44076;
+			productRefGroup = C9D72A7A1B1DC99300C44076 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C9D72A781B1DC99300C44076 /* InfoStats2 */,
+				C9AA288A1B24BAE8005846FE /* IS2WeatherDaemon */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C9AA28891B24BAE8005846FE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = IS2WeatherDaemon/setupWeatherDaemon.sh;
+		};
+		C9D72A731B1DC99300C44076 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp-logos";
+		};
+		C9D72A771B1DC99300C44076 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C9AA28871B24BAE8005846FE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9AA289E1B24BDF1005846FE /* main.mm in Sources */,
+				C9AA28A41B24BE13005846FE /* Reachability.m in Sources */,
+				C9AA28A31B24BE13005846FE /* IS2WeatherProvider.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C9D72A741B1DC99300C44076 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9D72A9B1B1DCE3000C44076 /* CIWExtensions.m in Sources */,
+				C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */,
+				C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C9AA289A1B24BAE8005846FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/frameworks/**",
+					"$(SDKROOT)/System/Library/PrivateFrameworks",
+					/opt/iOSOpenDev/frameworks,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "IS2WeatherDaemon/IS2WeatherDaemon-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				INSTALL_PATH = /usr/bin;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				PRODUCT_NAME = infostats2d;
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Debug;
+		};
+		C9AA289B1B24BAE8005846FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/frameworks/**",
+					"$(SDKROOT)/System/Library/PrivateFrameworks",
+					/opt/iOSOpenDev/frameworks,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "IS2WeatherDaemon/IS2WeatherDaemon-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				INSTALL_PATH = /usr/bin;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				PRODUCT_NAME = infostats2d;
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Release;
+		};
+		C9D72A8D1B1DC99300C44076 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/frameworks/**",
+					"$(SDKROOT)/System/Library/PrivateFrameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = Debug;
+		};
+		C9D72A8E1B1DC99300C44076 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = YES;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/frameworks/**",
+					"$(SDKROOT)/System/Library/PrivateFrameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = Release;
+		};
+		C9D72A901B1DC99300C44076 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/frameworks,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InfoStats2/InfoStats2-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Debug;
+		};
+		C9D72A911B1DC99300C44076 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/frameworks,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InfoStats2/InfoStats2-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C9AA289C1B24BAE8005846FE /* Build configuration list for PBXNativeTarget "IS2WeatherDaemon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9AA289A1B24BAE8005846FE /* Debug */,
+				C9AA289B1B24BAE8005846FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C9D72A721B1DC99300C44076 /* Build configuration list for PBXProject "InfoStats2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9D72A8D1B1DC99300C44076 /* Debug */,
+				C9D72A8E1B1DC99300C44076 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C9D72A8F1B1DC99300C44076 /* Build configuration list for PBXNativeTarget "InfoStats2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9D72A901B1DC99300C44076 /* Debug */,
+				C9D72A911B1DC99300C44076 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C9D72A6F1B1DC99300C44076 /* Project object */;
+}

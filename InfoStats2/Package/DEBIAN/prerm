@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [[ $1 == remove || $1 == purge ]]; then
+    /bin/launchctl unload /Library/LaunchDaemons/com.matchstic.InfoStats2-Weather-Provider.plist
+fi
+
+exit 0

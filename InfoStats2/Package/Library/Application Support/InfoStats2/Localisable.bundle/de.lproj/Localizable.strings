@@ -1,0 +1,7 @@
+// Main strings
+
+"UNPLUGGED" = "Abgesteckt";
+"CHARGING" = "Lädt";
+"FULL_CHARGED" = "Voll aufgeladen"; // Redo
+"UNKNOWN" = "Unbekannt"; // Redo
+

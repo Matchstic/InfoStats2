@@ -1,0 +1,8 @@
+// Main strings
+// Again, needs to be redone!
+
+"UNPLUGGED" = "Desenchufado";
+"CHARGING" = "Cargar";
+"FULL_CHARGED" = "Completamente Cargada";
+"UNKNOWN" = "Desconocido";
+

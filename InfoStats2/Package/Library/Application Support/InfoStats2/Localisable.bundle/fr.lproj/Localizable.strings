@@ -1,0 +1,7 @@
+// Main strings
+
+"UNPLUGGED" = "Débranché";
+"CHARGING" = "En charge";
+"FULL_CHARGED" = "Charge Complète";
+"UNKNOWN" = "Inconnu";
+
