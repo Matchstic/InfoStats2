@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CIWExtensions : NSObject
+@interface IS2Extensions : NSObject
 
 // Battery
 +(int)batteryPercent;

@@ -2,7 +2,7 @@
 #import "IS2WebView.h"
 #include "WebCycript.h"
 
-@interface CIWExtensions : NSObject
+@interface IS2Extensions : NSObject
 +(void)initializeExtensions;
 @end
 
@@ -45,23 +45,14 @@
 
 -(id)initWithFrame:(CGRect)frame {
     UIWebView *original = %orig;
-    
-    /*NSString *sourceString = [[NSThread callStackSymbols] objectAtIndex:1];
-    NSCharacterSet *separatorSet = [NSCharacterSet characterSetWithCharactersInString:@" -[]+?.,"];
-    NSMutableArray *array = [NSMutableArray arrayWithArray:[sourceString  componentsSeparatedByCharactersInSet:separatorSet]];
-    [array removeObject:@""];
-    
-    if ([[array objectAtIndex:4] isEqualToString:@"iWidgets"]) {*/
-        //object_setClass(original, [IS2WebView class]);
         
-        UIWebDocumentView *document = [original _documentView];
-        WebView *webview = [document webView];
+    UIWebDocumentView *document = [original _documentView];
+    WebView *webview = [document webView];
         
-        [webview setPreferencesIdentifier:@"WebCycript"];
+    [webview setPreferencesIdentifier:@"WebCycript"];
         
-        if ([webview respondsToSelector:@selector(_setAllowsMessaging:)])
-            [webview _setAllowsMessaging:YES];
-    //}
+    if ([webview respondsToSelector:@selector(_setAllowsMessaging:)])
+        [webview _setAllowsMessaging:YES];
     
     return original;
 }
@@ -80,8 +71,7 @@
     
     NSString *href = [[[[frame dataSource] request] URL] absoluteString];
     if (href) {
-        // Inject Cycript into this webview. If we're in Cydget, this *should* work fine.
-        
+        // Inject Cycript into this webview.
         @try {
             WebCycriptSetupView(webview);
             NSLog(@"**** Cycript was injected into an UIWebView");
@@ -102,7 +92,7 @@
 - (void)applicationDidFinishLaunching:(id)arg1 {
     %orig;
     
-    [CIWExtensions initializeExtensions];
+    [IS2Extensions initializeExtensions];
 }
 
 %end

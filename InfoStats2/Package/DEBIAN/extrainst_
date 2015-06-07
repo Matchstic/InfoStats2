@@ -1,13 +1,13 @@
 #!/bin/sh
 
-chown root /Library/LaunchDaemons/com.matchstic.InfoStats2-Weather-Provider.plist
+chown root /Library/LaunchDaemons/com.matchstic.infostats2d.plist
 
 if [[ $1 == upgrade ]]; then
-    /bin/launchctl unload /Library/LaunchDaemons/com.matchstic.InfoStats2-Weather-Provider.plist
+    /bin/launchctl unload /Library/LaunchDaemons/com.matchstic.infostats2d.plist
 fi
 
 if [[ $1 == install || $1 == upgrade ]]; then
-    /bin/launchctl load /Library/LaunchDaemons/com.matchstic.InfoStats2-Weather-Provider.plist
+    /bin/launchctl load /Library/LaunchDaemons/com.matchstic.infostats2d.plist
 fi
 
 exit 0

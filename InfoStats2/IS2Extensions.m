@@ -6,7 +6,7 @@
 //
 //
 
-#import "CIWExtensions.h"
+#import "IS2Extensions.h"
 #import "IS2WeatherProvider.h"
 #import <SpringBoard7.0/SBUIController.h>
 #import <SpringBoard7.0/SBTelephonyManager.h>
@@ -20,7 +20,7 @@ static NSBundle *bundle; // strings bundle.
 static SBTelephonyManager *telephonyManager;
 static NSMutableSet *weatherUpdateBlockQueue;
 
-@implementation CIWExtensions
+@implementation IS2Extensions
 
 #pragma mark Internal
 
@@ -47,7 +47,7 @@ static NSMutableSet *weatherUpdateBlockQueue;
 }
 
 +(NSString*)batteryState {
-    switch ([CIWExtensions batteryStateAsInteger]) {
+    switch ([IS2Extensions batteryStateAsInteger]) {
         case UIDeviceBatteryStateUnplugged: {
             return [bundle localizedStringForKey:@"UNPLUGGED" value:@"Unplugged" table:nil];
             break;

@@ -3,7 +3,7 @@
 #import "IS2WebView.h"
 #include "WebCycript.h"
 
-@interface CIWExtensions : NSObject
+@interface IS2Extensions : NSObject
 +(void)initializeExtensions;
 @end
 
@@ -20,7 +20,7 @@
 
 #include <logos/logos.h>
 #include <substrate.h>
-@class IWWidget; @class UIView; @class SpringBoard; @class UIWebView; 
+@class UIWebView; @class IWWidget; @class UIView; @class SpringBoard; 
 static void (*_logos_orig$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$)(IWWidget*, SEL, id, id, id); static void _logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$(IWWidget*, SEL, id, id, id); static id _logos_method$_ungrouped$UIView$_newCloseBoxOfType$(UIView*, SEL, int); static id (*_logos_orig$_ungrouped$UIWebView$initWithFrame$)(UIWebView*, SEL, CGRect); static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView*, SEL, CGRect); static void (*_logos_orig$_ungrouped$UIWebView$webView$addMessageToConsole$)(UIWebView*, SEL, WebView *, NSDictionary *); static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWebView*, SEL, WebView *, NSDictionary *); static void (*_logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$)(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(SpringBoard*, SEL, id); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard*, SEL, id); 
 
 #line 20 "/Users/Matt/iOS/Projects/InfoStats2/InfoStats2/InfoStats2.xm"
@@ -52,23 +52,14 @@ static id _logos_method$_ungrouped$UIView$_newCloseBoxOfType$(UIView* self, SEL 
 
 static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView* self, SEL _cmd, CGRect frame) {
     UIWebView *original = _logos_orig$_ungrouped$UIWebView$initWithFrame$(self, _cmd, frame);
-    
-    
-
-
-
-
-
         
+    UIWebDocumentView *document = [original _documentView];
+    WebView *webview = [document webView];
         
-        UIWebDocumentView *document = [original _documentView];
-        WebView *webview = [document webView];
+    [webview setPreferencesIdentifier:@"WebCycript"];
         
-        [webview setPreferencesIdentifier:@"WebCycript"];
-        
-        if ([webview respondsToSelector:@selector(_setAllowsMessaging:)])
-            [webview _setAllowsMessaging:YES];
-    
+    if ([webview respondsToSelector:@selector(_setAllowsMessaging:)])
+        [webview _setAllowsMessaging:YES];
     
     return original;
 }
@@ -87,7 +78,6 @@ static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forF
     
     NSString *href = [[[[frame dataSource] request] URL] absoluteString];
     if (href) {
-        
         
         @try {
             WebCycriptSetupView(webview);
@@ -109,12 +99,12 @@ static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forF
 static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard* self, SEL _cmd, id arg1) {
     _logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$(self, _cmd, arg1);
     
-    [CIWExtensions initializeExtensions];
+    [IS2Extensions initializeExtensions];
 }
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_f67a23ac() {
+static __attribute__((constructor)) void _logosLocalCtor_d842d4df() {
     
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     
