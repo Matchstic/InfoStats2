@@ -4,7 +4,18 @@
 //
 //  Created by Matt Clarke on 02/06/2015.
 //
-//
+
+/*
+ *
+ *  Updating weather on iOS is a glorious pain in the arse. This daemon simplifies things 
+ *  nicely enough for it all to work, and be readable too when doing so. Enjoy!
+ *
+ *  I don't recommend iterfacing with this daemon yourself; please use the provided public
+ *  API, else you may release gremlins into your system.
+ *
+ *  Licensed under the BSD license.
+ *
+ */
 
 #import "IS2WeatherProvider.h"
 #import <Weather/TWCCityUpdater.h>
@@ -17,16 +28,11 @@
 - (id)loadSavedCityAtIndex:(int)arg1;
 @end
 
-/*@interface WeatherLocationManager (iOS7)
-@property(retain) CLLocationManager * locationManager;
-- (CLLocation*)location;
-- (void)setLocationTrackingReady:(bool)arg1 activelyTracking:(bool)arg2;
-@end
-
 @interface WeatherLocationManager (iOS8)
 - (bool)localWeatherAuthorized;
 - (void)_setAuthorizationStatus:(int)arg1;
-@end*/
+- (void)setLocationTrackingReady:(bool)arg1 activelyTracking:(bool)arg2;
+@end
 
 @interface City (iOS7)
 @property (assign, nonatomic) BOOL isRequestedByFrameworkClient;
@@ -59,7 +65,7 @@ static int authorisationStatus;
     if (self) {
         self.locationManager = [[CLLocationManager alloc] init];
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
-        [self.locationManager setDistanceFilter:1000.0];
+        [self.locationManager setDistanceFilter:500.0];
         [self.locationManager setDelegate:self];
         [self.locationManager setActivityType:CLActivityTypeOther];
         
@@ -71,29 +77,25 @@ static int authorisationStatus;
             [self.locationManager setPrivateMode:YES];
         }
 
+        authorisationStatus = kCLAuthorizationStatusNotDetermined;
     }
     
     return self;
 }
 
 -(void)updateWeather {
-    Reachability *reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    Reachability *reach = [Reachability reachabilityForInternetConnection];
     
     if (reach.isReachable) {
         [self fullUpdate];
         return;
+    } else {
+        // No data connection; allow for extrapolated data to be used instead from
+        // the current City instance.
+        NSLog(@"*** [InfoStats2 | Weather] :: No data connection; using extrapolated data from last update.");
+        notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
+        return;
     }
-    
-    reach.reachableBlock = ^(Reachability *reach) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (reach.isReachable) {
-                [self fullUpdate];
-                [reach stopNotifier];
-            }
-        });
-    };
-    
-    [reach startNotifier];
 }
 
 // Backend
@@ -101,53 +103,32 @@ static int authorisationStatus;
 -(void)fullUpdate {
     //BOOL localWeather = [CLLocationManager locationServicesEnabled];
     
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+        [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:NO activelyTracking:NO];
+        [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:authorisationStatus];
+    }
+    
     if (authorisationStatus == kCLAuthorizationStatusAuthorized) {
-        /*if (!self.setup) {
-            [self setupLocationWeatherStuff];
-        }*/
+        NSLog(@"*** [InfoStats2 | Weather] :: Updating, and also getting a new location");
         
         currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
         [currentCity associateWithDelegate:self];
         
+        [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
+        
         // Force finding of new location, and then update from there.
         [self.locationManager startUpdatingLocation];
-    } else {
+    } else if (authorisationStatus == kCLAuthorizationStatusDenied) {
+        NSLog(@"*** [InfoStats2 | Weather] :: Updating first city in Weather.app");
+        
         currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
         [currentCity associateWithDelegate:self];
         
-        //self.setup = YES;
+        [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:NO];
         
         [self updateCurrentCityWithoutLocation];
     }
 }
-
-/*-(void)setupLocationWeatherStuff {
-    currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
-    [currentCity associateWithDelegate:self];
-    
-    //[[WeatherLocationManager sharedWeatherLocationManager] setDelegate:self];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-        //[[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:NO activelyTracking:NO];
-        //[[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:3];
-    }
-    
-    //[[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
-    
-    self.setup = YES;
-}*/
-
-/*-(void)unloadLocationStuff {
-    currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
-    [currentCity associateWithDelegate:self];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-        //[[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:NO activelyTracking:NO];
-        //[[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:2];
-    }
-    
-    //[[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:NO];
-}*/
 
 -(void)updateLocalCityWithLocation:(CLLocation*)location {
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
@@ -170,23 +151,47 @@ static int authorisationStatus;
     // Nothing to do here currently.
 }
 
--(void)cityDidFinishWeatherUpdate:(id)city {
+-(void)cityDidFinishWeatherUpdate:(City*)city {
     currentCity = city;
+    
+    // We should save this data to be loaded into the SpringBoard portion.
+    
+    /*
+     * WeatherPreferences seems to be a pain when saving cities, and requires isCelsius to 
+     * be re-set again. No idea why, but hey, goddammit Apple.
+     */
+    BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
+    
+    if ([currentCity isLocalWeatherCity]) {
+        [[WeatherPreferences sharedPreferences] saveToDiskWithLocalWeatherCity:city];
+    } else {
+        NSMutableArray *cities = [[[WeatherPreferences sharedPreferences] loadSavedCities] mutableCopy];
+        [cities removeObjectAtIndex:0];
+        [cities insertObject:city atIndex:0];
+        
+        [[WeatherPreferences sharedPreferences] saveToDiskWithCities:cities activeCity:0];
+    }
+    
+    [[WeatherPreferences sharedPreferences] setCelsius:isCelsius];
+    
+    NSLog(@"*** [InfoStats2 | Weather] :: Updated, returning data.");
     
     // Return a message back to SpringBoard that updating is now done.
     notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
 }
 
 - (void)locationManager:(id)arg1 didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    NSLog(@"*** [InfoStats2 | Weather] :: Location manager auth state changed to: %d.", status);
+    NSLog(@"*** [InfoStats2 | Weather] :: Location manager auth state changed to %d.", status);
     
-    /*if (status == kCLAuthorizationStatusAuthorized) {
-        [self setupLocationWeatherStuff];
-    } else {
-        [self unloadLocationStuff];
-    }*/
-    
+    int oldStatus = authorisationStatus;
     authorisationStatus = status;
+    
+    if (oldStatus == kCLAuthorizationStatusAuthorized && oldStatus != status) {
+        [self.locationManager stopUpdatingLocation];
+        
+        // That update failed. We should re-run for first city in Weather.app
+        [self updateWeather];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
@@ -202,7 +207,6 @@ static int authorisationStatus;
 #pragma mark Message listening from SpringBoard
 
 - (void)timerFireMethod:(NSTimer *)timer {
-	[timer invalidate];
     
 	int status, check;
 	static char first = 0;
@@ -214,26 +218,18 @@ static int authorisationStatus;
 		}
         
 		first = 1;
+        
+        return; // We don't want to update the weather on the first run, only when requested.
 	}
     
 	status = notify_check(notifyToken, &check);
 	if (status == NOTIFY_STATUS_OK && check != 0) {
 		NSLog(@"*** [InfoStats2 | Weather] :: Weather update request received.");
         
-        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        dispatch_async(dispatch_get_main_queue(), ^(void){
             [self updateWeather];
         });
 	}
-    
-	//start a timer so that the process does not exit.
-	timer = [[NSTimer alloc] initWithFireDate:[NSDate date]
-                                     interval:5
-                                       target:self
-                                     selector:@selector(timerFireMethod:)
-                                     userInfo:nil
-                                      repeats:YES];
-    
-	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
 }
 
 @end

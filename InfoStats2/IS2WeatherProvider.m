@@ -52,40 +52,38 @@ int status;
     if (!provider) {
         [City initialize];
         provider = [[IS2WeatherProvider alloc] init];
-        
-        status = notify_register_dispatch("com.matchstic.infostats2/weatherUpdateCompleted", &notifyToken, dispatch_get_main_queue(), ^(int t) {
-            NSLog(@"*** [InfoStats2] :: Weather has been updated, reloading data.");
-            
-            BOOL localWeather = NO;
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
-                localWeather = [[WeatherLocationManager sharedWeatherLocationManager] localWeatherAuthorized];
-            else
-                localWeather = [CLLocationManager locationServicesEnabled];
-            
-            if (localWeather) {
-                // local city updated
-                currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
-            } else {
-                // First city updated
-                currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
-            }
-            
-            // Run callback block!
-            [provider.callbackBlock invoke];
-            
-            provider.isUpdating = NO;
-        });
-
     }
     
     return provider;
 }
 
+// PLEASE do not ever call this directly; it's not exposed publicly for a reason.
 -(void)updateWeatherWithCallback:(void (^)(void))callbackBlock {
     self.isUpdating = YES;
     self.callbackBlock = callbackBlock;
     
     NSLog(@"*** [InfoStats2] :: Attempting to request weather update.");
+    
+    status = notify_register_dispatch("com.matchstic.infostats2/weatherUpdateCompleted", &notifyToken, dispatch_get_main_queue(), ^(int t) {
+        NSLog(@"*** [InfoStats2] :: Weather has been updated, reloading data.");
+        
+        BOOL localWeather = [CLLocationManager locationServicesEnabled];
+        
+        if (localWeather) {
+            // local city updated
+            currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
+        } else {
+            // First city updated
+            currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
+        }
+        
+        // Run callback block!
+        [self.callbackBlock invoke];
+        
+        self.isUpdating = NO;
+        
+        notify_cancel(notifyToken); // No need to continue monitoring for this notification, saves battery power.
+    });
     
     // Communicate via notify() with daemon for weather updates.
     notify_post("com.matchstic.infostats2/requestWeatherUpdate");

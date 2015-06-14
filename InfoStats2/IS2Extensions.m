@@ -179,7 +179,7 @@ static NSMutableSet *weatherUpdateBlockQueue;
         // Update weather, and then call blocks for updated weather.
         [[IS2WeatherProvider sharedInstance] updateWeatherWithCallback:^{
             for (void (^block)() in weatherUpdateBlockQueue) {
-                [block invoke]; // Runs all the callbacks who requested a weather update.
+                [block invoke]; // Runs all the callbacks whom requested a weather update.
             }
         }];
     }
