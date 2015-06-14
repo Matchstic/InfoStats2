@@ -12,10 +12,7 @@
 - (void)webView:(id)arg1 didClearWindowObject:(id)arg2 forFrame:(id)arg3;
 @end
 
-@interface SBIconView : UIView
-- (id)initWithDefaultSize;
-- (id)_newCloseBoxOfType:(int)type;
-@end
+// Needed to inject into iWidgets
 
 %hook IWWidget
 
@@ -28,18 +25,7 @@
 
 %end
 
-// Fix for iWidgets on iOS 6 and below
-
-%hook UIView
-
-%new
-
--(id)_newCloseBoxOfType:(int)type {
-    SBIconView *view = [[objc_getClass("SBIconView") alloc] initWithDefaultSize];
-    return [view _newCloseBoxOfType:type];
-}
-
-%end
+#pragma mark Injection of Cycript into WebViews
 
 %hook UIWebView
 
@@ -54,6 +40,9 @@
     if ([webview respondsToSelector:@selector(_setAllowsMessaging:)])
         [webview _setAllowsMessaging:YES];
     
+    // TODO: We may need to prevent other tweaks messing with the frame delegate of WebView
+    // since that prevents Cycript from being injected.
+    
     return original;
 }
 
@@ -65,9 +54,7 @@
 }
 
 - (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame {
-    NSObject<CIWDelegate> *delegate = (NSObject<CIWDelegate> *)[self delegate];
-    if ([delegate respondsToSelector:@selector(webView:didClearWindowObject:forFrame:)])
-        [delegate webView:webview didClearWindowObject:window forFrame:frame];
+    // TODO: If in a Cydget web view, do not attempt to inject into it.
     
     NSString *href = [[[[frame dataSource] request] URL] absoluteString];
     if (href) {
@@ -98,7 +85,7 @@
 %end
 
 %ctor {
-    // Load up iWidgets dylib
+    // Load up iWidgets dylib to hook it
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     
     %init;

@@ -26,7 +26,3 @@
 @protocol CIWDelegate <NSObject>
 - (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame;
 @end
-
-/*@interface IS2WebView : UIWebView
-
-@end*/

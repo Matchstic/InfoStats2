@@ -5,7 +5,7 @@ int main(int argc, char **argv, char **envp) {
     NSLog(@"*** [InfoStats2 | Weather] :: Loading up weather provider.");
     
 	//initialize our daemon
-	IS2WeatherUpdater *provider = [IS2WeatherUpdater sharedInstance];
+	IS2WeatherUpdater *provider = [[IS2WeatherUpdater alloc] init];
     
 	//start a timer so that the process does not exit.
 	NSTimer *timer = [[NSTimer alloc] initWithFireDate:[NSDate date]

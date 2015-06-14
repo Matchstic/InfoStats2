@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C9AA288A1B24BAE8005846FE"
-               BuildableName = "IS2WeatherDaemon"
+               BuildableName = "infostats2d"
                BlueprintName = "IS2WeatherDaemon"
                ReferencedContainer = "container:InfoStats2.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C9AA288A1B24BAE8005846FE"
-            BuildableName = "IS2WeatherDaemon"
+            BuildableName = "infostats2d"
             BlueprintName = "IS2WeatherDaemon"
             ReferencedContainer = "container:InfoStats2.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C9AA288A1B24BAE8005846FE"
-            BuildableName = "IS2WeatherDaemon"
+            BuildableName = "infostats2d"
             BlueprintName = "IS2WeatherDaemon"
             ReferencedContainer = "container:InfoStats2.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C9AA288A1B24BAE8005846FE"
-            BuildableName = "IS2WeatherDaemon"
+            BuildableName = "infostats2d"
             BlueprintName = "IS2WeatherDaemon"
             ReferencedContainer = "container:InfoStats2.xcodeproj">
          </BuildableReference>

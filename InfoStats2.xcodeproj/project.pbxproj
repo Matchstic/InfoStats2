@@ -29,7 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C9AA288B1B24BAE8005846FE /* IS2WeatherDaemon */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = IS2WeatherDaemon; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9AA288B1B24BAE8005846FE /* infostats2d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = infostats2d; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AA28991B24BAE8005846FE /* IS2WeatherDaemon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IS2WeatherDaemon-Prefix.pch"; sourceTree = "<group>"; };
 		C9AA289D1B24BDF1005846FE /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		C9AA289F1B24BE13005846FE /* IS2WeatherProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WeatherProvider.h; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				C9D72A791B1DC99300C44076 /* InfoStats2.dylib */,
-				C9AA288B1B24BAE8005846FE /* IS2WeatherDaemon */,
+				C9AA288B1B24BAE8005846FE /* infostats2d */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -263,7 +263,7 @@
 			);
 			name = IS2WeatherDaemon;
 			productName = IS2WeatherDaemon;
-			productReference = C9AA288B1B24BAE8005846FE /* IS2WeatherDaemon */;
+			productReference = C9AA288B1B24BAE8005846FE /* infostats2d */;
 			productType = "com.apple.product-type.tool";
 		};
 		C9D72A781B1DC99300C44076 /* InfoStats2 */ = {
@@ -323,7 +323,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = IS2WeatherDaemon/setupWeatherDaemon.sh;
+			shellScript = ./setupWeatherDaemon.sh;
 		};
 		C9D72A731B1DC99300C44076 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -522,7 +522,7 @@
 				iOSOpenDevInstallOnAnyBuild = NO;
 				iOSOpenDevInstallOnProfiling = NO;
 				iOSOpenDevRespringOnInstall = NO;
-				iOSOpenDevUsePackageVersionPList = NO;
+				iOSOpenDevUsePackageVersionPList = YES;
 			};
 			name = Debug;
 		};
@@ -551,7 +551,7 @@
 				iOSOpenDevInstallOnAnyBuild = NO;
 				iOSOpenDevInstallOnProfiling = NO;
 				iOSOpenDevRespringOnInstall = NO;
-				iOSOpenDevUsePackageVersionPList = NO;
+				iOSOpenDevUsePackageVersionPList = YES;
 			};
 			name = Release;
 		};
@@ -565,6 +565,7 @@
 				C9AA289B1B24BAE8005846FE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C9D72A721B1DC99300C44076 /* Build configuration list for PBXProject "InfoStats2" */ = {
 			isa = XCConfigurationList;

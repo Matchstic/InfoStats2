@@ -11,8 +11,7 @@
 
 @interface IS2WeatherUpdater : NSObject <CLLocationManagerDelegate>
 
-@property (nonatomic) BOOL setup;
-
-+(instancetype)sharedInstance;
+//@property (nonatomic) BOOL setup;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end

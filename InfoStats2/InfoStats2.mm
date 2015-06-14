@@ -18,12 +18,14 @@
 - (id)_newCloseBoxOfType:(int)type;
 @end
 
+
+
 #include <logos/logos.h>
 #include <substrate.h>
-@class UIWebView; @class IWWidget; @class UIView; @class SpringBoard; 
+@class IWWidget; @class UIWebView; @class SpringBoard; @class UIView; 
 static void (*_logos_orig$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$)(IWWidget*, SEL, id, id, id); static void _logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$(IWWidget*, SEL, id, id, id); static id _logos_method$_ungrouped$UIView$_newCloseBoxOfType$(UIView*, SEL, int); static id (*_logos_orig$_ungrouped$UIWebView$initWithFrame$)(UIWebView*, SEL, CGRect); static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView*, SEL, CGRect); static void (*_logos_orig$_ungrouped$UIWebView$webView$addMessageToConsole$)(UIWebView*, SEL, WebView *, NSDictionary *); static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWebView*, SEL, WebView *, NSDictionary *); static void (*_logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$)(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(SpringBoard*, SEL, id); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard*, SEL, id); 
 
-#line 20 "/Users/Matt/iOS/Projects/InfoStats2/InfoStats2/InfoStats2.xm"
+#line 22 "/Users/Matt/iOS/Projects/InfoStats2/InfoStats2/InfoStats2.xm"
 
 
 static void _logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$(IWWidget* self, SEL _cmd, id arg1, id arg2, id arg3) {
@@ -61,6 +63,9 @@ static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView* self, SEL
     if ([webview respondsToSelector:@selector(_setAllowsMessaging:)])
         [webview _setAllowsMessaging:YES];
     
+    
+    
+    
     return original;
 }
 
@@ -72,10 +77,6 @@ static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWe
 }
 
 static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView* self, SEL _cmd, WebView * webview, WebScriptObject * window, WebFrame * frame) {
-    NSObject<CIWDelegate> *delegate = (NSObject<CIWDelegate> *)[self delegate];
-    if ([delegate respondsToSelector:@selector(webView:didClearWindowObject:forFrame:)])
-        [delegate webView:webview didClearWindowObject:window forFrame:frame];
-    
     NSString *href = [[[[frame dataSource] request] URL] absoluteString];
     if (href) {
         
@@ -104,7 +105,7 @@ static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_d842d4df() {
+static __attribute__((constructor)) void _logosLocalCtor_d3183886() {
     
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     
