@@ -57,7 +57,7 @@ int status;
     return provider;
 }
 
-// PLEASE do not ever call this directly; it's not exposed publicly for a reason.
+// PLEASE do not ever call this directly; it's not exposed publicly in the API for a reason.
 -(void)updateWeatherWithCallback:(void (^)(void))callbackBlock {
     self.isUpdating = YES;
     self.callbackBlock = callbackBlock;
@@ -67,10 +67,13 @@ int status;
     status = notify_register_dispatch("com.matchstic.infostats2/weatherUpdateCompleted", &notifyToken, dispatch_get_main_queue(), ^(int t) {
         NSLog(@"*** [InfoStats2] :: Weather has been updated, reloading data.");
         
+        // it seems that when no data is available, we cannot use extrapolated data for the local
+        // weather city. TODO: fix this.
+        
         BOOL localWeather = [CLLocationManager locationServicesEnabled];
         
         if (localWeather) {
-            // local city updated
+            // Local city updated
             currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
         } else {
             // First city updated

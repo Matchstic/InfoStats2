@@ -10,6 +10,12 @@
  *  Updating weather on iOS is a glorious pain in the arse. This daemon simplifies things 
  *  nicely enough for it all to work, and be readable too when doing so. Enjoy!
  *
+ *  Due to changes in iOS 8 onwards, a daemon is necessary to be able to acheive location
+ *  updating for local weather. This is because a new entitlement was introduced on
+ *  locationd for privacy purposes; this daemon is signed with it, since we can't exactly 
+ *  re-sign SpringBoard easily at runtime. Whilst this will always run in the background, 
+ *  it has been found this has no discernible effect on battery life.
+ *
  *  I don't recommend iterfacing with this daemon yourself; please use the provided public
  *  API, else you may release gremlins into your system.
  *
@@ -21,8 +27,9 @@
 #import <Weather/TWCCityUpdater.h>
 #import <objc/runtime.h>
 #import <Weather/Weather.h>
-#import "Reachability.h"
 #import <notify.h>
+
+#define deviceVersion [[[UIDevice currentDevice] systemVersion] floatValue]
 
 @interface WeatherPreferences (iOS7)
 - (id)loadSavedCityAtIndex:(int)arg1;
@@ -64,18 +71,20 @@ static int authorisationStatus;
     self = [super init];
     if (self) {
         self.locationManager = [[CLLocationManager alloc] init];
-        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
-        [self.locationManager setDistanceFilter:500.0];
+        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
         [self.locationManager setDelegate:self];
-        [self.locationManager setActivityType:CLActivityTypeOther];
+        [self.locationManager setActivityType:CLActivityTypeOtherNavigation]; // Allows use of GPS
         
-        if ([self.locationManager respondsToSelector:@selector(setPersistentMonitoringEnabled:)]) {
+        /*if ([self.locationManager respondsToSelector:@selector(setPersistentMonitoringEnabled:)]) {
             [self.locationManager setPersistentMonitoringEnabled:NO];
         }
         
         if ([self.locationManager respondsToSelector:@selector(setPrivateMode:)]) {
             [self.locationManager setPrivateMode:YES];
-        }
+        }*/
+        
+        self.reach = [Reachability reachabilityForInternetConnection];
 
         authorisationStatus = kCLAuthorizationStatusNotDetermined;
     }
@@ -84,9 +93,7 @@ static int authorisationStatus;
 }
 
 -(void)updateWeather {
-    Reachability *reach = [Reachability reachabilityForInternetConnection];
-    
-    if (reach.isReachable) {
+    if (self.reach.isReachable) {
         [self fullUpdate];
         return;
     } else {
@@ -98,13 +105,11 @@ static int authorisationStatus;
     }
 }
 
-// Backend
+#pragma mark Backend
 
 -(void)fullUpdate {
-    //BOOL localWeather = [CLLocationManager locationServicesEnabled];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-        [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:NO activelyTracking:NO];
+    if (deviceVersion >= 8.0) {
+        [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:(authorisationStatus != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
         [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:authorisationStatus];
     }
     
@@ -112,7 +117,7 @@ static int authorisationStatus;
         NSLog(@"*** [InfoStats2 | Weather] :: Updating, and also getting a new location");
         
         currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
-        [currentCity associateWithDelegate:self];
+        [currentCity associateWithDelegate:self]; // Essential for getting callbacks when the city is updated.
         
         [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
         
@@ -121,6 +126,14 @@ static int authorisationStatus;
     } else if (authorisationStatus == kCLAuthorizationStatusDenied) {
         NSLog(@"*** [InfoStats2 | Weather] :: Updating first city in Weather.app");
         
+        if (deviceVersion < 6.0) {
+            // This is untested; I have no idea if this will work, but I hope so.
+            @try {
+                currentCity = [[[WeatherPreferences sharedPreferences] loadSavedCities] firstObject];
+            } @catch (NSException *e) {
+                NSLog(@"*** [InfoStats2 | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
+            }
+        }
         currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
         [currentCity associateWithDelegate:self];
         
@@ -131,7 +144,7 @@ static int authorisationStatus;
 }
 
 -(void)updateLocalCityWithLocation:(CLLocation*)location {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+    if (deviceVersion >= 8.0) {
         [[objc_getClass("TWCLocationUpdater") sharedLocationUpdater] updateWeatherForLocation:location city:currentCity];
     } else {
         [[LocationUpdater sharedLocationUpdater] updateWeatherForLocation:location city:currentCity];
@@ -139,7 +152,7 @@ static int authorisationStatus;
 }
 
 -(void)updateCurrentCityWithoutLocation {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    if (deviceVersion >= 8.0)
         [[objc_getClass("TWCCityUpdater") sharedCityUpdater] updateWeatherForCity:currentCity];
     else
         [[WeatherIdentifierUpdater sharedWeatherIdentifierUpdater] updateWeatherForCity:currentCity];
@@ -154,12 +167,13 @@ static int authorisationStatus;
 -(void)cityDidFinishWeatherUpdate:(City*)city {
     currentCity = city;
     
-    // We should save this data to be loaded into the SpringBoard portion.
-    
-    /*
-     * WeatherPreferences seems to be a pain when saving cities, and requires isCelsius to 
-     * be re-set again. No idea why, but hey, goddammit Apple.
+    /* 
+     *  We should save this data so it can be loaded into the SpringBoard portion.
+     *
+     *  WeatherPreferences seems to be a pain when saving cities, and requires isCelsius to
+     *  be re-set again. No idea why, but hey, goddammit Apple.
      */
+    
     BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
     
     if ([currentCity isLocalWeatherCity]) {
@@ -188,9 +202,6 @@ static int authorisationStatus;
     
     if (oldStatus == kCLAuthorizationStatusAuthorized && oldStatus != status) {
         [self.locationManager stopUpdatingLocation];
-        
-        // That update failed. We should re-run for first city in Weather.app
-        [self updateWeather];
     }
 }
 
@@ -199,15 +210,19 @@ static int authorisationStatus;
     
     // Locations updated! We can now ask for an update to weather with the new locations.
     CLLocation *mostRecentLocation = [[locations lastObject] copy];
-    [self updateLocalCityWithLocation:mostRecentLocation];
-    
+    if (mostRecentLocation) {
+        [self updateLocalCityWithLocation:mostRecentLocation];
+    } else {
+        NSLog(@"*** [InfoStats2 | Weather] :: Cannot determine location; using extrapolated data from last update.");
+        notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
+    }
+        
     [self.locationManager stopUpdatingLocation];
 }
 
 #pragma mark Message listening from SpringBoard
 
 - (void)timerFireMethod:(NSTimer *)timer {
-    
 	int status, check;
 	static char first = 0;
 	if (!first) {

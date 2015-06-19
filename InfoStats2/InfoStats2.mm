@@ -61,7 +61,12 @@ static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWe
 }
 
 static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView* self, SEL _cmd, WebView * webview, WebScriptObject * window, WebFrame * frame) {
+    NSLog(@"*** Our current class is %@", [self class]);
     
+    if ([[self class] isEqual:[objc_getClass("CydgetWebView") class]]) {
+        _logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(self, _cmd, webview, window, frame);
+        return;
+    }
     
     NSString *href = [[[[frame dataSource] request] URL] absoluteString];
     if (href) {
@@ -91,7 +96,7 @@ static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_d6d2aec7() {
+static __attribute__((constructor)) void _logosLocalCtor_de8539e1() {
     
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     

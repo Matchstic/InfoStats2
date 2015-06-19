@@ -54,14 +54,17 @@
 }
 
 - (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame {
-    // TODO: If in a Cydget web view, do not attempt to inject into it.
+    if ([[self class] isEqual:[objc_getClass("CydgetWebView") class]]) { // No need to inject Cycript into Cydget
+        %orig;
+        return;
+    }
     
     NSString *href = [[[[frame dataSource] request] URL] absoluteString];
     if (href) {
         // Inject Cycript into this webview.
         @try {
             WebCycriptSetupView(webview);
-            NSLog(@"**** Cycript was injected into an UIWebView");
+            NSLog(@"*** Cycript was injected into an instance of %@", [self class]);
         } @catch (NSException *e) {
             NSLog(@"*** CydgetSetupContext => %@", e);
         }
