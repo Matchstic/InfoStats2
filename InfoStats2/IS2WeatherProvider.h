@@ -13,6 +13,7 @@
 
 @property (nonatomic, copy) id callbackBlock;
 @property (nonatomic) BOOL setup;
+@property(strong, nonatomic) NSBundle *weatherFrameworkBundle;
 @property (nonatomic, readwrite) BOOL isUpdating;
 
 +(instancetype)sharedInstance;
@@ -24,6 +25,21 @@
 -(int)highForCurrentDay;
 -(int)lowForCurrentDay;
 -(int)currentWindSpeed;
+
+-(int)currentDewPoint;
+-(int)currentHumidity;
+-(int)currentWindChill;
+-(int)currentVisibilityPercent;
+-(int)currentChanceOfRain;
+-(int)currentlyFeelsLike;
+-(unsigned int)sunsetUNIXTime;
+-(unsigned int)sunriseUNIXTime;
+-(NSDate*)lastUpdateTime;
+
+-(id)city;
+
 -(NSString*)currentLocation;
+-(NSArray*)hourlyForecastsForCurrentLocation;
+-(NSArray*)dayForecastsForCurrentLocation;
 
 @end

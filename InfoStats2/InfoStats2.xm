@@ -54,7 +54,8 @@
 }
 
 - (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame {
-    if ([[self class] isEqual:[objc_getClass("CydgetWebView") class]]) { // No need to inject Cycript into Cydget
+    if ([[self class] isEqual:[objc_getClass("CydgetWebView") class]]) {
+        // No need to inject Cycript into Cydget
         %orig;
         return;
     }

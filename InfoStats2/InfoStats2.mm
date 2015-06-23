@@ -17,7 +17,7 @@
 
 #include <logos/logos.h>
 #include <substrate.h>
-@class IWWidget; @class UIWebView; @class SpringBoard; 
+@class SpringBoard; @class IWWidget; @class UIWebView; 
 static void (*_logos_orig$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$)(IWWidget*, SEL, id, id, id); static void _logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$(IWWidget*, SEL, id, id, id); static id (*_logos_orig$_ungrouped$UIWebView$initWithFrame$)(UIWebView*, SEL, CGRect); static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView*, SEL, CGRect); static void (*_logos_orig$_ungrouped$UIWebView$webView$addMessageToConsole$)(UIWebView*, SEL, WebView *, NSDictionary *); static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWebView*, SEL, WebView *, NSDictionary *); static void (*_logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$)(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(SpringBoard*, SEL, id); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard*, SEL, id); 
 
 #line 17 "/Users/Matt/iOS/Projects/InfoStats2/InfoStats2/InfoStats2.xm"
@@ -61,9 +61,8 @@ static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWe
 }
 
 static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView* self, SEL _cmd, WebView * webview, WebScriptObject * window, WebFrame * frame) {
-    NSLog(@"*** Our current class is %@", [self class]);
-    
     if ([[self class] isEqual:[objc_getClass("CydgetWebView") class]]) {
+        
         _logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(self, _cmd, webview, window, frame);
         return;
     }
@@ -73,7 +72,7 @@ static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forF
         
         @try {
             WebCycriptSetupView(webview);
-            NSLog(@"**** Cycript was injected into an UIWebView");
+            NSLog(@"*** Cycript was injected into an instance of %@", [self class]);
         } @catch (NSException *e) {
             NSLog(@"*** CydgetSetupContext => %@", e);
         }
@@ -96,7 +95,7 @@ static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_de8539e1() {
+static __attribute__((constructor)) void _logosLocalCtor_a0d0ee7f() {
     
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     

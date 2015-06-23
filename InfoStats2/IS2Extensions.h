@@ -38,9 +38,20 @@
 +(int)lowForCurrentDay;
 +(int)currentWindSpeed;
 +(NSString*)currentLocation;
++(int)currentDewPoint;
++(int)currentHumidity;
++(int)currentWindChill;
++(int)currentVisibilityPercent;
++(int)currentChanceOfRain;
++(int)currentlyFeelsLike;
++(NSString*)sunsetTime;
++(NSString*)sunriseTime;
++(NSString*)lastUpdateTime;
 +(NSArray*)hourlyForecastsForCurrentLocation;
 +(NSArray*)dayForecastsForCurrentLocation;
 +(BOOL)isWeatherUpdating;
++(BOOL)isCelsius;
++(BOOL)isWindSpeedMph;
 +(void)updateWeatherWithCallback:(void (^)(void))callbackBlock;
 
 // Calendar

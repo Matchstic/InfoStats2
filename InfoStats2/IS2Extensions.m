@@ -1,16 +1,15 @@
 //
-//  CIWExtensions.m
-//  CycriptIniWidgets
+//  IS2Extensions.m
+//  InfoStats2
 //
 //  Created by Matt Clarke on 01/06/2015.
-//
 //
 
 #import "IS2Extensions.h"
 #import "IS2WeatherProvider.h"
 #import <SpringBoard7.0/SBUIController.h>
-#import <SpringBoard7.0/SBTelephonyManager.h>
-#import <SpringBoard7.0/SBWiFiManager.h>
+#import <SpringBoard7.0/SBTelephonyManager.h> // TODO: Fix for iOS 5
+#import <SpringBoard/SBWiFiManager.h>
 #import <objc/runtime.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
@@ -167,6 +166,74 @@ static NSMutableSet *weatherUpdateBlockQueue;
     return [[IS2WeatherProvider sharedInstance] currentLocation];
 }
 
++(int)currentCondition {
+    return [[IS2WeatherProvider sharedInstance] currentCondition];
+}
+
++(NSString*)currentConditionAsString {
+    return [[IS2WeatherProvider sharedInstance] currentConditionAsString];
+}
+
++(int)highForCurrentDay {
+    return [[IS2WeatherProvider sharedInstance] highForCurrentDay];
+}
+
++(int)lowForCurrentDay {
+    return [[IS2WeatherProvider sharedInstance] lowForCurrentDay];
+}
+
++(int)currentWindSpeed {
+    return [[IS2WeatherProvider sharedInstance] currentWindSpeed];
+}
+
++(int)currentDewPoint {
+    return [[IS2WeatherProvider sharedInstance] currentDewPoint];
+}
+
++(int)currentHumidity {
+    return [[IS2WeatherProvider sharedInstance] currentHumidity];
+}
+
++(id)city {
+    return [[IS2WeatherProvider sharedInstance] city];
+}
+
++(int)currentWindChill {
+    
+}
+
++(int)currentVisibilityPercent {
+    
+}
+
++(int)currentChanceOfRain {
+    
+}
+
++(int)currentlyFeelsLike {
+    
+}
+
++(NSString*)sunsetTime {
+    
+}
+
++(NSString*)sunriseTime {
+    
+}
+
++(NSString*)lastUpdateTime {
+    
+}
+
++(NSArray*)dayForecastsForCurrentLocation {
+    return [[IS2WeatherProvider sharedInstance] dayForecastsForCurrentLocation];
+}
+
++(NSArray*)hourlyForecastsForCurrentLocation {
+    return [[IS2WeatherProvider sharedInstance] hourlyForecastsForCurrentLocation];
+}
+
 +(BOOL)isWeatherUpdating {
     return [[IS2WeatherProvider sharedInstance] isUpdating];
 }
@@ -193,6 +260,22 @@ static NSMutableSet *weatherUpdateBlockQueue;
 
 #pragma mark Music
 
+#pragma mark System utilities
 
++(void)takeScreenshot {
+    
+}
+
++(void)lockDevice {
+    
+}
+
++(void)openSwitcher {
+    
+}
+
++(void)openApplication:(NSString*)bundleIdentifier {
+    
+}
 
 @end
