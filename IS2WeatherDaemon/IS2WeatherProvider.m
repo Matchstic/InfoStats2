@@ -38,7 +38,11 @@
 @interface WeatherLocationManager (iOS8)
 - (bool)localWeatherAuthorized;
 - (void)_setAuthorizationStatus:(int)arg1;
-- (void)setLocationTrackingReady:(bool)arg1 activelyTracking:(bool)arg2;
+- (void)setLocationTrackingReady:(bool)arg1 activelyTracking:(bool)arg2; // not in 8.3
+@end
+
+@interface WeatherLocationManager (iOS8_3)
+- (void)setLocationTrackingReady:(bool)arg1 activelyTracking:(bool)arg2 watchKitExtension:(BOOL)arg3;
 @end
 
 @interface City (iOS7)
@@ -109,7 +113,11 @@ static int authorisationStatus;
 
 -(void)fullUpdate {
     if (deviceVersion >= 8.0) {
-        [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:(authorisationStatus != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
+        if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setLocationTrackingReady:activelyTracking:)])
+            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:(authorisationStatus != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
+        else {
+            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:(authorisationStatus != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO watchKitExtension:NO];
+        }
         [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:authorisationStatus];
     }
     

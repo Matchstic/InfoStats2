@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9372A1B1B557D1600592CCF /* MediaRemote.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		C9372A201B557DC000592CCF /* IS2Weather.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A1E1B557DC000592CCF /* IS2Weather.h */; };
+		C9372A211B557DC000592CCF /* IS2Weather.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A1F1B557DC000592CCF /* IS2Weather.m */; };
+		C9372A241B557DD000592CCF /* IS2Media.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A221B557DD000592CCF /* IS2Media.h */; };
+		C9372A251B557DD000592CCF /* IS2Media.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A231B557DD000592CCF /* IS2Media.m */; };
+		C9372A281B557DDB00592CCF /* IS2Telephony.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A261B557DDB00592CCF /* IS2Telephony.h */; };
+		C9372A291B557DDB00592CCF /* IS2Telephony.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A271B557DDB00592CCF /* IS2Telephony.m */; };
+		C9372A2C1B557DEA00592CCF /* IS2System.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A2A1B557DEA00592CCF /* IS2System.h */; };
+		C9372A2D1B557DEA00592CCF /* IS2System.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A2B1B557DEA00592CCF /* IS2System.m */; };
 		C9AA288C1B24BAE8005846FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9AA289E1B24BDF1005846FE /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9AA289D1B24BDF1005846FE /* main.mm */; };
 		C9AA28A31B24BE13005846FE /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AA28A01B24BE13005846FE /* IS2WeatherProvider.m */; };
@@ -20,7 +29,6 @@
 		C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */; };
 		C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9D72A871B1DC99300C44076 /* InfoStats2.mm */; };
-		C9D72A941B1DCC9400C44076 /* IS2WebView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D72A921B1DCC9400C44076 /* IS2WebView.h */; };
 		C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */; };
 		C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9E1B1DCE5F00C44076 /* libWebCycript */; };
 		C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72AA01B1DCE8600C44076 /* UIKit.framework */; };
@@ -29,6 +37,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C9372A1B1B557D1600592CCF /* MediaRemote.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaRemote.framework; path = System/Library/PrivateFrameworks/MediaRemote.framework; sourceTree = SDKROOT; };
+		C9372A1E1B557DC000592CCF /* IS2Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Weather.h; sourceTree = "<group>"; };
+		C9372A1F1B557DC000592CCF /* IS2Weather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Weather.m; sourceTree = "<group>"; };
+		C9372A221B557DD000592CCF /* IS2Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Media.h; sourceTree = "<group>"; };
+		C9372A231B557DD000592CCF /* IS2Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Media.m; sourceTree = "<group>"; };
+		C9372A261B557DDB00592CCF /* IS2Telephony.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Telephony.h; sourceTree = "<group>"; };
+		C9372A271B557DDB00592CCF /* IS2Telephony.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Telephony.m; sourceTree = "<group>"; };
+		C9372A2A1B557DEA00592CCF /* IS2System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2System.h; sourceTree = "<group>"; };
+		C9372A2B1B557DEA00592CCF /* IS2System.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2System.m; sourceTree = "<group>"; };
 		C9AA288B1B24BAE8005846FE /* infostats2d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = infostats2d; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AA28991B24BAE8005846FE /* IS2WeatherDaemon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IS2WeatherDaemon-Prefix.pch"; sourceTree = "<group>"; };
 		C9AA289D1B24BDF1005846FE /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -50,7 +67,6 @@
 		C9D72A861B1DC99300C44076 /* InfoStats2.xm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = InfoStats2.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C9D72A871B1DC99300C44076 /* InfoStats2.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = InfoStats2.mm; sourceTree = "<group>"; };
 		C9D72A8C1B1DC99300C44076 /* InfoStats2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = InfoStats2.plist; path = Package/Library/MobileSubstrate/DynamicLibraries/InfoStats2.plist; sourceTree = "<group>"; };
-		C9D72A921B1DCC9400C44076 /* IS2WebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WebView.h; sourceTree = "<group>"; };
 		C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsubstrate.dylib; path = ../../../../../opt/iOSOpenDev/lib/libsubstrate.dylib; sourceTree = "<group>"; };
 		C9D72A9E1B1DCE5F00C44076 /* libWebCycript */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libWebCycript; path = ../../../../../opt/iOSOpenDev/lib/libWebCycript; sourceTree = "<group>"; };
 		C9D72AA01B1DCE8600C44076 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -74,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */,
 				C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */,
 				C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */,
 				C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */,
@@ -155,6 +172,7 @@
 		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9372A1B1B557D1600592CCF /* MediaRemote.framework */,
 				C9E040A71B1F7DD8006E70BE /* Weather.framework */,
 				C9E040A51B1F7D97006E70BE /* CoreLocation.framework */,
 				C9D72AA01B1DCE8600C44076 /* UIKit.framework */,
@@ -168,9 +186,16 @@
 		C9D72A7E1B1DC99300C44076 /* InfoStats2 */ = {
 			isa = PBXGroup;
 			children = (
-				C9D72A921B1DCC9400C44076 /* IS2WebView.h */,
 				C9AA28A81B24D1A1005846FE /* IS2Extensions.h */,
 				C9AA28A91B24D1A1005846FE /* IS2Extensions.m */,
+				C9372A221B557DD000592CCF /* IS2Media.h */,
+				C9372A231B557DD000592CCF /* IS2Media.m */,
+				C9372A261B557DDB00592CCF /* IS2Telephony.h */,
+				C9372A271B557DDB00592CCF /* IS2Telephony.m */,
+				C9372A2A1B557DEA00592CCF /* IS2System.h */,
+				C9372A2B1B557DEA00592CCF /* IS2System.m */,
+				C9372A1E1B557DC000592CCF /* IS2Weather.h */,
+				C9372A1F1B557DC000592CCF /* IS2Weather.m */,
 				C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */,
 				C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */,
 				C9D72A861B1DC99300C44076 /* InfoStats2.xm */,
@@ -240,8 +265,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9D72A941B1DCC9400C44076 /* IS2WebView.h in Headers */,
+				C9372A201B557DC000592CCF /* IS2Weather.h in Headers */,
+				C9372A2C1B557DEA00592CCF /* IS2System.h in Headers */,
 				C9B048AE1B1E19BA0000CEBD /* IS2WeatherProvider.h in Headers */,
+				C9372A241B557DD000592CCF /* IS2Media.h in Headers */,
+				C9372A281B557DDB00592CCF /* IS2Telephony.h in Headers */,
 				C9AA28AA1B24D1A1005846FE /* IS2Extensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,8 +397,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9AA28AB1B24D1A1005846FE /* IS2Extensions.m in Sources */,
+				C9372A211B557DC000592CCF /* IS2Weather.m in Sources */,
 				C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */,
+				C9372A251B557DD000592CCF /* IS2Media.m in Sources */,
 				C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */,
+				C9372A2D1B557DEA00592CCF /* IS2System.m in Sources */,
+				C9372A291B557DDB00592CCF /* IS2Telephony.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,6 +420,7 @@
 					"$(iOSOpenDevPath)/frameworks/**",
 					"$(SDKROOT)/System/Library/PrivateFrameworks",
 					/opt/iOSOpenDev/frameworks,
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IS2WeatherDaemon/IS2WeatherDaemon-Prefix.pch";
@@ -422,6 +455,7 @@
 					"$(iOSOpenDevPath)/frameworks/**",
 					"$(SDKROOT)/System/Library/PrivateFrameworks",
 					/opt/iOSOpenDev/frameworks,
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IS2WeatherDaemon/IS2WeatherDaemon-Prefix.pch";
@@ -507,6 +541,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/iOSOpenDev/frameworks,
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "InfoStats2/InfoStats2-Prefix.pch";
@@ -536,6 +571,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/iOSOpenDev/frameworks,
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "InfoStats2/InfoStats2-Prefix.pch";

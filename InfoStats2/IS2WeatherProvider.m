@@ -42,6 +42,8 @@
 +(id)descriptionForWeatherUpdateDetail:(unsigned)arg1;
 @end
 
+NSString *WeatherWindSpeedUnitForCurrentLocale();
+
 static City *currentCity;
 static IS2WeatherProvider *provider;
 
@@ -98,6 +100,8 @@ int status;
     // Communicate via notify() with daemon for weather updates.
     notify_post("com.matchstic.infostats2/requestWeatherUpdate");
 }
+
+#pragma mark Translations
 
 -(NSString*)nameForCondition:(int)condition {
     switch (condition) {
@@ -202,11 +206,19 @@ int status;
     }
 }
 
+-(NSString*)translatedWindSpeedUnits {
+    return [self.weatherFrameworkBundle localizedStringForKey:WeatherWindSpeedUnitForCurrentLocale() value:@"" table:@"WeatherFrameworkLocalizableStrings"];
+}
+
+#pragma mark Data access
+
 -(int)currentTemperature {
     int temp = [currentCity.temperature intValue];
     
+    // Need to convert to Farenheit ourselves annoyingly
     if (![[WeatherPreferences sharedPreferences] isCelsius])
         temp = ((temp*9)/5) + 32;
+    
     return temp;
 }
 
@@ -237,6 +249,7 @@ int status;
     DayForecast *forecast = [[currentCity dayForecasts] firstObject];
     int temp = [(isHigh ? forecast.high : forecast.low) intValue];
     
+    // Need to convert to Farenheit ourselves annoyingly
     if (![[WeatherPreferences sharedPreferences] isCelsius])
         temp = (([forecast.high intValue]*9)/5) + 32;
     

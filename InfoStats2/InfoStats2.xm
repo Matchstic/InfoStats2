@@ -1,9 +1,24 @@
 #import <objc/runtime.h>
-#import "IS2WebView.h"
 #include "WebCycript.h"
+#import <UIKit/UIKit.h>
+#import <WebKit/WebView.h>
+#import <WebKit/WebPreferences.h>
+#import <WebKit/WebFrame.h>
 
-@interface IS2Extensions : NSObject
-+(void)initializeExtensions;
+@class WebScriptObject;
+
+@interface UIWebDocumentView : UIView
+-(WebView*)webView;
+@end
+
+@interface UIWebView (Apple)
+- (void)webView:(WebView *)view addMessageToConsole:(NSDictionary *)message;
+- (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame;
+-(UIWebDocumentView*)_documentView;
+@end
+
+@protocol IS2Delegate <NSObject>
+- (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame;
 @end
 
 @interface IWWidget : UIView {
@@ -11,6 +26,8 @@
 }
 - (void)webView:(id)arg1 didClearWindowObject:(id)arg2 forFrame:(id)arg3;
 @end
+
+#pragma mark Begin actual code
 
 // Needed to inject into iWidgets
 
@@ -76,21 +93,11 @@
 
 %end
 
-#pragma mark Helper for API
-
-%hook SpringBoard
-
-- (void)applicationDidFinishLaunching:(id)arg1 {
-    %orig;
-    
-    [IS2Extensions initializeExtensions];
-}
-
-%end
-
 %ctor {
     // Load up iWidgets dylib to hook it
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
+    
+    
     
     %init;
 }

@@ -36,7 +36,7 @@
 -(unsigned int)sunriseUNIXTime;
 -(NSDate*)lastUpdateTime;
 
--(id)city;
+-(NSString*)translatedWindSpeedUnits;
 
 -(NSString*)currentLocation;
 -(NSArray*)hourlyForecastsForCurrentLocation;
