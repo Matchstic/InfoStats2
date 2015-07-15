@@ -1,12 +1,15 @@
-//
-//  IS2Media.h
-//  InfoStats2
-//
-//  Created by Matt Clarke on 14/07/2015.
-//
-//
+/*
+ * IS2Media.h
+ * InfoStats2
+ *
+ * Created by Matt Clarke on 14/07/2015.
+ *
+*/
 
 #import <Foundation/Foundation.h>
+
+/** IS2Media is used to access all media related data and functions. Whilst not everything available in terms of media controlling is found here, the contained methods are the most commonly used.
+ */
 
 @interface IS2Media : NSObject
 
