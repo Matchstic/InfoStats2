@@ -1,11 +1,12 @@
 Package: com.matchstic.InfoStats2
 Name: InfoStats 2
-Version: 0.2.2
+Version: 0.3
 Description: A highly powerful framework for widgets.
 Section: System
-Depends: firmware (>= 5.1), mobilesubstrate, com.saurik.webcycript
+Depends: firmware (>= 6.0), mobilesubstrate, com.saurik.webcycript
 Priority: extra
 Architecture: iphoneos-arm
 Author: Matt Clarke <matt@incendo.ws>
 dev: Matt Clarke <matt@incendo.ws>
 Maintainer: Matt Clarke <matt@incendo.ws>
+Depiction: http://incendo.ws/volatile/depictions/com.matchstic.InfoStats2.html
