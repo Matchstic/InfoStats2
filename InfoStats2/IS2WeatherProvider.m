@@ -251,7 +251,7 @@ int status;
     
     // Need to convert to Farenheit ourselves annoyingly
     if (![[WeatherPreferences sharedPreferences] isCelsius])
-        temp = (([forecast.high intValue]*9)/5) + 32;
+        temp = ((temp*9)/5) + 32;
     
     return temp;
 }
