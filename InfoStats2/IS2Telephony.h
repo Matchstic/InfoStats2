@@ -13,7 +13,9 @@
 
 @interface IS2Telephony : NSObject
 
-// Wireless etc
+/** Sets a block to be called whenever music data changes. It is highly advisable to use this, as it will allow for your code to be automatically notified of any change in media data.
+ @return The currrent amount of bars shown in the status bar
+ */
 +(int)phoneSignalBars;
 +(int)phoneSignalRSSI;
 +(NSString*)phoneCarrier;

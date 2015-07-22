@@ -21,6 +21,10 @@
 - (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame;
 @end
 
+@interface IS2Media : NSObject
++(void)nowPlayingDataDidUpdate;
+@end
+
 @interface IWWidget : UIView {
     UIWebView *_webView;
 }
@@ -89,6 +93,16 @@
     }
     
     %orig;
+}
+
+%end
+
+%hook SBMediaController
+
+-(void)_nowPlayingInfoChanged {
+    %orig;
+    
+    [IS2Media nowPlayingDataDidUpdate];
 }
 
 %end

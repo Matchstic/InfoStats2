@@ -13,13 +13,29 @@
 
 @interface IS2Media : NSObject
 
+/** @name Setup
+ */
+
+/** Sets a block to be called whenever music data changes. It is highly advisable to use this, as it will allow for your code to be automatically notified of any change in media data.
+    @param callbackBlock The block to call once data changes
+*/
+
++(void)registerForNowPlayingNotificationsWithCallback:(void (^)(void))callbackBlock;
+
+/** Requests new music data; data is updated a few milliseconds after any media state changes, so the callback block is called once updating completes.
+    @param callbackBlock The block to call once refreshing completes
+*/
++(void)refreshMusicDataWithCallback:(void (^)(void))callbackBlock;
+
+
+
 /** @name Functions */
 
 /** Jumps to the next track. If no track is left in the queue, then this function will instead stop playing media.
  */
 +(void)skipToNextTrack;
 
-/** Jumps to the previous track. If no track was played beforehand, this function will then stop playing media
+/** Jumps to the previous track. If no track was played beforehand, this function will then stop playing media.
  */
 +(void)skipToPreviousTrack;
 
@@ -27,11 +43,7 @@
  */
 +(void)togglePlayPause;
 
-/** Requests new music data; data is updated a few milliseconds after any media state changes, so the callback block is called once updating completes.
- 
- @param callbackBlock The block to call once refreshing completes
- */
-+(void)refreshMusicDataWithCallback:(void (^)(void))callbackBlock;
+
 
 /** @name Data retrieval */
 
@@ -57,6 +69,12 @@
  @warning This function may return a NULL value if no media has played since SpringBoard was last launched.
  */
 +(UIImage*)currentTrackArtwork;
+
+/** Initializes a string with the current album artwork data as base64.
+ @return The current track's artwork image as base64
+ @warning This function may return a NULL value if no media has played since SpringBoard was last launched.
+ */
++(NSString*)currentTrackArtworkBase64;
 
 /** Gives the current track's length, which measured in seconds.
  @return The current track's length
