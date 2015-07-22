@@ -11,7 +11,7 @@
 #include "MediaRemote.h"
 
 static NSDictionary *data;
-static NSMutableSet *mediaUpdateBlockQueue;
+static NSMutableDictionary *mediaUpdateBlockQueue;
 
 @interface NSData (Base64)
 + (NSData *)dataWithBase64EncodedString:(NSString *) string;
@@ -164,20 +164,26 @@ static char encodingTable[64] = {
 
 +(void)nowPlayingDataDidUpdate {
     // Let all our callbacks know we've got new data available.
-    for (void (^block)() in mediaUpdateBlockQueue) {
-        [block invoke]; // Runs all the callbacks whom requested a weather update.
+    for (NSString *identifier in [mediaUpdateBlockQueue allKeys]) {
+        void (^block)() = [mediaUpdateBlockQueue objectForKey:identifier];
+        [block invoke];
     }
 }
 
 #pragma mark Public methods
 
-+(void)registerForNowPlayingNotificationsWithCallback:(void (^)(void))callbackBlock {
++(void)registerForNowPlayingNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock {
     if (!mediaUpdateBlockQueue) {
-        mediaUpdateBlockQueue = [NSMutableSet set];
+        mediaUpdateBlockQueue = [NSMutableDictionary dictionary];
     }
     
-    if (callbackBlock)
-        [mediaUpdateBlockQueue addObject:callbackBlock];
+    if (callbackBlock && identifier) {
+        [mediaUpdateBlockQueue setObject:callbackBlock forKey:identifier];
+    }
+}
+
++(void)unregisterForNotificationsWithIdentifier:(NSString*)identifier {
+    [mediaUpdateBlockQueue removeObjectForKey:identifier];
 }
 
 +(NSString*)currentTrackTitle {
@@ -191,11 +197,15 @@ static char encodingTable[64] = {
 }
 
 +(NSString*)currentTrackArtist {
-    return [IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoArtist"];
+    NSString *string = [IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoArtist"];
+    if (!string) string = @"";
+    return string;
 }
 
 +(NSString*)currentTrackAlbum {
-    return [IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoAlbum"];
+    NSString *string = [IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoAlbum"];
+    if (!string) string = @"";
+    return string;
 }
 
 +(UIImage*)currentTrackArtwork {
@@ -205,7 +215,7 @@ static char encodingTable[64] = {
 
 +(NSString*)currentTrackArtworkBase64 {
     NSData *imageData = UIImageJPEGRepresentation([IS2Media currentTrackArtwork], 1.0);
-    return [imageData base64Encoding];
+    return [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]];
 }
 
 +(int)currentTrackLength {
@@ -217,7 +227,7 @@ static char encodingTable[64] = {
 }
 
 +(BOOL)shuffleEnabled {
-    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoShuffleMode"] boolValue];
+    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoShuffleMode"] intValue] != 0;
 }
 
 +(BOOL)iTunesRadioPlaying {
@@ -249,10 +259,12 @@ static char encodingTable[64] = {
 }
 
 +(void)refreshMusicDataWithCallback:(void (^)(void))callbackBlock {
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_main_queue(), ^(CFDictionaryRef information) {
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFDictionaryRef information) {
         data = (__bridge NSDictionary*)information;
         
-        [callbackBlock invoke];
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [callbackBlock invoke];
+        });
     });
 }
 

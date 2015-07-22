@@ -73,6 +73,8 @@ int status;
     
     NSLog(@"*** [InfoStats2] :: Attempting to request weather update.");
     
+    // Set status bar indicator going
+    
     status = notify_register_dispatch("com.matchstic.infostats2/weatherUpdateCompleted", &notifyToken, dispatch_get_main_queue(), ^(int t) {
         NSLog(@"*** [InfoStats2] :: Weather has been updated, reloading data.");
         

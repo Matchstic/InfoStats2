@@ -34,6 +34,8 @@
 		C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72AA01B1DCE8600C44076 /* UIKit.framework */; };
 		C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A51B1F7D97006E70BE /* CoreLocation.framework */; };
 		C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A71B1F7DD8006E70BE /* Weather.framework */; };
+		C9EA1D791B5FF13500DCEF75 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C9EA1D771B5FF13500DCEF75 /* Reachability.h */; };
+		C9EA1D7A1B5FF13500DCEF75 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C9EA1D781B5FF13500DCEF75 /* Reachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +74,8 @@
 		C9D72AA01B1DCE8600C44076 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C9E040A51B1F7D97006E70BE /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C9E040A71B1F7DD8006E70BE /* Weather.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Weather.framework; path = ../../../../../opt/iOSOpenDev/frameworks/Weather.framework; sourceTree = "<group>"; };
+		C9EA1D771B5FF13500DCEF75 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		C9EA1D781B5FF13500DCEF75 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +190,7 @@
 		C9D72A7E1B1DC99300C44076 /* InfoStats2 */ = {
 			isa = PBXGroup;
 			children = (
+				C9EA1D7B1B5FF13C00DCEF75 /* Reachability */,
 				C9AA28A81B24D1A1005846FE /* IS2Extensions.h */,
 				C9AA28A91B24D1A1005846FE /* IS2Extensions.m */,
 				C9372A221B557DD000592CCF /* IS2Media.h */,
@@ -258,6 +263,15 @@
 			name = DynamicLibraries;
 			sourceTree = "<group>";
 		};
+		C9EA1D7B1B5FF13C00DCEF75 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				C9EA1D771B5FF13500DCEF75 /* Reachability.h */,
+				C9EA1D781B5FF13500DCEF75 /* Reachability.m */,
+			);
+			name = Reachability;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -271,6 +285,7 @@
 				C9372A241B557DD000592CCF /* IS2Media.h in Headers */,
 				C9372A281B557DDB00592CCF /* IS2Telephony.h in Headers */,
 				C9AA28AA1B24D1A1005846FE /* IS2Extensions.h in Headers */,
+				C9EA1D791B5FF13500DCEF75 /* Reachability.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +413,7 @@
 			files = (
 				C9AA28AB1B24D1A1005846FE /* IS2Extensions.m in Sources */,
 				C9372A211B557DC000592CCF /* IS2Weather.m in Sources */,
+				C9EA1D7A1B5FF13500DCEF75 /* Reachability.m in Sources */,
 				C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */,
 				C9372A251B557DD000592CCF /* IS2Media.m in Sources */,
 				C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */,

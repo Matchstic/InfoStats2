@@ -16,17 +16,22 @@
 /** @name Setup
  */
 
-/** Sets a block to be called whenever music data changes. It is highly advisable to use this, as it will allow for your code to be automatically notified of any change in media data.
+/** Sets a block to be called whenever music data changes. The identifier must be unique string; it is recommended to use reverse DNS notation, such as "com.foo.bar". It is highly advisable to use this function, as it will allow for your code to be automatically notified of any change in media data.
+    @param identifier The identifier associated with your callback
     @param callbackBlock The block to call once data changes
 */
 
-+(void)registerForNowPlayingNotificationsWithCallback:(void (^)(void))callbackBlock;
++(void)registerForNowPlayingNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock;
+
+/** The inverse of registering for notifications. This must be called when your code is unloaded, else gremlins will squirm their way into your device.
+ @param identifier The identifier associated with your callback
+ */
++(void)unregisterForNotificationsWithIdentifier:(NSString*)identifier;
 
 /** Requests new music data; data is updated a few milliseconds after any media state changes, so the callback block is called once updating completes.
     @param callbackBlock The block to call once refreshing completes
 */
 +(void)refreshMusicDataWithCallback:(void (^)(void))callbackBlock;
-
 
 
 /** @name Functions */

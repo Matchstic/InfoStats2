@@ -13,6 +13,7 @@
 #include <sys/sysctl.h>
 #import <objc/runtime.h>
 #import "IS2Extensions.h"
+#import <SpringBoard8.1/SBUserAgent.h>
 
 @implementation IS2System
 
@@ -118,7 +119,7 @@
 }
 
 +(void)openApplication:(NSString*)bundleIdentifier {
-    
+    [[objc_getClass("SBUserAgent") sharedUserAgent] launchApplicationFromSource:2 withDisplayID:bundleIdentifier options:nil];
 }
 
 @end

@@ -73,14 +73,18 @@ static NSMutableSet *weatherUpdateBlockQueue;
     if (callbackBlock)
         [weatherUpdateBlockQueue addObject:callbackBlock];
     
-    if (![[IS2WeatherProvider sharedInstance] isUpdating]) {
-        // Update weather, and then call blocks for updated weather.
-        [[IS2WeatherProvider sharedInstance] updateWeatherWithCallback:^{
-            for (void (^block)() in weatherUpdateBlockQueue) {
-                [block invoke]; // Runs all the callbacks whom requested a weather update.
-            }
-        }];
-    }
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        if (![[IS2WeatherProvider sharedInstance] isUpdating]) {
+            // Update weather, and then call blocks for updated weather.
+            [[IS2WeatherProvider sharedInstance] updateWeatherWithCallback:^{
+                for (void (^block)() in weatherUpdateBlockQueue) {
+                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                        [block invoke]; // Runs all the callbacks whom requested a weather update.
+                    });
+                }
+            }];
+        }
+    });
 }
 
 @end
