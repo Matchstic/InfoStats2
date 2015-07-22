@@ -3,5 +3,7 @@ Tests/
 LatestBuild/
 Packages/
 InfoStats2 Weather Provider/
-help
+help/
 Depiction/
+infostats2d
+*.dylib
