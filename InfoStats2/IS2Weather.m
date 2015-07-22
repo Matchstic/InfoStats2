@@ -41,13 +41,13 @@ static NSMutableSet *weatherUpdateBlockQueue;
     return [[IS2WeatherProvider sharedInstance] currentWindSpeed];
 }
 
-+(int)currentDewPoint {
+/*+(int)currentDewPoint {
     return [[IS2WeatherProvider sharedInstance] currentDewPoint];
 }
 
 +(int)currentHumidity {
     return [[IS2WeatherProvider sharedInstance] currentHumidity];
-}
+}*/
 
 +(NSArray*)dayForecastsForCurrentLocation {
     return [[IS2WeatherProvider sharedInstance] dayForecastsForCurrentLocation];
@@ -85,6 +85,10 @@ static NSMutableSet *weatherUpdateBlockQueue;
             }];
         }
     });
+}
+
++(BOOL)isCelsius {
+    return [[IS2WeatherProvider sharedInstance] isCelsius];
 }
 
 @end

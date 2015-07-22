@@ -74,6 +74,18 @@
  */
 +(void)openApplication:(NSString*)bundleIdentifier;
 
+/** Opens the Siri interface.
+ */
++(void)openSiri;
+
+/** Relaunches SpringBoard immediately after calling.
+ */
++(void)respring;
+
+/** Reboots the device immediately after calling.
+ */
++(void)reboot;
+
 /** @name System toggles 
  */
 

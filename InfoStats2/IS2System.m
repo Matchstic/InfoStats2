@@ -14,6 +14,8 @@
 #import <objc/runtime.h>
 #import "IS2Extensions.h"
 #import <SpringBoard8.1/SBUserAgent.h>
+#import <SpringBoard6.0/SpringBoard.h>
+#import <SpringBoard7.0/SBAssistantController.h>
 
 @implementation IS2System
 
@@ -107,19 +109,38 @@
 #pragma mark System functions
 
 +(void)takeScreenshot {
-    
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This function isn't implemented yet" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [av show];
 }
 
 +(void)lockDevice {
-    
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This function isn't implemented yet" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [av show];
 }
 
 +(void)openSwitcher {
-    
+    [[objc_getClass("SBUIController") sharedInstance] _toggleSwitcher];
 }
 
 +(void)openApplication:(NSString*)bundleIdentifier {
     [[objc_getClass("SBUserAgent") sharedUserAgent] launchApplicationFromSource:2 withDisplayID:bundleIdentifier options:nil];
+}
+
++(void)openSiri {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+        [[objc_getClass("SBAssistantController") sharedInstance] _activateSiriForPPT];
+    else {
+        // TODO: Handle this for iOS 6
+        [[objc_getClass("SBAssistantController") sharedInstance] activateIgnoringTouches];
+    }
+}
+
++(void)respring {
+    [(SpringBoard*)[UIApplication sharedApplication] _relaunchSpringBoardNow];
+}
+
++(void)reboot {
+    [(SpringBoard*)[UIApplication sharedApplication] reboot];
 }
 
 @end

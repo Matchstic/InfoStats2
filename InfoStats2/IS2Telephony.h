@@ -15,7 +15,7 @@
 
 @interface IS2Telephony : NSObject
 
-/** @name Data retrieval */
+/** @name Data Retrieval */
 
 /** Gives the amount of signal bars the user sees in the status bar UI. As such, it is not 100% accurate. This will be 0 for iPod or WiFi-only iPad.
  @return The currrent amount of signal bars

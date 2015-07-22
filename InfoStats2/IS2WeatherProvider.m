@@ -262,6 +262,10 @@ int status;
     return currentCity.windSpeed;
 }
 
+-(BOOL)isCelsius {
+    return [[WeatherPreferences sharedPreferences] isCelsius];
+}
+
 -(NSArray*)dayForecastsForCurrentLocation {
     // The widget developer will be assuming this is the upcoming forecast for the week
     NSMutableArray *array = currentCity.dayForecasts;
