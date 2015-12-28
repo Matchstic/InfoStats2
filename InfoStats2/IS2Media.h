@@ -30,10 +30,10 @@
  */
 +(void)unregisterForNotificationsWithIdentifier:(NSString*)identifier;
 
-/** Requests new music data; data is updated a few milliseconds after any media state changes, so the callback block is called once updating completes.
+/*/** Requests new music data; data is updated a few milliseconds after any media state changes, so the callback block is called once updating completes.
     @param callbackBlock The block to call once refreshing completes
 */
-+(void)refreshMusicDataWithCallback:(void (^)(void))callbackBlock;
+//+(void)refreshMusicDataWithCallback:(void (^)(void))callbackBlock;*/
 
 
 /** @name Functions */

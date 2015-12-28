@@ -46,6 +46,7 @@ NSString *WeatherWindSpeedUnitForCurrentLocale();
 
 static City *currentCity;
 static IS2WeatherProvider *provider;
+static void (^block)();
 
 int notifyToken;
 int status;
@@ -69,7 +70,7 @@ int status;
 // PLEASE do not ever call this directly; it's not exposed publicly in the API for a reason.
 -(void)updateWeatherWithCallback:(void (^)(void))callbackBlock {
     self.isUpdating = YES;
-    self.callbackBlock = callbackBlock;
+    block = callbackBlock;
     
     NSLog(@"*** [InfoStats2] :: Attempting to request weather update.");
     
@@ -92,7 +93,7 @@ int status;
         }
         
         // Run callback block!
-        [self.callbackBlock invoke];
+        block();
         
         self.isUpdating = NO;
         

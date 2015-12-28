@@ -89,4 +89,7 @@
 /** @name System toggles 
  */
 
++(BOOL)getBluetoothEnabled;
++(void)setBluetoothEnabled:(BOOL)arg1;
+
 @end

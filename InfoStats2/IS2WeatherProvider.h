@@ -11,7 +11,6 @@
 
 @interface IS2WeatherProvider : NSObject <CLLocationManagerDelegate>
 
-@property (nonatomic, copy) id callbackBlock;
 @property (nonatomic) BOOL setup;
 @property(strong, nonatomic) NSBundle *weatherFrameworkBundle;
 @property (nonatomic, readwrite) BOOL isUpdating;

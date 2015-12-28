@@ -16,6 +16,8 @@
 		C9372A291B557DDB00592CCF /* IS2Telephony.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A271B557DDB00592CCF /* IS2Telephony.m */; };
 		C9372A2C1B557DEA00592CCF /* IS2System.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A2A1B557DEA00592CCF /* IS2System.h */; };
 		C9372A2D1B557DEA00592CCF /* IS2System.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A2B1B557DEA00592CCF /* IS2System.m */; };
+		C97B8CC51C31A40200525449 /* IS2WorkaroundDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */; };
+		C97B8CC61C31A40200525449 /* IS2WorkaroundDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */; };
 		C9AA288C1B24BAE8005846FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9AA289E1B24BDF1005846FE /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9AA289D1B24BDF1005846FE /* main.mm */; };
 		C9AA28A31B24BE13005846FE /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AA28A01B24BE13005846FE /* IS2WeatherProvider.m */; };
@@ -36,6 +38,14 @@
 		C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A71B1F7DD8006E70BE /* Weather.framework */; };
 		C9EA1D791B5FF13500DCEF75 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C9EA1D771B5FF13500DCEF75 /* Reachability.h */; };
 		C9EA1D7A1B5FF13500DCEF75 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C9EA1D781B5FF13500DCEF75 /* Reachability.m */; };
+		C9FAC32E1B605AC800199CAC /* IS2Calendar.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FAC32C1B605AC800199CAC /* IS2Calendar.h */; };
+		C9FAC32F1B605AC800199CAC /* IS2Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FAC32D1B605AC800199CAC /* IS2Calendar.m */; };
+		C9FAC3321B605AD400199CAC /* IS2Notes.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FAC3301B605AD400199CAC /* IS2Notes.h */; };
+		C9FAC3331B605AD400199CAC /* IS2Notes.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FAC3311B605AD400199CAC /* IS2Notes.m */; };
+		C9FAC3361B605AE400199CAC /* IS2Location.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FAC3341B605AE400199CAC /* IS2Location.h */; };
+		C9FAC3371B605AE400199CAC /* IS2Location.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FAC3351B605AE400199CAC /* IS2Location.m */; };
+		C9FAC33A1B605AF300199CAC /* IS2Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FAC3381B605AF300199CAC /* IS2Notifications.h */; };
+		C9FAC33B1B605AF300199CAC /* IS2Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FAC3391B605AF300199CAC /* IS2Notifications.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +58,8 @@
 		C9372A271B557DDB00592CCF /* IS2Telephony.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Telephony.m; sourceTree = "<group>"; };
 		C9372A2A1B557DEA00592CCF /* IS2System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2System.h; sourceTree = "<group>"; };
 		C9372A2B1B557DEA00592CCF /* IS2System.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2System.m; sourceTree = "<group>"; };
+		C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WorkaroundDictionary.h; sourceTree = "<group>"; };
+		C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WorkaroundDictionary.m; sourceTree = "<group>"; };
 		C9AA288B1B24BAE8005846FE /* infostats2d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = infostats2d; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AA28991B24BAE8005846FE /* IS2WeatherDaemon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IS2WeatherDaemon-Prefix.pch"; sourceTree = "<group>"; };
 		C9AA289D1B24BDF1005846FE /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -76,6 +88,14 @@
 		C9E040A71B1F7DD8006E70BE /* Weather.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Weather.framework; path = ../../../../../opt/iOSOpenDev/frameworks/Weather.framework; sourceTree = "<group>"; };
 		C9EA1D771B5FF13500DCEF75 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C9EA1D781B5FF13500DCEF75 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		C9FAC32C1B605AC800199CAC /* IS2Calendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Calendar.h; sourceTree = "<group>"; };
+		C9FAC32D1B605AC800199CAC /* IS2Calendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Calendar.m; sourceTree = "<group>"; };
+		C9FAC3301B605AD400199CAC /* IS2Notes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Notes.h; sourceTree = "<group>"; };
+		C9FAC3311B605AD400199CAC /* IS2Notes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Notes.m; sourceTree = "<group>"; };
+		C9FAC3341B605AE400199CAC /* IS2Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Location.h; sourceTree = "<group>"; };
+		C9FAC3351B605AE400199CAC /* IS2Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Location.m; sourceTree = "<group>"; };
+		C9FAC3381B605AF300199CAC /* IS2Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Notifications.h; sourceTree = "<group>"; };
+		C9FAC3391B605AF300199CAC /* IS2Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Notifications.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +127,100 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C931A99F1BD1789C00823E60 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				C9FAC32C1B605AC800199CAC /* IS2Calendar.h */,
+				C9FAC32D1B605AC800199CAC /* IS2Calendar.m */,
+			);
+			name = Calendar;
+			sourceTree = "<group>";
+		};
+		C978133A1BD0006000A8CEC4 /* Location Services */ = {
+			isa = PBXGroup;
+			children = (
+				C9FAC3341B605AE400199CAC /* IS2Location.h */,
+				C9FAC3351B605AE400199CAC /* IS2Location.m */,
+			);
+			name = "Location Services";
+			sourceTree = "<group>";
+		};
+		C978133B1BD0006B00A8CEC4 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				C9372A221B557DD000592CCF /* IS2Media.h */,
+				C9372A231B557DD000592CCF /* IS2Media.m */,
+			);
+			name = Media;
+			sourceTree = "<group>";
+		};
+		C978133C1BD0007300A8CEC4 /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				C9FAC3301B605AD400199CAC /* IS2Notes.h */,
+				C9FAC3311B605AD400199CAC /* IS2Notes.m */,
+			);
+			name = Notes;
+			sourceTree = "<group>";
+		};
+		C978133D1BD0007900A8CEC4 /* BulletinBoard */ = {
+			isa = PBXGroup;
+			children = (
+				C9FAC3381B605AF300199CAC /* IS2Notifications.h */,
+				C9FAC3391B605AF300199CAC /* IS2Notifications.m */,
+			);
+			name = BulletinBoard;
+			sourceTree = "<group>";
+		};
+		C978133E1BD0008200A8CEC4 /* Telephony */ = {
+			isa = PBXGroup;
+			children = (
+				C9372A261B557DDB00592CCF /* IS2Telephony.h */,
+				C9372A271B557DDB00592CCF /* IS2Telephony.m */,
+			);
+			name = Telephony;
+			sourceTree = "<group>";
+		};
+		C978133F1BD0021200A8CEC4 /* Private classes */ = {
+			isa = PBXGroup;
+			children = (
+				C9AA28A81B24D1A1005846FE /* IS2Extensions.h */,
+				C9AA28A91B24D1A1005846FE /* IS2Extensions.m */,
+				C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */,
+				C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */,
+			);
+			name = "Private classes";
+			sourceTree = "<group>";
+		};
+		C97813401BD0022100A8CEC4 /* Third-party Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				C9EA1D7B1B5FF13C00DCEF75 /* Reachability */,
+			);
+			name = "Third-party Libraries";
+			sourceTree = "<group>";
+		};
+		C97813411BD0025F00A8CEC4 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				C9372A2A1B557DEA00592CCF /* IS2System.h */,
+				C9372A2B1B557DEA00592CCF /* IS2System.m */,
+			);
+			name = System;
+			sourceTree = "<group>";
+		};
+		C97813421BD0026500A8CEC4 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				C9AA288D1B24BAE8005846FE /* IS2WeatherDaemon */,
+				C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */,
+				C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */,
+				C9372A1E1B557DC000592CCF /* IS2Weather.h */,
+				C9372A1F1B557DC000592CCF /* IS2Weather.m */,
+			);
+			name = Weather;
+			sourceTree = "<group>";
+		};
 		C9AA288D1B24BAE8005846FE /* IS2WeatherDaemon */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,7 +231,8 @@
 				C9AA289D1B24BDF1005846FE /* main.mm */,
 				C9AA28921B24BAE8005846FE /* Supporting Files */,
 			);
-			path = IS2WeatherDaemon;
+			name = IS2WeatherDaemon;
+			path = ../IS2WeatherDaemon;
 			sourceTree = "<group>";
 		};
 		C9AA28921B24BAE8005846FE /* Supporting Files */ = {
@@ -158,7 +273,6 @@
 			isa = PBXGroup;
 			children = (
 				C9D72A7E1B1DC99300C44076 /* InfoStats2 */,
-				C9AA288D1B24BAE8005846FE /* IS2WeatherDaemon */,
 				C9D72A7B1B1DC99300C44076 /* Frameworks */,
 				C9D72A7A1B1DC99300C44076 /* Products */,
 			);
@@ -190,22 +304,17 @@
 		C9D72A7E1B1DC99300C44076 /* InfoStats2 */ = {
 			isa = PBXGroup;
 			children = (
-				C9EA1D7B1B5FF13C00DCEF75 /* Reachability */,
-				C9AA28A81B24D1A1005846FE /* IS2Extensions.h */,
-				C9AA28A91B24D1A1005846FE /* IS2Extensions.m */,
-				C9372A221B557DD000592CCF /* IS2Media.h */,
-				C9372A231B557DD000592CCF /* IS2Media.m */,
-				C9372A261B557DDB00592CCF /* IS2Telephony.h */,
-				C9372A271B557DDB00592CCF /* IS2Telephony.m */,
-				C9372A2A1B557DEA00592CCF /* IS2System.h */,
-				C9372A2B1B557DEA00592CCF /* IS2System.m */,
-				C9372A1E1B557DC000592CCF /* IS2Weather.h */,
-				C9372A1F1B557DC000592CCF /* IS2Weather.m */,
-				C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */,
-				C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */,
+				C978133F1BD0021200A8CEC4 /* Private classes */,
+				C931A99F1BD1789C00823E60 /* Calendar */,
+				C978133A1BD0006000A8CEC4 /* Location Services */,
+				C978133B1BD0006B00A8CEC4 /* Media */,
+				C978133C1BD0007300A8CEC4 /* Notes */,
+				C978133D1BD0007900A8CEC4 /* BulletinBoard */,
+				C978133E1BD0008200A8CEC4 /* Telephony */,
+				C97813411BD0025F00A8CEC4 /* System */,
+				C97813421BD0026500A8CEC4 /* Weather */,
 				C9D72A861B1DC99300C44076 /* InfoStats2.xm */,
 				C9D72A871B1DC99300C44076 /* InfoStats2.mm */,
-				C9D72A7F1B1DC99300C44076 /* Package */,
 				C9D72A831B1DC99300C44076 /* Supporting Files */,
 			);
 			path = InfoStats2;
@@ -231,6 +340,8 @@
 		C9D72A831B1DC99300C44076 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C9D72A7F1B1DC99300C44076 /* Package */,
+				C97813401BD0022100A8CEC4 /* Third-party Libraries */,
 				C9D72A841B1DC99300C44076 /* PackageVersion.plist */,
 				C9D72A851B1DC99300C44076 /* InfoStats2-Prefix.pch */,
 			);
@@ -279,9 +390,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9FAC33A1B605AF300199CAC /* IS2Notifications.h in Headers */,
 				C9372A201B557DC000592CCF /* IS2Weather.h in Headers */,
 				C9372A2C1B557DEA00592CCF /* IS2System.h in Headers */,
+				C9FAC3321B605AD400199CAC /* IS2Notes.h in Headers */,
 				C9B048AE1B1E19BA0000CEBD /* IS2WeatherProvider.h in Headers */,
+				C9FAC3361B605AE400199CAC /* IS2Location.h in Headers */,
+				C9FAC32E1B605AC800199CAC /* IS2Calendar.h in Headers */,
+				C97B8CC51C31A40200525449 /* IS2WorkaroundDictionary.h in Headers */,
 				C9372A241B557DD000592CCF /* IS2Media.h in Headers */,
 				C9372A281B557DDB00592CCF /* IS2Telephony.h in Headers */,
 				C9AA28AA1B24D1A1005846FE /* IS2Extensions.h in Headers */,
@@ -411,13 +527,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9FAC3371B605AE400199CAC /* IS2Location.m in Sources */,
 				C9AA28AB1B24D1A1005846FE /* IS2Extensions.m in Sources */,
+				C9FAC32F1B605AC800199CAC /* IS2Calendar.m in Sources */,
 				C9372A211B557DC000592CCF /* IS2Weather.m in Sources */,
 				C9EA1D7A1B5FF13500DCEF75 /* Reachability.m in Sources */,
+				C9FAC33B1B605AF300199CAC /* IS2Notifications.m in Sources */,
 				C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */,
 				C9372A251B557DD000592CCF /* IS2Media.m in Sources */,
+				C97B8CC61C31A40200525449 /* IS2WorkaroundDictionary.m in Sources */,
 				C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */,
 				C9372A2D1B557DEA00592CCF /* IS2System.m in Sources */,
+				C9FAC3331B605AD400199CAC /* IS2Notes.m in Sources */,
 				C9372A291B557DDB00592CCF /* IS2Telephony.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,6 +569,7 @@
 				INSTALL_PATH = /usr/bin;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = infostats2d;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
@@ -479,6 +601,7 @@
 				INSTALL_PATH = /usr/bin;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = infostats2d;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
@@ -566,6 +689,7 @@
 					"$(inherited)",
 					/opt/iOSOpenDev/lib,
 				);
+				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
@@ -596,6 +720,7 @@
 					"$(inherited)",
 					/opt/iOSOpenDev/lib,
 				);
+				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;

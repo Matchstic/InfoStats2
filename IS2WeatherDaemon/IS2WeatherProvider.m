@@ -38,6 +38,7 @@
 @interface WeatherLocationManager (iOS8)
 - (bool)localWeatherAuthorized;
 - (void)_setAuthorizationStatus:(int)arg1;
+- (void)setAuthorizationStatus:(int)arg1;
 - (void)setLocationTrackingReady:(bool)arg1 activelyTracking:(bool)arg2; // not in 8.3
 @end
 
@@ -47,6 +48,12 @@
 
 @interface City (iOS7)
 @property (assign, nonatomic) BOOL isRequestedByFrameworkClient;
+@end
+
+@interface City (IOS9)
+- (void)addUpdateObserver:(id)arg1;
+- (int)lastUpdateStatus;
+- (id)state;
 @end
 
 @interface TWCLocationUpdater : TWCUpdater
@@ -80,14 +87,6 @@ static int authorisationStatus;
         [self.locationManager setDelegate:self];
         [self.locationManager setActivityType:CLActivityTypeOtherNavigation]; // Allows use of GPS
         
-        /*if ([self.locationManager respondsToSelector:@selector(setPersistentMonitoringEnabled:)]) {
-            [self.locationManager setPersistentMonitoringEnabled:NO];
-        }
-        
-        if ([self.locationManager respondsToSelector:@selector(setPrivateMode:)]) {
-            [self.locationManager setPrivateMode:YES];
-        }*/
-        
         self.reach = [Reachability reachabilityForInternetConnection];
 
         authorisationStatus = kCLAuthorizationStatusNotDetermined;
@@ -113,19 +112,27 @@ static int authorisationStatus;
 
 -(void)fullUpdate {
     if (deviceVersion >= 8.0) {
-        if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setLocationTrackingReady:activelyTracking:)])
+        if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setLocationTrackingReady:activelyTracking:)]) {
             [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:(authorisationStatus != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
-        else {
+        } else {
+            [[WeatherLocationManager sharedWeatherLocationManager] setDelegate:self];
             [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:(authorisationStatus != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO watchKitExtension:NO];
         }
-        [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:authorisationStatus];
+        
+        if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(_setAuthorizationStatus:)])
+             [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:authorisationStatus];
+        else if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setAuthorizationStatus:)])
+            [[WeatherLocationManager sharedWeatherLocationManager] setAuthorizationStatus:authorisationStatus];
     }
     
     if (authorisationStatus == kCLAuthorizationStatusAuthorized) {
         NSLog(@"*** [InfoStats2 | Weather] :: Updating, and also getting a new location");
         
         currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
-        [currentCity associateWithDelegate:self]; // Essential for getting callbacks when the city is updated.
+        if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
+            [currentCity associateWithDelegate:self];
+        else if ([currentCity respondsToSelector:@selector(addUpdateObserver:)])
+            [currentCity addUpdateObserver:self]; // Essential for getting callbacks when the city is updated.
         
         [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
         
@@ -143,7 +150,10 @@ static int authorisationStatus;
             }
         }
         currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
-        [currentCity associateWithDelegate:self];
+        if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
+            [currentCity associateWithDelegate:self];
+        else if ([currentCity respondsToSelector:@selector(addUpdateObserver:)])
+            [currentCity addUpdateObserver:self];
         
         [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:NO];
         
@@ -155,7 +165,7 @@ static int authorisationStatus;
     if (deviceVersion >= 8.0) {
         [[objc_getClass("TWCLocationUpdater") sharedLocationUpdater] updateWeatherForLocation:location city:currentCity];
     } else {
-        [[LocationUpdater sharedLocationUpdater] updateWeatherForLocation:location city:currentCity];
+        [[objc_getClass("LocationUpdater") sharedLocationUpdater] updateWeatherForLocation:location city:currentCity];
     }
 }
 
@@ -163,7 +173,7 @@ static int authorisationStatus;
     if (deviceVersion >= 8.0)
         [[objc_getClass("TWCCityUpdater") sharedCityUpdater] updateWeatherForCity:currentCity];
     else
-        [[WeatherIdentifierUpdater sharedWeatherIdentifierUpdater] updateWeatherForCity:currentCity];
+        [[objc_getClass("WeatherIdentifierUpdater") sharedWeatherIdentifierUpdater] updateWeatherForCity:currentCity];
 }
 
 #pragma mark Delegates
@@ -180,6 +190,8 @@ static int authorisationStatus;
      *
      *  WeatherPreferences seems to be a pain when saving cities, and requires isCelsius to
      *  be re-set again. No idea why, but hey, goddammit Apple.
+     *
+     *  I bet the saving issues seen are casued by this method; the one where the false data is set to the first city
      */
     
     BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];

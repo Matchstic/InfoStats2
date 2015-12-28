@@ -9,12 +9,12 @@ For the HTML side of things, Cycript is injected into all instances of UIWebView
 
 To make things even easier, examples for using each of the many parts of the provided API can be found here: .
 
-Also, a quick, no-nonsense guide to Cycript and this API (recommended reading) can be found here: .
+Also, a quick, no-nonsense guide to Cycript and this API (recommended reading) can be found <a href="api_intro_html.html">here</a>.
 
 Objective-C
 -----------
 
-For those using this within tweaks, retrieving data is as simple as calling class methods; there is no need to allocate an instance of anything. Additionally, there is no need to link against InfoStats2 to obtain data from it, simply get its class via the Objective-C runtime - objc_getClass("IS2Extensions") - and call whatever method you need. Simple.
+For those using this within tweaks, retrieving data is as simple as calling class methods; there is no need to allocate an instance of anything. Additionally, there is no need to link against InfoStats2 to obtain data from it, simply get its class via the Objective-C runtime - eg, objc_getClass("IS2System") - and call whatever method you need. Simple.
 
 Headers can be found here: .
 

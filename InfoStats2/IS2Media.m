@@ -8,10 +8,11 @@
 
 #import "IS2Media.h"
 #import "IS2Extensions.h"
+#import "IS2WorkaroundDictionary.h"
 #include "MediaRemote.h"
 
 static NSDictionary *data;
-static NSMutableDictionary *mediaUpdateBlockQueue;
+static IS2WorkaroundDictionary *mediaUpdateBlockQueue;
 
 @interface NSData (Base64)
 + (NSData *)dataWithBase64EncodedString:(NSString *) string;
@@ -164,9 +165,8 @@ static char encodingTable[64] = {
 
 +(void)nowPlayingDataDidUpdate {
     // Let all our callbacks know we've got new data available.
-    for (NSString *identifier in [mediaUpdateBlockQueue allKeys]) {
-        void (^block)() = [mediaUpdateBlockQueue objectForKey:identifier];
-        [block invoke];
+    for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
+        block();
     }
 }
 
@@ -174,11 +174,11 @@ static char encodingTable[64] = {
 
 +(void)registerForNowPlayingNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock {
     if (!mediaUpdateBlockQueue) {
-        mediaUpdateBlockQueue = [NSMutableDictionary dictionary];
+        mediaUpdateBlockQueue = [IS2WorkaroundDictionary dictionary];
     }
     
     if (callbackBlock && identifier) {
-        [mediaUpdateBlockQueue setObject:callbackBlock forKey:identifier];
+        [mediaUpdateBlockQueue addObject:callbackBlock forKey:identifier];
     }
 }
 

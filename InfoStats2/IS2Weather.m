@@ -8,8 +8,12 @@
 
 #import "IS2Weather.h"
 #import "IS2WeatherProvider.h"
+#import "IS2WorkaroundDictionary.h"
 
-static NSMutableSet *weatherUpdateBlockQueue;
+static NSMutableArray *weatherUpdateBlockQueue;
+//static NSMutableArray *weatherUpdateBlockQueueTestKeys;
+//static NSMutableArray *weatherUpdateBlockQueueTestValues;
+static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
 
 @implementation IS2Weather
 
@@ -65,9 +69,47 @@ static NSMutableSet *weatherUpdateBlockQueue;
     return [[IS2WeatherProvider sharedInstance] translatedWindSpeedUnits];
 }
 
+////////// TESTING ONLY
+
++(void)registerForWeatherUpdatesWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock {
+    NSLog(@"*** [InfoStats2] :: Registering %@ for weather updates", identifier);
+    
+    if (!weatherUpdateBlockQueueTest) {
+        weatherUpdateBlockQueueTest = [IS2WorkaroundDictionary dictionary];
+    }
+    
+    if (callbackBlock && identifier) {
+        [weatherUpdateBlockQueueTest addObject:callbackBlock forKey:identifier];
+    }
+}
+
++(void)unregisterForUpdatesWithIdentifier:(NSString*)identifier {
+    NSLog(@"*** [InfoStats2] :: Un-registering for weather updates: %@", identifier);
+    
+    [weatherUpdateBlockQueueTest removeObjectForKey:identifier];
+}
+
++(void)updateWeather {
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        if (![[IS2WeatherProvider sharedInstance] isUpdating]) {
+            // Update weather, and then call blocks for updated weather.
+            [[IS2WeatherProvider sharedInstance] updateWeatherWithCallback:^{
+                for (void (^block)() in [weatherUpdateBlockQueueTest allValues]) {
+                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                        block(); // Runs all the callbacks whom requested a weather update.
+                    });
+                }
+            }];
+        }
+    });
+}
+
+///////////
+
+
 +(void)updateWeatherWithCallback:(void (^)(void))callbackBlock {
     if (!weatherUpdateBlockQueue) {
-        weatherUpdateBlockQueue = [NSMutableSet set];
+        weatherUpdateBlockQueue = [NSMutableArray array];
     }
     
     if (callbackBlock)

@@ -1,14 +1,23 @@
 #import <objc/runtime.h>
 #include "WebCycript.h"
 #import <UIKit/UIKit.h>
-#import <WebKit/WebView.h>
-#import <WebKit/WebPreferences.h>
-#import <WebKit/WebFrame.h>
+//#import <WebKit/WebView.h>
+//#import <WebKit/WebPreferences.h>
+//#import <WebKit/WebFrame.h>
 
 @class WebScriptObject;
 
 @interface UIWebDocumentView : UIView
 -(WebView*)webView;
+@end
+
+@interface WebFrame : NSObject
+-(id)dataSource;
+@end
+
+@interface WebView : NSObject
+-(void)setPreferencesIdentifier:(id)arg1;
+-(void)_setAllowsMessaging:(BOOL)arg1;
 @end
 
 @interface UIWebView (Apple)
@@ -110,8 +119,6 @@
 %ctor {
     // Load up iWidgets dylib to hook it
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
-    
-    
     
     %init;
 }

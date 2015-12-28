@@ -22,7 +22,12 @@
 #pragma mark Battery
 
 +(int)batteryPercent {
-    return [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] displayBatteryCapacityAsPercentage];
+    SBUIController *controller = (SBUIController*)[objc_getClass("SBUIController") sharedInstance];
+    
+    if ([controller respondsToSelector:@selector(displayBatteryCapacityAsPercentage)])
+        return [controller displayBatteryCapacityAsPercentage];
+    else
+        return [controller batteryCapacityAsPercentage];
 }
 
 +(int)batteryStateAsInteger {
