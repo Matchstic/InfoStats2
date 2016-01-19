@@ -20,12 +20,20 @@
 /** @name Updating Data
  */
 
-/** This method is used to update weather data asynchrously, and then notify your code that an update has occured. If you call this method whilst data is already updating, your code will be notified when the current update finishes.
- @param callbackBlock The code to call once updating finishes
+/** Sets a block to be called whenever weather data changes. The identifier must be unique string; it is recommended to use reverse DNS notation, such as "com.foo.bar".
+ @param identifier The identifier associated with your callback
+ @param callbackBlock The block to call once data changes
  */
-+(void)updateWeatherWithCallback:(void (^)(void))callbackBlock;
++(void)registerForWeatherUpdatesWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock;
 
+/** The inverse of registering for notifications. This must be called when your code is unloaded, else a thermonulcear detonation will occur on the palm of your hand.
+ @param identifier The identifier associated with your callback
+ */
++(void)unregisterForUpdatesWithIdentifier:(NSString*)identifier;
 
+/** Call this method to update the current weather data; your code will be notified when this update is completed via the callback block set in <i>-registerForWeatherUpdatesWithIdentifier:</i>.
+ */
++(void)updateWeather;
 
 /** @name Locale-specific Preferences
  */
@@ -77,15 +85,48 @@
  */
 +(NSString*)currentLocation;
 
-/** Gives an array of hourly forecasts. These are in the form of HourlyForecast objects; see https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.framework/HourlyForecast.h for the header for these.
+/** Gives an array of HourlyForecast objects ( https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.framework/HourlyForecast.h ) representing the forecast for the next few hours. It's not recommendeded to use this method if you are iterfacing with this API via JavaScript.
  @return An array of hourly forecasts
  */
 +(NSArray*)hourlyForecastsForCurrentLocation;
 
-/** Gives an array of daily forecasts. These are in the form of DayForecast objects; see https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.frameworkDayForecast.h for the header for these.
+/** Gives JSON representing hourly forecasts.
+ @return JSON representation of the hourly forecast, in the form of:<code><br/>
+ [<br/>
+ &emsp;{<br/>
+ &emsp;&emsp;"time": "15:00", (Time is formatted as per the user's locale)<br/>
+ &emsp;&emsp;"condition": 30, (The Yahoo.com condition code for this day)<br/>
+ &emsp;&emsp;"temperature": 1,<br/>
+ &emsp;&emsp;"percentPrecipitation": 30<br/>
+ &emsp;},<br/>
+ &emsp;{<br/>
+ &emsp;&emsp;...<br/>
+ &emsp;}<br/>
+ ]<br/></code>
+ */
++(NSString*)hourlyForecastsForCurrentLocationJSON;
+
+/** Gives an array of daily forecasts. These are in the form of DayForecast objects ( https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.framework/DayForecast.h ) - It's not recommendeded to use this method if you are iterfacing with this API via JavaScript.
  @return An array of daily forecasts
  */
 +(NSArray*)dayForecastsForCurrentLocation;
+
+/** Gives JSON representing daily forecasts.
+ @return JSON representation of the daily forecast, in the form of:<code><br/>
+ [<br/>
+ &emsp;{<br/>
+ &emsp;&emsp;"dayNumber": 1, (Index of the day in the data)<br/>
+ &emsp;&emsp;"dayOfWeek": 3, (Sunday is treated as day 1, with Saturday as day 7)<br/>
+ &emsp;&emsp;"condition": 30, (The Yahoo.com condition code for this day)<br/>
+ &emsp;&emsp;"high": 15,<br/>
+ &emsp;&emsp;"low": 10<br/>
+ &emsp;},<br/>
+ &emsp;{<br/>
+ &emsp;&emsp;...<br/>
+ &emsp;}<br/>
+ ]<br/></code>
+ */
++(NSString*)dayForecastsForCurrentLocationJSON;
 
 //+(int)currentDewPoint;
 //+(int)currentHumidity;

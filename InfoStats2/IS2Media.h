@@ -18,7 +18,7 @@
 /** @name Setup
  */
 
-/** Sets a block to be called whenever music data changes. The identifier must be unique string; it is recommended to use reverse DNS notation, such as "com.foo.bar". It is highly advisable to use this function, as it will allow for your code to be automatically notified of any change in media data.
+/** Sets a block to be called whenever music data changes. The identifier must be unique string; it is recommended to use reverse DNS notation, such as "com.foo.bar".
     @param identifier The identifier associated with your callback
     @param callbackBlock The block to call once data changes
 */

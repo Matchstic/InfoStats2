@@ -16,6 +16,7 @@
 @property (nonatomic, readwrite) BOOL isUpdating;
 
 +(instancetype)sharedInstance;
+-(void)setupForTweakLoaded;
 
 -(void)updateWeatherWithCallback:(void (^)(void))callbackBlock;
 -(int)currentTemperature;
@@ -40,6 +41,8 @@
 -(NSString*)currentLocation;
 -(NSArray*)hourlyForecastsForCurrentLocation;
 -(NSArray*)dayForecastsForCurrentLocation;
+-(NSString*)dayForecastsForCurrentLocationJSON;
+-(NSString*)hourlyForecastsForCurrentLocationJSON;
 
 -(BOOL)isCelsius;
 

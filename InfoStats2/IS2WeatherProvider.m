@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 #import <Weather/Weather.h>
 #import <notify.h>
+#import "IS2Extensions.h"
 
 #define deviceVersion [[[UIDevice currentDevice] systemVersion] floatValue]
 
@@ -33,6 +34,12 @@
 @interface WeatherLocationManager (iOS8)
 - (bool)localWeatherAuthorized;
 - (void)_setAuthorizationStatus:(int)arg1;
+@end
+
+@interface HourlyForecast (Additions)
+@property (nonatomic) unsigned int eventType;
+@property (nonatomic, copy) NSString *time;
+@property (nonatomic, copy) NSString *detail;
 @end
 
 @interface City (iOS7)
@@ -63,6 +70,10 @@ int status;
     return provider;
 }
 
+-(void)setupForTweakLoaded {
+    [self setCurrentCity];
+}
+
 -(id)city {
     return currentCity;
 }
@@ -82,15 +93,7 @@ int status;
         // it seems that when no data is available, we cannot use extrapolated data for the local
         // weather city. TODO: fix this.
         
-        BOOL localWeather = [CLLocationManager locationServicesEnabled];
-        
-        if (localWeather) {
-            // Local city updated
-            currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
-        } else {
-            // First city updated
-            currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
-        }
+        [self setCurrentCity];
         
         // Run callback block!
         block();
@@ -102,6 +105,26 @@ int status;
     
     // Communicate via notify() with daemon for weather updates.
     notify_post("com.matchstic.infostats2/requestWeatherUpdate");
+}
+
+-(void)setCurrentCity {
+    BOOL localWeather = [CLLocationManager locationServicesEnabled];
+    
+    if (localWeather) {
+        // Local city updated
+        currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
+    } else {
+        // First city updated
+        if (![[WeatherPreferences sharedPreferences] respondsToSelector:@selector(loadSavedCityAtIndex:)]) {
+            // This is untested; I have no idea if this will work, but I hope so.
+            @try {
+                currentCity = [[[WeatherPreferences sharedPreferences] loadSavedCities] firstObject];
+            } @catch (NSException *e) {
+                NSLog(@"*** [InfoStats2 | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
+            }
+        } else
+            currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
+    }
 }
 
 #pragma mark Translations
@@ -267,17 +290,94 @@ int status;
     return [[WeatherPreferences sharedPreferences] isCelsius];
 }
 
+-(BOOL)isWindSpeedMph {
+    // TODO: Work out whether wind speed is in mph.
+    return NO;
+}
+
 -(NSArray*)dayForecastsForCurrentLocation {
     // The widget developer will be assuming this is the upcoming forecast for the week
     NSMutableArray *array = currentCity.dayForecasts;
-    [array removeObjectAtIndex:0]; // remove today.
     
     return array;
 }
 
+-(NSString*)dayForecastsForCurrentLocationJSON {
+    NSMutableString *string = [@"[" mutableCopy];
+    
+    int i = 0;
+    for (DayForecast *forecast in [[self dayForecastsForCurrentLocation] copy]) {
+        i++;
+        [string appendString:@"{"];
+        
+        [string appendFormat:@"\"dayNumber\":%d,", forecast.dayNumber];
+        [string appendFormat:@"\"dayOfWeek\":%d,", forecast.dayOfWeek];
+        [string appendFormat:@"\"condition\":%d,", forecast.icon];
+        
+        // Convert high and low to farenheit as needed
+        int lattemp;
+        if ([[WeatherPreferences sharedPreferences] isCelsius])
+            lattemp = [forecast.high intValue];
+        else
+            lattemp = (([forecast.high intValue]*9)/5) + 32;
+        [string appendFormat:@"\"high\":%d,", lattemp];
+        
+        if ([[WeatherPreferences sharedPreferences] isCelsius])
+            lattemp = [forecast.low intValue];
+        else
+            lattemp = (([forecast.low intValue]*9)/5) + 32;
+        [string appendFormat:@"\"low\":%d", lattemp];
+        
+        [string appendFormat:@"}%@", (i == [self dayForecastsForCurrentLocation].count ? @"" : @",")];
+    }
+    
+    [string appendString:@"]"];
+    
+    return string;
+}
+
+-(NSString*)hourlyForecastsForCurrentLocationJSON {
+    NSMutableString *string = [@"[" mutableCopy];
+    
+    int i = 0;
+    for (HourlyForecast *forecast in [[self hourlyForecastsForCurrentLocation] copy]) {
+        i++;
+        [string appendString:@"{"];
+        
+        if ([forecast respondsToSelector:@selector(time24Hour)]) {
+            [string appendFormat:@"\"time\":\"%@\",", forecast.time24Hour];
+        } else {
+            [string appendFormat:@"\"time\":\"%@\",", forecast.time];
+        }
+        
+        // Convert temperature to farenheit
+        NSString *detail;
+        if ([forecast respondsToSelector:@selector(temperature)]) {
+            detail = forecast.temperature;
+        } else {
+            detail = forecast.detail;
+        }
+        
+        int lattemp;
+        if ([[WeatherPreferences sharedPreferences] isCelsius])
+            lattemp = [detail intValue];
+        else
+            lattemp = (([detail intValue]*9)/5) + 32;
+        
+        [string appendFormat:@"\"temperature\":%d,", lattemp];
+        [string appendFormat:@"\"condition\":%d,", forecast.conditionCode];
+        [string appendFormat:@"\"percentPrecipitation\":%d", (int)forecast.percentPrecipitation];
+        
+        [string appendFormat:@"}%@", (i == [self hourlyForecastsForCurrentLocation].count ? @"" : @",")];
+    }
+    
+    [string appendString:@"]"];
+    
+    return string;
+}
+
 -(NSArray*)hourlyForecastsForCurrentLocation {
     NSMutableArray *array = currentCity.hourlyForecasts;
-    [array removeObjectAtIndex:0]; // remove right now.
     
     return array;
 }

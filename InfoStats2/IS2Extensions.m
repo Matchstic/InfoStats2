@@ -6,6 +6,16 @@
 //
 
 #import "IS2Extensions.h"
+#import "IS2WeatherProvider.h"
+
+@interface IS2Calendar : NSObject
++(void)setupAfterTweakLoad;
+@end
+
+@interface IS2Notifications : NSObject
++(void)setupAfterTweakLoaded;
++(void)setupAfterSpringBoardLaunched;
+@end
 
 static NSBundle *bundle; // strings bundle.
 
@@ -19,6 +29,28 @@ static NSBundle *bundle; // strings bundle.
     }
     
     return bundle;
+}
+
++(void)setupForTweakLoaded {
+    [[IS2WeatherProvider sharedInstance] setupForTweakLoaded];
+    [IS2Calendar setupAfterTweakLoad];
+    [IS2Notifications setupAfterTweakLoaded];
+}
+
++(void)setupAfterSpringBoardLoaded {
+    [IS2Notifications setupAfterSpringBoardLaunched];
+}
+
++(NSString*)JSONescapedStringForString:(NSString*)input {
+    NSMutableString *s = [NSMutableString stringWithString:input];
+    [s replaceOccurrencesOfString:@"\"" withString:@"\\\"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
+    [s replaceOccurrencesOfString:@"/" withString:@"\\/" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
+    [s replaceOccurrencesOfString:@"\n" withString:@"\\n" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
+    [s replaceOccurrencesOfString:@"\b" withString:@"\\b" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
+    [s replaceOccurrencesOfString:@"\f" withString:@"\\f" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
+    [s replaceOccurrencesOfString:@"\r" withString:@"\\r" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
+    [s replaceOccurrencesOfString:@"\t" withString:@"\\t" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
+    return [NSString stringWithString:s];
 }
 
 @end

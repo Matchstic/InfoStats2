@@ -11,6 +11,10 @@
 @interface IS2Private : NSObject
 
 +(NSBundle*)stringsBundle;
++(void)setupForTweakLoaded;
++(void)setupAfterSpringBoardLoaded;
+
++(NSString*)JSONescapedStringForString:(NSString*)input;
 
 // Calendar
 

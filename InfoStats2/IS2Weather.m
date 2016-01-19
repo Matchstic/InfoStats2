@@ -10,9 +10,6 @@
 #import "IS2WeatherProvider.h"
 #import "IS2WorkaroundDictionary.h"
 
-static NSMutableArray *weatherUpdateBlockQueue;
-//static NSMutableArray *weatherUpdateBlockQueueTestKeys;
-//static NSMutableArray *weatherUpdateBlockQueueTestValues;
 static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
 
 @implementation IS2Weather
@@ -57,6 +54,14 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
     return [[IS2WeatherProvider sharedInstance] dayForecastsForCurrentLocation];
 }
 
++(NSString*)dayForecastsForCurrentLocationJSON {
+    return [[IS2WeatherProvider sharedInstance] dayForecastsForCurrentLocationJSON];
+}
+
++(NSString*)hourlyForecastsForCurrentLocationJSON {
+    return [[IS2WeatherProvider sharedInstance] hourlyForecastsForCurrentLocationJSON];
+}
+
 +(NSArray*)hourlyForecastsForCurrentLocation {
     return [[IS2WeatherProvider sharedInstance] hourlyForecastsForCurrentLocation];
 }
@@ -69,11 +74,7 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
     return [[IS2WeatherProvider sharedInstance] translatedWindSpeedUnits];
 }
 
-////////// TESTING ONLY
-
 +(void)registerForWeatherUpdatesWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock {
-    NSLog(@"*** [InfoStats2] :: Registering %@ for weather updates", identifier);
-    
     if (!weatherUpdateBlockQueueTest) {
         weatherUpdateBlockQueueTest = [IS2WorkaroundDictionary dictionary];
     }
@@ -84,8 +85,6 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
 }
 
 +(void)unregisterForUpdatesWithIdentifier:(NSString*)identifier {
-    NSLog(@"*** [InfoStats2] :: Un-registering for weather updates: %@", identifier);
-    
     [weatherUpdateBlockQueueTest removeObjectForKey:identifier];
 }
 
@@ -104,10 +103,8 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
     });
 }
 
-///////////
 
-
-+(void)updateWeatherWithCallback:(void (^)(void))callbackBlock {
+/*+(void)updateWeatherWithCallback:(void (^)(void))callbackBlock {
     if (!weatherUpdateBlockQueue) {
         weatherUpdateBlockQueue = [NSMutableArray array];
     }
@@ -127,7 +124,7 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
             }];
         }
     });
-}
+}*/
 
 +(BOOL)isCelsius {
     return [[IS2WeatherProvider sharedInstance] isCelsius];

@@ -10,4 +10,7 @@
 
 @interface IS2Notes : NSObject
 
++(NSArray*)allNotes;
++(NSArray*)allNotesJSON;
+
 @end

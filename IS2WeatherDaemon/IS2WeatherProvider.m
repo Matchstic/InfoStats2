@@ -141,15 +141,16 @@ static int authorisationStatus;
     } else if (authorisationStatus == kCLAuthorizationStatusDenied) {
         NSLog(@"*** [InfoStats2 | Weather] :: Updating first city in Weather.app");
         
-        if (deviceVersion < 6.0) {
+        if (![[WeatherPreferences sharedPreferences] respondsToSelector:@selector(loadSavedCityAtIndex:)]) {
             // This is untested; I have no idea if this will work, but I hope so.
             @try {
                 currentCity = [[[WeatherPreferences sharedPreferences] loadSavedCities] firstObject];
             } @catch (NSException *e) {
                 NSLog(@"*** [InfoStats2 | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
             }
-        }
-        currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
+        } else
+            currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
+        
         if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
             [currentCity associateWithDelegate:self];
         else if ([currentCity respondsToSelector:@selector(addUpdateObserver:)])

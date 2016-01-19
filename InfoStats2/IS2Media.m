@@ -164,10 +164,16 @@ static char encodingTable[64] = {
 #pragma mark Private methods
 
 +(void)nowPlayingDataDidUpdate {
-    // Let all our callbacks know we've got new data available.
-    for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
-        block();
-    }
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFDictionaryRef information) {
+        data = (__bridge NSDictionary*)information;
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            // Let all our callbacks know we've got new data available.
+            for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
+                block();
+            }
+        });
+    });
 }
 
 #pragma mark Public methods
@@ -256,16 +262,6 @@ static char encodingTable[64] = {
 
 +(void)togglePlayPause {
     MRMediaRemoteSendCommand(kMRTogglePlayPause, 0);
-}
-
-+(void)refreshMusicDataWithCallback:(void (^)(void))callbackBlock {
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFDictionaryRef information) {
-        data = (__bridge NSDictionary*)information;
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [callbackBlock invoke];
-        });
-    });
 }
 
 +(id)getValueForKey:(NSString*)key {

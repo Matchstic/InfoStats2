@@ -29,6 +29,7 @@
 		C9AA28AB1B24D1A1005846FE /* IS2Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AA28A91B24D1A1005846FE /* IS2Extensions.m */; };
 		C9B048AE1B1E19BA0000CEBD /* IS2WeatherProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */; };
 		C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */; };
+		C9C70E0D1C348F7C00546F68 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C70E0C1C348F7C00546F68 /* EventKit.framework */; };
 		C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9D72A871B1DC99300C44076 /* InfoStats2.mm */; };
 		C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */; };
@@ -73,6 +74,7 @@
 		C9AA28B21B24D22D005846FE /* com.matchstic.infostats2d.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = com.matchstic.infostats2d.plist; sourceTree = "<group>"; };
 		C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WeatherProvider.h; sourceTree = "<group>"; };
 		C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WeatherProvider.m; sourceTree = "<group>"; };
+		C9C70E0C1C348F7C00546F68 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		C9D72A791B1DC99300C44076 /* InfoStats2.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = InfoStats2.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9D72A7C1B1DC99300C44076 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9D72A821B1DC99300C44076 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9C70E0D1C348F7C00546F68 /* EventKit.framework in Frameworks */,
 				C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */,
 				C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */,
 				C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */,
@@ -290,6 +293,7 @@
 		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9C70E0C1C348F7C00546F68 /* EventKit.framework */,
 				C9372A1B1B557D1600592CCF /* MediaRemote.framework */,
 				C9E040A71B1F7DD8006E70BE /* Weather.framework */,
 				C9E040A51B1F7D97006E70BE /* CoreLocation.framework */,

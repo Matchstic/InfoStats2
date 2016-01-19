@@ -24,7 +24,7 @@
 		</div>
 	</header>
 
-	<aside>
+	<!--<aside>
 		<div class="container">
 			<nav>
 				<ul id="header-buttons" role="toolbar">
@@ -32,7 +32,7 @@
 				</ul>
 			</nav>
 		</div>
-	</aside>
+	</aside>-->
 
 	<article>
 		<div id="overview-contents" class="container">
@@ -50,9 +50,9 @@
 					</div>
 					{{/indexDescription}}
 
-					<div class="index-container">
+					<div>
 						{{#hasDocs}}
-						<div class="index-column">
+						<div>
 							<h2 class="index-title">{{page.docsTitle}}</h2>
 							<ul>
 								{{#docs}}
@@ -63,7 +63,7 @@
 						{{/hasDocs}}
 
 						{{#hasClasses}}
-						<div class="index-column">
+						<div>
 							<h2 class="index-title">{{strings.indexPage.classesTitle}}</h2>
 							<ul>
 								{{#classes}}
@@ -74,7 +74,7 @@
 						{{/hasClasses}}
 
 						{{#hasProtocolsOrCategories}}
-						<div class="index-column">
+						<div>
 							{{#hasProtocols}}
 							<h2 class="index-title">{{strings.indexPage.protocolsTitle}}</h2>
 							<ul>
