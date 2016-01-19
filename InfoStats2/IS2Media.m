@@ -164,12 +164,16 @@ static char encodingTable[64] = {
 #pragma mark Private methods
 
 +(void)nowPlayingDataDidUpdate {
+    NSLog(@"Pulling data for media change");
     MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFDictionaryRef information) {
         data = (__bridge NSDictionary*)information;
+        
+        NSLog(@"Received media change data, %@", data);
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
             // Let all our callbacks know we've got new data available.
             for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
+                NSLog(@"Calling block");
                 block();
             }
         });
@@ -220,8 +224,13 @@ static char encodingTable[64] = {
 }
 
 +(NSString*)currentTrackArtworkBase64 {
-    NSData *imageData = UIImageJPEGRepresentation([IS2Media currentTrackArtwork], 1.0);
-    return (imageData ? [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]] : @"");
+    UIImage *img = [IS2Media currentTrackArtwork];
+    if (img) {
+        NSData *imageData = UIImageJPEGRepresentation(img, 1.0);
+        return [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]];
+    } else {
+        return @"data:image/jpeg;base64,";
+    }
 }
 
 +(int)currentTrackLength {

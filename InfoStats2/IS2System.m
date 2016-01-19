@@ -16,6 +16,9 @@
 #import <SpringBoard8.1/SBUserAgent.h>
 #import <SpringBoard6.0/SpringBoard.h>
 #import <SpringBoard7.0/SBAssistantController.h>
+#import <AudioToolbox/AudioToolbox.h>
+
+void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
 
 @implementation IS2System
 
@@ -135,7 +138,7 @@
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
         [[objc_getClass("SBAssistantController") sharedInstance] _activateSiriForPPT];
     else {
-        // TODO: Handle this for iOS 6
+        // TODO: Test this for iOS 6
         [[objc_getClass("SBAssistantController") sharedInstance] activateIgnoringTouches];
     }
 }
@@ -146,6 +149,26 @@
 
 +(void)reboot {
     [(SpringBoard*)[UIApplication sharedApplication] reboot];
+}
+
++(void)vibrateDevice {
+    [IS2System vibrateDeviceForTimeLength:0.2];
+}
+
++(void)vibrateDeviceForTimeLength:(CGFloat)timeLength {
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    NSMutableArray* arr = [NSMutableArray array ];
+    
+    [arr addObject:[NSNumber numberWithBool:YES]]; //vibrate for time length
+    [arr addObject:[NSNumber numberWithInt:timeLength*1000]];
+    
+    [arr addObject:[NSNumber numberWithBool:NO]];
+    [arr addObject:[NSNumber numberWithInt:50]];
+    
+    [dict setObject:arr forKey:@"VibePattern"];
+    [dict setObject:[NSNumber numberWithInt:1] forKey:@"Intensity"];
+    
+    AudioServicesPlaySystemSoundWithVibration(4095, nil, dict);
 }
 
 @end

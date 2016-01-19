@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C92838A31C4E88F00019ABEC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C92838A21C4E88F00019ABEC /* AudioToolbox.framework */; };
 		C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9372A1B1B557D1600592CCF /* MediaRemote.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C9372A201B557DC000592CCF /* IS2Weather.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A1E1B557DC000592CCF /* IS2Weather.h */; };
 		C9372A211B557DC000592CCF /* IS2Weather.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A1F1B557DC000592CCF /* IS2Weather.m */; };
@@ -50,6 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C92838A21C4E88F00019ABEC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C9372A1B1B557D1600592CCF /* MediaRemote.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaRemote.framework; path = System/Library/PrivateFrameworks/MediaRemote.framework; sourceTree = SDKROOT; };
 		C9372A1E1B557DC000592CCF /* IS2Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Weather.h; sourceTree = "<group>"; };
 		C9372A1F1B557DC000592CCF /* IS2Weather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Weather.m; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C92838A31C4E88F00019ABEC /* AudioToolbox.framework in Frameworks */,
 				C9C70E0D1C348F7C00546F68 /* EventKit.framework in Frameworks */,
 				C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */,
 				C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */,
@@ -293,6 +296,7 @@
 		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C92838A21C4E88F00019ABEC /* AudioToolbox.framework */,
 				C9C70E0C1C348F7C00546F68 /* EventKit.framework */,
 				C9372A1B1B557D1600592CCF /* MediaRemote.framework */,
 				C9E040A71B1F7DD8006E70BE /* Weather.framework */,

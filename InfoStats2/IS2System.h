@@ -86,6 +86,15 @@
  */
 +(void)reboot;
 
+/** Vibrates the device (triggers an audible alert instead if vibration is not available, or is turned off) for 0.2 seconds
+ */
++(void)vibrateDevice;
+
+/** Vibrates the device (audible alert if vibration is unavailable or disabled) for a custom period of time
+ @param timeLength Length of time in seconds to vibrate the device for
+ */
++(void)vibrateDeviceForTimeLength:(CGFloat)timeLength;
+
 /** @name System toggles 
  */
 
