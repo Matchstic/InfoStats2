@@ -78,7 +78,7 @@
 
 #include <logos/logos.h>
 #include <substrate.h>
-@class SBApplication; @class IWWidget; @class UIWebView; @class SpringBoard; @class SBApplicationIcon; @class SBMediaController; @class BBServer; 
+@class BBServer; @class SpringBoard; @class SBMediaController; @class UIWebView; @class IWWidget; @class SBApplicationIcon; @class SBApplication; 
 static id (*_logos_orig$_ungrouped$UIWebView$initWithFrame$)(UIWebView*, SEL, CGRect); static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView*, SEL, CGRect); static void (*_logos_orig$_ungrouped$UIWebView$webView$addMessageToConsole$)(UIWebView*, SEL, WebView *, NSDictionary *); static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWebView*, SEL, WebView *, NSDictionary *); static void (*_logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$)(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void (*_logos_orig$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$)(IWWidget*, SEL, id, id, id); static void _logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$(IWWidget*, SEL, id, id, id); static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(SpringBoard*, SEL, id); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard*, SEL, id); static void (*_logos_orig$_ungrouped$SBMediaController$_nowPlayingInfoChanged)(SBMediaController*, SEL); static void _logos_method$_ungrouped$SBMediaController$_nowPlayingInfoChanged(SBMediaController*, SEL); static void (*_logos_orig$_ungrouped$SBApplication$setBadge$)(SBApplication*, SEL, id); static void _logos_method$_ungrouped$SBApplication$setBadge$(SBApplication*, SEL, id); static void (*_logos_orig$_ungrouped$SBApplicationIcon$setBadge$)(SBApplicationIcon*, SEL, id); static void _logos_method$_ungrouped$SBApplicationIcon$setBadge$(SBApplicationIcon*, SEL, id); static id _logos_meta_method$_ungrouped$BBServer$IS2_sharedInstance(Class, SEL); static id (*_logos_orig$_ungrouped$BBServer$init)(BBServer*, SEL); static id _logos_method$_ungrouped$BBServer$init(BBServer*, SEL); static void (*_logos_orig$_ungrouped$BBServer$publishBulletin$destinations$alwaysToLockScreen$)(BBServer*, SEL, __unsafe_unretained BBBulletin*, unsigned long long, _Bool); static void _logos_method$_ungrouped$BBServer$publishBulletin$destinations$alwaysToLockScreen$(BBServer*, SEL, __unsafe_unretained BBBulletin*, unsigned long long, _Bool); static void (*_logos_orig$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shouldSync$)(BBServer*, SEL, __unsafe_unretained NSSet*, unsigned long long, _Bool); static void _logos_method$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shouldSync$(BBServer*, SEL, __unsafe_unretained NSSet*, unsigned long long, _Bool); 
 
 #line 78 "/Users/Matt/iOS/Projects/InfoStats2/InfoStats2/InfoStats2.xm"
@@ -154,7 +154,14 @@ static void _logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFr
 
 static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard* self, SEL _cmd, id application) {
     _logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$(self, _cmd, application);
+    
     [IS2Private setupAfterSpringBoardLoaded];
+    
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/com.matchstic.infostats2.list"]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"InfoStats2" message:@"The official repo for InfoStats2 is\n\ninfostats2.incendo.ws\n\nNo support whatsoever will be given if you do not use the official version." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+    }
 }
 
 
@@ -248,7 +255,7 @@ static void _logos_method$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shoul
 
 #pragma mark Constructor
 
-static __attribute__((constructor)) void _logosLocalCtor_a63c6e76() {
+static __attribute__((constructor)) void _logosLocalCtor_e6aabc04() {
     
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     

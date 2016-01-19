@@ -26,15 +26,20 @@
 -(int)lowForCurrentDay;
 -(int)currentWindSpeed;
 
-//-(int)currentDewPoint;
-//-(int)currentHumidity;
-//-(int)currentWindChill;
-//-(int)currentVisibilityPercent;
-//-(int)currentChanceOfRain;
-//-(int)currentlyFeelsLike;
-//-(unsigned int)sunsetUNIXTime;
-//-(unsigned int)sunriseUNIXTime;
-//-(NSDate*)lastUpdateTime;
+-(int)currentDewPoint;
+-(int)currentHumidity;
+-(int)currentWindChill;
+-(int)currentVisibilityPercent;
+-(int)currentChanceOfRain;
+-(int)currentlyFeelsLike;
+-(NSString*)sunsetTime;
+-(NSString*)sunriseTime;
+-(NSDate*)lastUpdateTime;
+
+-(CGFloat)currentLatitude;
+-(CGFloat)currentLongitude;
+-(CGFloat)currentPressure;
+-(int)windDirection;
 
 -(NSString*)translatedWindSpeedUnits;
 

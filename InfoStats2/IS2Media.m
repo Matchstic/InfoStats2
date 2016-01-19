@@ -227,7 +227,11 @@ static char encodingTable[64] = {
     UIImage *img = [IS2Media currentTrackArtwork];
     if (img) {
         NSData *imageData = UIImageJPEGRepresentation(img, 1.0);
-        return [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]];
+        @try {
+            return [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]];
+        } @catch (NSException *e) {
+            return @"data:image/jpeg;base64,";
+        }
     } else {
         return @"data:image/jpeg;base64,";
     }

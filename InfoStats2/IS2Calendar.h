@@ -38,7 +38,7 @@
  @param endTime End time of the event, again as a timestamp in milliseconds
  @param isAllDay Defines whether the new event is to last all day - ensure that startTime is 00:00 of the day specified
  */
-+(void)addCalendarEntryWithTitle:(NSString*)title location:(NSString*)location startTimeAsTimestamp:(unsigned int)startTime andEndTimeAsTimestamp:(unsigned int)endTime isAllDayEvent:(BOOL)isAllDay;
++(void)addCalendarEntryWithTitle:(NSString*)title location:(NSString*)location startTimeAsTimestamp:(time_t)startTime andEndTimeAsTimestamp:(time_t)endTime isAllDayEvent:(BOOL)isAllDay;
 
 /** Adds a new calendar entry to the device; this is intended for usage via Objective-C.
  @param title Title of the new calendar event.
@@ -77,7 +77,7 @@
  &emsp;}<br/>
  ]<br/></code>
  */
-+(NSString*)calendarEntriesJSONBetweenStartTimeAsTimestamp:(unsigned int)startTime andEndTimeAsTimestamp:(unsigned int)endTime;
++(NSString*)calendarEntriesJSONBetweenStartTimeAsTimestamp:(time_t)startTime andEndTimeAsTimestamp:(time_t)endTime;
 
 /** Gives an array of calendar events between the dates specified. This is sourced from all available calendars defined by the user.
  @param startTime Start time of the event

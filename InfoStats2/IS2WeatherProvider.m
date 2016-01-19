@@ -295,6 +295,76 @@ int status;
     return NO;
 }
 
+-(int)currentDewPoint {
+    return (int)currentCity.dewPoint;
+}
+
+-(int)currentHumidity {
+    return (int)currentCity.humidity;
+}
+
+-(int)currentWindChill {
+    return [currentCity.windChill intValue];
+}
+
+-(int)currentVisibilityPercent {
+    return (int)currentCity.visibility;
+}
+
+-(int)currentChanceOfRain {
+    
+}
+
+-(int)currentlyFeelsLike {
+    return (int)currentCity.feelsLike;
+}
+
+-(NSString*)intTimeToString:(int)input {
+    NSString *string = @"";
+    if (input < 100) {
+        string = [NSString stringWithFormat:@"00%d", input];
+    } else if (input < 1000) {
+        string = [NSString stringWithFormat:@"0%d", input];
+    } else {
+        string = [NSString stringWithFormat:@"%d", input];
+    }
+    
+    // Split string, and insert :
+    
+    string = [NSString stringWithFormat:@"%hu%hu:%hu%hu", [string characterAtIndex:0], [string characterAtIndex:1], [string characterAtIndex:2], [string characterAtIndex:3]];
+    
+    return string;
+}
+
+-(NSString*)sunsetTime {
+    return [self intTimeToString:currentCity.sunsetTime];
+}
+
+-(NSString*)sunriseTime {
+    return [self intTimeToString:currentCity.sunriseTime];
+}
+
+-(NSDate*)lastUpdateTime {
+    return currentCity.updateTime;
+}
+
+-(CGFloat)currentLatitude {
+    return currentCity.latitude;
+}
+
+-(CGFloat)currentLongitude {
+    return currentCity.longitude;
+}
+
+-(CGFloat)currentPressure {
+    return currentCity.pressure;
+}
+
+// Degrees
+-(int)windDirection {
+    return currentCity.windDirection;
+}
+
 -(NSArray*)dayForecastsForCurrentLocation {
     // The widget developer will be assuming this is the upcoming forecast for the week
     NSMutableArray *array = currentCity.dayForecasts;

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** IS2Weather is used to access a wide variety of weather data directly sourced from Apple's weather framework. It communicates with the daemon provided with InfoStats 2 to update data in the background whenever a call to update occurs.
+/** IS2Weather is used to access a wide variety of weather data directly sourced from Apple's weather framework. It communicates with the daemon provided with InfoStats2 to update data in the background whenever a call to update occurs.
  
  On each update, if the user has enabled Location Services then a new location will be found before updating data. This ensures that the most accurate data is returned.
  
@@ -35,11 +35,16 @@
  */
 +(void)updateWeather;
 
+/** The last time the currently selected city in Apple's weather application was updated.
+ @return Last update time in the format: hours:minutes (00:00), automatically converted between 24hr and 12hr dependant on user's settings
+ */
++(NSString*)lastUpdateTime;
+
 /** @name Locale-specific Preferences
  */
 
-/** A boolean specifying whether the returned weather data is in celsius or fahrenheit.
- @return Whether weather data is in celsius or fahrenheit
+/** A boolean specifying whether the returned weather data is in Celsius or Fahrenheit.
+ @return Whether weather data is in Celsius or Fahrenheit
  */
 +(BOOL)isCelsius;
 
@@ -47,8 +52,13 @@
 +(BOOL)isWindSpeedMph;
 +(NSString*)translatedWindSpeedUnits;
 
-/** @name Data Retrieval
+/** @name Current Data
  */
+
+/** Gives the current location used for weather data. This will be either the local city if Location Services is enabled, or the first city in Apple's Weather app otherwise.
+ @return The current location for weather data
+ */
++(NSString*)currentLocation;
 
 /** Gives the current temperature.
  @return The current temperature
@@ -75,15 +85,72 @@
  */
 +(int)lowForCurrentDay;
 
-/** Gives current wind speed. This is automatically converted between mph and kph for you.
+/** The current wind speed, automatically converted between KPH and MPH dependant on the user's settings
  @return The current wind speed
  */
 +(int)currentWindSpeed;
 
-/** Gives the appropriate Yahoo.com weather code for the current weather condition.
- @return The current weather condition
+/** The current wind direction, measured in degrees from 0-360, with 0 being North and 180 being South.
+ @return Wind direction in degrees
  */
-+(NSString*)currentLocation;
++(int)currentWindDirection;
+
+/** The current wind chill for today
+ @return Wind chill, in Celsius or Farenheit dependant on user settings
+ */
++(int)currentWindChill;
+
+/** The temperature required for dew to form today.
+ @return Currrent dew point
+ */
++(int)currentDewPoint;
+
+/** The current air humidity
+ @return The current humidity as a percentage, 0-100.
+ */
++(int)currentHumidity;
+
+/** Percentage representing the quality visibility is on the current day
+ @return Visibility, measured in percent 0-100
+ */
++(int)currentVisibilityPercent;
+
+/*/** Current chance of rain, as a percentage between 0-100
+ @return Current chance of rain
+ */
+//+(int)currentChanceOfRain;
+
+/** The temperature it feels like, taking into account wind chill etc.
+ @return Current "feels like" temperature; this is automatically converted between Celsius and Farenheit
+ */
++(int)currentlyFeelsLike;
+
+/** The current pressure in millibars (typically around 900-1100)
+ @return Current atmospheric pressure
+ */
++(CGFloat)currentPressure;
+
+/** The time sunset will occur, in the format hours:minutes (eg 16:23). This is automatically converted between 24hr and 12hr dependant on user settings
+ @return Formatted sunset time
+ */
++(NSString*)sunsetTime;
+
+/** The time sunrise will occur, in the format hours:minutes (eg 16:23). This is automatically converted between 24hr and 12hr dependant on user settings
+ @return Formatted sunrise time
+ */
++(NSString*)sunriseTime;
+
+/** The current latitude of the location used for weather data; either the local area if Location Services are enabled, or the first city in Apple's Weather app if not.
+ @return Current latitude
+ */
++(CGFloat)currentLatitude;
+
+/** The current longitude of the location used for weather data; either the local area if Location Services are enabled, or the first city in Apple's Weather app if not.
+ @return Current longitude
+ */
++(CGFloat)currentLongitude;
+
+/** @name Forecasts */
 
 /** Gives an array of HourlyForecast objects ( https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.framework/HourlyForecast.h ) representing the forecast for the next few hours. It's not recommendeded to use this method if you are iterfacing with this API via JavaScript.
  @return An array of hourly forecasts
@@ -127,15 +194,5 @@
  ]<br/></code>
  */
 +(NSString*)dayForecastsForCurrentLocationJSON;
-
-//+(int)currentDewPoint;
-//+(int)currentHumidity;
-//+(int)currentWindChill;
-//+(int)currentVisibilityPercent;
-//+(int)currentChanceOfRain;
-//+(int)currentlyFeelsLike;
-//+(NSString*)sunsetTime;
-//+(NSString*)sunriseTime;
-//+(NSString*)lastUpdateTime;
 
 @end
