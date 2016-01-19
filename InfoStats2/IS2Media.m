@@ -216,12 +216,12 @@ static char encodingTable[64] = {
 
 +(UIImage*)currentTrackArtwork {
     NSData *data = [IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoArtworkData"];
-    return [UIImage imageWithData:data];
+    return (data ? [UIImage imageWithData:data] : nil);
 }
 
 +(NSString*)currentTrackArtworkBase64 {
     NSData *imageData = UIImageJPEGRepresentation([IS2Media currentTrackArtwork], 1.0);
-    return [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]];
+    return (imageData ? [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]] : @"");
 }
 
 +(int)currentTrackLength {
