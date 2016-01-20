@@ -48,7 +48,9 @@
  */
 +(BOOL)isCelsius;
 
-// Yeah I ain't documenting these yet
+/** A boolean specifying whether the returned weather data gives wind speeds in mph or km/h.
+ @return Whether wind data is measured in mph or km/h.
+ */
 +(BOOL)isWindSpeedMph;
 +(NSString*)translatedWindSpeedUnits;
 
@@ -85,7 +87,7 @@
  */
 +(int)lowForCurrentDay;
 
-/** The current wind speed, automatically converted between KPH and MPH dependant on the user's settings
+/** The current wind speed, automatically converted between mph and km/h dependant on the user's locale settings
  @return The current wind speed
  */
 +(int)currentWindSpeed;

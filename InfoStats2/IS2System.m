@@ -17,8 +17,12 @@
 #import <SpringBoard6.0/SpringBoard.h>
 #import <SpringBoard7.0/SBAssistantController.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import <sys/utsname.h>
 
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
+
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 
 @implementation IS2System
 
@@ -112,6 +116,39 @@ void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id 
     int mib[2] = {CTL_HW, typeSpecifier};
     sysctl(mib, 2, &results, &size, NULL, 0);
     return (NSUInteger) results;
+}
+
+#pragma mark System data
+
++(NSString*)deviceType {
+    NSMutableString *string = [@"" mutableCopy];
+    
+    for (int i = 0; i < [IS2System deviceModel].length-1; i++) {
+        if (isdigit([[IS2System deviceModel] characterAtIndex:i])) {
+            break;
+        } else {
+            [string appendFormat:@"%c", [[IS2System deviceModel] characterAtIndex:i]];
+        }
+    }
+    
+    return string;
+}
+
++(NSString*)deviceModel {
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    
+    NSString *machineName = [NSString stringWithCString:systemInfo.machine
+                                               encoding:NSUTF8StringEncoding];
+    return machineName;
+}
+
++(int)deviceDisplayHeight {
+    return MAX(SCREEN_HEIGHT, SCREEN_WIDTH);
+}
+
++(int)deviceDisplayWidth {
+    return MIN(SCREEN_HEIGHT, SCREEN_WIDTH);
 }
 
 #pragma mark System functions

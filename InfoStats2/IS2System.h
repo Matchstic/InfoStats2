@@ -32,8 +32,6 @@
  */
 +(int)batteryStateAsInteger;
 
-
-
 /** @name RAM data
  */
 
@@ -52,7 +50,27 @@
  */
 +(int)ramAvailable;
 
+/** @name Device Data */
 
+/** Gives the device type, eg iPhone, iPad or iPod
+ @return Device type
+ */
++(NSString*)deviceType;
+
+/** Gives the exact model of the current device, eg iPhone7,2
+ @return Device model
+ */
++(NSString*)deviceModel;
+
+/** Gives the height of the device's display in points. This does not change if the device is rotated.
+ @return The height of the display
+ */
++(int)deviceDisplayHeight;
+
+/** Gives the width of the device's display in points. This does not change if the device is rotated.
+ @return The width of the display
+ */
++(int)deviceDisplayWidth;
 
 /** @name System functions 
  */
@@ -86,11 +104,11 @@
  */
 +(void)reboot;
 
-/** Vibrates the device (triggers an audible alert instead if vibration is not available, or is turned off) for 0.2 seconds
+/** Vibrates the device (triggers an audible alert instead if vibration is not available) for 0.2 seconds. This respects the user setting "Vibrate on Silent" found under Sounds; no vibration will occur when this is turned off.
  */
 +(void)vibrateDevice;
 
-/** Vibrates the device (audible alert if vibration is unavailable or disabled) for a custom period of time
+/** Vibrates the device (audible alert if vibration is unavailable) for a custom period of time. This respects the user setting "Vibrate on Silent" found under Sounds; no vibration will occur when this is turned off.
  @param timeLength Length of time in seconds to vibrate the device for
  */
 +(void)vibrateDeviceForTimeLength:(CGFloat)timeLength;

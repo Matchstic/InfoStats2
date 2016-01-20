@@ -29,6 +29,7 @@
 -(int)currentDewPoint;
 -(int)currentHumidity;
 -(int)currentWindChill;
+-(BOOL)isWindSpeedMph;
 -(int)currentVisibilityPercent;
 -(int)currentChanceOfRain;
 -(int)currentlyFeelsLike;
@@ -38,7 +39,7 @@
 
 -(CGFloat)currentLatitude;
 -(CGFloat)currentLongitude;
--(CGFloat)currentPressure;
+-(float)currentPressure;
 -(int)windDirection;
 
 -(NSString*)translatedWindSpeedUnits;

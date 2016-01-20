@@ -38,7 +38,7 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
     return [[IS2WeatherProvider sharedInstance] lowForCurrentDay];
 }
 
-// Check for differences in mph and kph
+// Conversion between mph and kph done in IS2WeatherProvider
 +(int)currentWindSpeed {
     return [[IS2WeatherProvider sharedInstance] currentWindSpeed];
 }
@@ -48,7 +48,6 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
     return [[IS2WeatherProvider sharedInstance] currentDewPoint];
 }
 
-// check is percentage
 +(int)currentHumidity {
     return [[IS2WeatherProvider sharedInstance] currentHumidity];
 }
@@ -58,9 +57,12 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
     return [[IS2WeatherProvider sharedInstance] currentWindChill];
 }
 
-// Check is degrees
 +(int)currentWindDirection {
     return [[IS2WeatherProvider sharedInstance] windDirection];
+}
+
++(BOOL)isWindSpeedMph {
+    return [[IS2WeatherProvider sharedInstance] isWindSpeedMph];
 }
 
 +(int)currentVisibilityPercent {

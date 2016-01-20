@@ -283,6 +283,7 @@ int status;
 }
 
 -(int)currentWindSpeed {
+    // Convert between mph and kph. Data comes in as kph
     return currentCity.windSpeed;
 }
 
@@ -291,8 +292,8 @@ int status;
 }
 
 -(BOOL)isWindSpeedMph {
-    // TODO: Work out whether wind speed is in mph.
-    return NO;
+    NSNumber *val = [[NSLocale currentLocale] objectForKey:NSLocaleMeasurementSystem];
+    return [val boolValue];
 }
 
 -(int)currentDewPoint {
@@ -304,7 +305,7 @@ int status;
 }
 
 -(int)currentWindChill {
-    return [currentCity.windChill intValue];
+    return (int)currentCity.windChill;
 }
 
 -(int)currentVisibilityPercent {
@@ -331,7 +332,7 @@ int status;
     
     // Split string, and insert :
     
-    string = [NSString stringWithFormat:@"%hu%hu:%hu%hu", [string characterAtIndex:0], [string characterAtIndex:1], [string characterAtIndex:2], [string characterAtIndex:3]];
+    string = [NSString stringWithFormat:@"%c%c:%c%c", [string characterAtIndex:0], [string characterAtIndex:1], [string characterAtIndex:2], [string characterAtIndex:3]];
     
     return string;
 }
@@ -356,7 +357,7 @@ int status;
     return currentCity.longitude;
 }
 
--(CGFloat)currentPressure {
+-(float)currentPressure {
     return currentCity.pressure;
 }
 
