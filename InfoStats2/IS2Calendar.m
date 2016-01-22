@@ -59,10 +59,18 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
 }
 
 -(void)calendarUpdateNotificationRecieved:(NSNotification*)notification {
+    if (store == NULL) { // Handle if the event store becomes NULL for some reason.
+        store = [[EKEventStore alloc] init];
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^(void){
         // Let all our callbacks know we've got new data available.
         for (void (^block)() in [calendarUpdateBlockQueue allValues]) {
-            block();
+            @try {
+                block();
+            } @catch (NSException *e) {
+                NSLog(@"*** [InfoStats2 | Calendar] :: Failed to update a callback, with exception: %@", e);
+            }
         }
     });
 }
