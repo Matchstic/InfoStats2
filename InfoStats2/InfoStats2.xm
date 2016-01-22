@@ -36,10 +36,16 @@
 +(void)nowPlayingDataDidUpdate;
 @end
 
+@interface BBBulletin : NSObject
+@property(copy) NSString *sectionID;
+@end
+
 @interface IS2Notifications : NSObject
 +(void)updateNCCountWithIdentifier:(NSString*)identifier andValue:(int)value;
 +(void)updateBadgeCountWithIdentifier:(NSString*)identifier andValue:(int)value;
 +(int)notificationCountForApplication:(NSString*)bundleIdentifier;
++(void)updateLockscreenCountWithBulletin:(BBBulletin*)bulletin isRemoval:(BOOL)isRemoval isModification:(BOOL)isMod;
++(void)removeLockscreenCountsForUnlock;
 @end
 
 @interface SBApplication : NSObject
@@ -52,8 +58,8 @@
 -(SBApplication*)application;
 @end
 
-@interface BBBulletin : NSObject
-@property(copy) NSString * sectionID;
+@interface SBAwayBulletinListItem : NSObject
+@property(strong) BBBulletin *activeBulletin;
 @end
 
 @interface BBServer : NSObject
@@ -102,6 +108,8 @@
 }
 
 - (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame {
+    
+    
     if ([[self class] isEqual:[objc_getClass("CydgetWebView") class]] ||
         [[self class] isEqual:[objc_getClass("GLWebView") class]] ||
         [[self class] isEqual:[objc_getClass("CVLockHTMLBackgroundView") class]]) {
@@ -126,7 +134,7 @@
 
 %end
 
-// Needed to inject into iWidgets
+#pragma mark Needed to inject into iWidgets
 
 %hook IWWidget
 
@@ -141,7 +149,7 @@
 
 #pragma mark Hooks needed for data access
 
-// Finished loading notifier
+#pragma mark Finished loading notifier
 
 %hook SpringBoard
 
@@ -159,7 +167,7 @@
 
 %end
 
-// Media
+#pragma mark Media
 
 %hook SBMediaController
 
@@ -171,7 +179,7 @@
 
 %end
 
-// Notifications
+#pragma mark Notifications
 
 %hook SBApplication
 
@@ -207,6 +215,88 @@
     [IS2Notifications updateBadgeCountWithIdentifier:ident andValue:badgeCount];
     
     NSLog(@"*** [InfoStats2 | Notifications] :: Updated for %@ with new count of %d", ident, badgeCount);
+}
+
+%end
+
+// Lockscreen hooks
+
+%hook SBAwayBulletinListController // iOS 6
+
+-(void)_updateModelAndTableViewForAddition:(SBAwayBulletinListItem *)listItem {
+    if ([[listItem class] isEqual:[objc_getClass("SBAwayBulletinListItem") class]]) {
+        [IS2Notifications updateLockscreenCountWithBulletin:listItem.activeBulletin isRemoval:NO isModification:NO];
+    }
+    %orig;
+}
+
+- (void)_updateModelAndTableViewForModification:(SBAwayBulletinListItem *)arg1 originalHeight:(float)arg2 {
+    if ([[arg1 class] isEqual:[objc_getClass("SBAwayBulletinListItem") class]]) {
+        [IS2Notifications updateLockscreenCountWithBulletin:arg1.activeBulletin isRemoval:NO isModification:YES];
+    }
+    %orig;
+}
+
+-(void)_updateModelAndTableViewForRemoval:(SBAwayBulletinListItem *)arg1 originalHeight:(float)arg2 {
+    if ([[arg1 class] isEqual:[objc_getClass("SBAwayBulletinListItem") class]]) {
+        [IS2Notifications updateLockscreenCountWithBulletin:arg1.activeBulletin isRemoval:YES isModification:NO];
+    }
+    %orig;
+}
+
+%end
+
+%hook SBLockScreenNotificationListController
+
+-(void)_updateModelAndViewForAdditionOfItem:(SBAwayBulletinListItem *)listItem {
+    // Update IS2Notifications
+    if ([[listItem class] isEqual:[objc_getClass("SBAwayBulletinListItem") class]]) {
+        [IS2Notifications updateLockscreenCountWithBulletin:listItem.activeBulletin isRemoval:NO isModification:NO];
+    }
+    
+    %orig;
+}
+
+- (void)_updateModelAndViewForReplacingItem:(SBAwayBulletinListItem *)arg1 withNewItem:(SBAwayBulletinListItem *)arg2 {
+    if ([[arg2 class] isEqual:[objc_getClass("SBAwayBulletinListItem") class]]) {
+        [IS2Notifications updateLockscreenCountWithBulletin:arg2.activeBulletin isRemoval:NO isModification:YES];
+    }
+    
+    %orig;
+}
+
+- (void)_updateModelAndViewForModificationOfItem:(SBAwayBulletinListItem *)arg1 {
+    if ([[arg1 class] isEqual:[objc_getClass("SBAwayBulletinListItem") class]]) {
+        [IS2Notifications updateLockscreenCountWithBulletin:arg1.activeBulletin isRemoval:NO isModification:YES];
+    }
+    %orig;
+}
+
+-(void)_updateModelForRemovalOfItem:(SBAwayBulletinListItem *)arg1 updateView:(BOOL)arg2 {
+    if ([[arg1 class] isEqual:[objc_getClass("SBAwayBulletinListItem") class]]) {
+        [IS2Notifications updateLockscreenCountWithBulletin:arg1.activeBulletin isRemoval:YES isModification:NO];
+    }
+    %orig;
+}
+
+%end
+
+// Notify that unlocking has occured
+
+%hook SBLockScreenViewController
+
+-(void)_releaseLockScreenView {
+    %orig;
+    [IS2Notifications removeLockscreenCountsForUnlock];
+}
+
+%end
+
+%hook SBAwayController
+
+- (void)_releaseAwayView {
+    %orig;
+    [IS2Notifications removeLockscreenCountsForUnlock];
 }
 
 %end

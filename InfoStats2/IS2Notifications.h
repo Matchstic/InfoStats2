@@ -41,6 +41,12 @@
  */
 +(int)lockscreenNotificationCountForApplication:(NSString*)bundleIdentifier;
 
+/** Provides the total count of notifications over all applications.
+ @param onLockscreenOnly If true, this will only return the count of notifications displayed on the lockscreen. If the device is unlocked, this will always be 0.
+ @return The total count of notifications
+ */
++(int)totalNotificationCountOnLockScreenOnly:(BOOL)onLockscreenOnly;
+
 /** Gives an array of <code>BBBulletin</code> objects representing the data currently available in the Notification Centre. If the application specified is prevented from displaying items in the NC through Settings, then this will return an emtpy array.
  @param bundleIdentifier The bundle identifier of the application specified
  @return An array of <code>BBBulletin</code> objects.

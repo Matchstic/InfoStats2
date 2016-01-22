@@ -48,16 +48,16 @@
 @end
 
 @interface BBBulletin : NSObject
-@property(copy) NSString * bulletinID;
+@property(copy) NSString *bulletinID;
 @property bool clearable;
-@property(retain) NSDate * date;
-@property(copy) BBAction * defaultAction;
-@property(retain) NSDate * lastInterruptDate;
-@property(copy) NSString * message;
-@property(retain) NSDate * publicationDate;
-@property(copy) NSString * sectionID;
+@property(retain) NSDate *date;
+@property(copy) BBAction *defaultAction;
+@property(retain) NSDate *lastInterruptDate;
+@property(copy) NSString *message;
+@property(retain) NSDate *publicationDate;
+@property(copy) NSString *sectionID;
 @property bool showsMessagePreview;
-@property(copy) NSString * title;
+@property(copy) NSString *title;
 @end
 
 @interface BBServer : NSObject
@@ -74,6 +74,7 @@
 
 static NSMutableDictionary *ncNotificationCounts;
 static NSMutableDictionary *badgeNotificationCounts;
+static NSMutableDictionary *lockscreenBulletins;
 static IS2WorkaroundDictionary *notificationUpdateQueue;
 static int notificationPublishedCount = 0;
 
@@ -94,6 +95,8 @@ inline int bestCountForApp(NSString *identifier) {
     ncNotificationCounts = [NSMutableDictionary dictionary];
     badgeNotificationCounts = [NSMutableDictionary dictionary];
     notificationUpdateQueue = [IS2WorkaroundDictionary dictionary];
+    lockscreenBulletins = [NSMutableDictionary dictionary];
+    [lockscreenBulletins setObject:[NSMutableDictionary dictionary] forKey:@"countDictionary"];
 }
 
 +(void)setupAfterSpringBoardLaunched {
@@ -118,6 +121,27 @@ inline int bestCountForApp(NSString *identifier) {
 +(void)updateBadgeCountWithIdentifier:(NSString*)identifier andValue:(int)value {
     [badgeNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
     [IS2Notifications notifyCallbacksOfDataChange];
+}
+
++(void)updateLockscreenCountWithBulletin:(BBBulletin*)bulletin isRemoval:(BOOL)isRemoval isModification:(BOOL)isMod {
+    if (!isRemoval) {
+        [lockscreenBulletins setObject:bulletin forKey:bulletin.bulletinID];
+    } else {
+        [lockscreenBulletins removeObjectForKey:bulletin.bulletinID];
+    }
+    
+    NSMutableDictionary *countDict = lockscreenBulletins[@"countDictionary"];
+    int oldCount = [[countDict objectForKey:bulletin.sectionID] intValue];
+    
+    if (isRemoval) oldCount -= 1;
+    else if (!isMod) oldCount += 1;
+    
+    [countDict setObject:[NSNumber numberWithInt:oldCount] forKey:bulletin.sectionID];
+}
+
++(void)removeLockscreenCountsForUnlock {
+    [lockscreenBulletins removeAllObjects];
+    [lockscreenBulletins setObject:[NSMutableDictionary dictionary] forKey:@"countDictionary"];
 }
 
 +(void)notifyCallbacksOfDataChange {
@@ -175,8 +199,31 @@ inline int bestCountForApp(NSString *identifier) {
 }
 
 +(int)lockscreenNotificationCountForApplication:(NSString*)bundleIdentifier {
-    // Talk to SBLockScreenBulletinListViewController...
-    return 0;
+    NSDictionary *countDict = [lockscreenBulletins objectForKey:@"countDictionary"];
+    return [countDict[bundleIdentifier] intValue];
+}
+
++(int)totalNotificationCountOnLockScreenOnly:(BOOL)onLockscreenOnly {
+    if (onLockscreenOnly) {
+        return (int)lockscreenBulletins.count - 1; // -1 to remove count dictionary
+    } else {
+        // For each bundle id stored, count up. First, work out list of bundle IDs from the two dictionaries.
+        NSMutableArray *bundleIdentifiers = [NSMutableArray arrayWithArray:ncNotificationCounts.allKeys];
+        
+        for (NSString *iden in badgeNotificationCounts.allKeys) {
+            if (![bundleIdentifiers containsObject:iden]) {
+                [bundleIdentifiers addObject:iden];
+            }
+        }
+        
+        int count = 0;
+        
+        for (NSString *bundleIdentifier in bundleIdentifiers) {
+            count += bestCountForApp(bundleIdentifier);
+        }
+        
+        return count;
+    }
 }
 
 +(NSArray*)notificationsForApplication:(NSString*)bundleIdentifier {
