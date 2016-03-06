@@ -9,11 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "Reachability.h"
+#import "IS2LocationManager.h"
 
-@interface IS2WeatherUpdater : NSObject <CLLocationManagerDelegate>
+@interface IS2WeatherUpdater : NSObject
 
 //@property (nonatomic) BOOL setup;
-@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, weak) IS2LocationManager *locationManager;
 @property (nonatomic, strong) Reachability *reach;
+
+-(id)initWithLocationManager:(IS2LocationManager*)locationManager;
 
 @end

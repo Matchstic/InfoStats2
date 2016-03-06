@@ -72,24 +72,25 @@
 
 static City *currentCity;
 static int notifyToken;
-static int authorisationStatus;
 
 @implementation IS2WeatherUpdater
 
--(id)init {
+-(id)initWithLocationManager:(IS2LocationManager*)locationManager {
     [City initialize];
     
     self = [super init];
     if (self) {
-        self.locationManager = [[CLLocationManager alloc] init];
-        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-        [self.locationManager setDelegate:self];
-        [self.locationManager setActivityType:CLActivityTypeOtherNavigation]; // Allows use of GPS
+        self.locationManager = locationManager;
+        [self.locationManager registerNewCallbackForLocationData:^(CLLocation* mostRecentLocation) {
+            if (mostRecentLocation) {
+                [self updateLocalCityWithLocation:mostRecentLocation];
+            } else {
+                NSLog(@"*** [InfoStats2 | Weather] :: Cannot determine location; using extrapolated data from last update.");
+                notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
+            }
+        }];
         
         self.reach = [Reachability reachabilityForInternetConnection];
-
-        authorisationStatus = kCLAuthorizationStatusNotDetermined;
     }
     
     return self;
@@ -113,19 +114,19 @@ static int authorisationStatus;
 -(void)fullUpdate {
     if (deviceVersion >= 8.0) {
         if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setLocationTrackingReady:activelyTracking:)]) {
-            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:(authorisationStatus != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
+            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
         } else {
-            [[WeatherLocationManager sharedWeatherLocationManager] setDelegate:self];
-            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:(authorisationStatus != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO watchKitExtension:NO];
+            [(WeatherLocationManager*)[WeatherLocationManager sharedWeatherLocationManager] setDelegate:self.locationManager];
+            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO watchKitExtension:NO];
         }
         
         if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(_setAuthorizationStatus:)])
-             [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:authorisationStatus];
+             [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:[self.locationManager currentAuthorisationStatus]];
         else if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setAuthorizationStatus:)])
-            [[WeatherLocationManager sharedWeatherLocationManager] setAuthorizationStatus:authorisationStatus];
+            [[WeatherLocationManager sharedWeatherLocationManager] setAuthorizationStatus:[self.locationManager currentAuthorisationStatus]];
     }
     
-    if (authorisationStatus == kCLAuthorizationStatusAuthorized) {
+    if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusAuthorized) {
         NSLog(@"*** [InfoStats2 | Weather] :: Updating, and also getting a new location");
         
         currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
@@ -137,8 +138,8 @@ static int authorisationStatus;
         [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
         
         // Force finding of new location, and then update from there.
-        [self.locationManager startUpdatingLocation];
-    } else if (authorisationStatus == kCLAuthorizationStatusDenied) {
+        [self.locationManager.locationManager startUpdatingLocation];
+    } else if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusDenied) {
         NSLog(@"*** [InfoStats2 | Weather] :: Updating first city in Weather.app");
         
         if (![[WeatherPreferences sharedPreferences] respondsToSelector:@selector(loadSavedCityAtIndex:)]) {
@@ -213,32 +214,6 @@ static int authorisationStatus;
     
     // Return a message back to SpringBoard that updating is now done.
     notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
-}
-
-- (void)locationManager:(id)arg1 didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    NSLog(@"*** [InfoStats2 | Weather] :: Location manager auth state changed to %d.", status);
-    
-    int oldStatus = authorisationStatus;
-    authorisationStatus = status;
-    
-    if (oldStatus == kCLAuthorizationStatusAuthorized && oldStatus != status) {
-        [self.locationManager stopUpdatingLocation];
-    }
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    NSLog(@"*** [InfoStats2 | Weather] :: Location manager did update locations.");
-    
-    // Locations updated! We can now ask for an update to weather with the new locations.
-    CLLocation *mostRecentLocation = [[locations lastObject] copy];
-    if (mostRecentLocation) {
-        [self updateLocalCityWithLocation:mostRecentLocation];
-    } else {
-        NSLog(@"*** [InfoStats2 | Weather] :: Cannot determine location; using extrapolated data from last update.");
-        notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
-    }
-        
-    [self.locationManager stopUpdatingLocation];
 }
 
 #pragma mark Message listening from SpringBoard

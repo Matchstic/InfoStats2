@@ -40,6 +40,7 @@
 		C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A71B1F7DD8006E70BE /* Weather.framework */; };
 		C9EA1D791B5FF13500DCEF75 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C9EA1D771B5FF13500DCEF75 /* Reachability.h */; };
 		C9EA1D7A1B5FF13500DCEF75 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C9EA1D781B5FF13500DCEF75 /* Reachability.m */; };
+		C9F191161C8CBFE6006DF5B4 /* IS2LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F191151C8CBFE6006DF5B4 /* IS2LocationManager.m */; };
 		C9FAC32E1B605AC800199CAC /* IS2Calendar.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FAC32C1B605AC800199CAC /* IS2Calendar.h */; };
 		C9FAC32F1B605AC800199CAC /* IS2Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FAC32D1B605AC800199CAC /* IS2Calendar.m */; };
 		C9FAC3321B605AD400199CAC /* IS2Notes.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FAC3301B605AD400199CAC /* IS2Notes.h */; };
@@ -92,6 +93,8 @@
 		C9E040A71B1F7DD8006E70BE /* Weather.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Weather.framework; path = ../../../../../opt/iOSOpenDev/frameworks/Weather.framework; sourceTree = "<group>"; };
 		C9EA1D771B5FF13500DCEF75 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C9EA1D781B5FF13500DCEF75 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		C9F191141C8CBFE6006DF5B4 /* IS2LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2LocationManager.h; sourceTree = "<group>"; };
+		C9F191151C8CBFE6006DF5B4 /* IS2LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2LocationManager.m; sourceTree = "<group>"; };
 		C9FAC32C1B605AC800199CAC /* IS2Calendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Calendar.h; sourceTree = "<group>"; };
 		C9FAC32D1B605AC800199CAC /* IS2Calendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Calendar.m; sourceTree = "<group>"; };
 		C9FAC3301B605AD400199CAC /* IS2Notes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Notes.h; sourceTree = "<group>"; };
@@ -230,6 +233,8 @@
 		C9AA288D1B24BAE8005846FE /* IS2WeatherDaemon */ = {
 			isa = PBXGroup;
 			children = (
+				C9F191141C8CBFE6006DF5B4 /* IS2LocationManager.h */,
+				C9F191151C8CBFE6006DF5B4 /* IS2LocationManager.m */,
 				C9AA289F1B24BE13005846FE /* IS2WeatherProvider.h */,
 				C9AA28A01B24BE13005846FE /* IS2WeatherProvider.m */,
 				C9AA28A11B24BE13005846FE /* Reachability.h */,
@@ -526,6 +531,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9AA289E1B24BDF1005846FE /* main.mm in Sources */,
+				C9F191161C8CBFE6006DF5B4 /* IS2LocationManager.m in Sources */,
 				C9AA28A41B24BE13005846FE /* Reachability.m in Sources */,
 				C9AA28A31B24BE13005846FE /* IS2WeatherProvider.m in Sources */,
 			);
