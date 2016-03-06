@@ -18,6 +18,10 @@ static BOOL isAuthorised;
 static IS2Calendar *sharedInstance;
 static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
 
+@interface EKCalendar (Private)
+@property (nonatomic, readonly) BOOL isHidden;
+@end
+
 @implementation IS2Calendar
 
 #pragma Private methods
@@ -151,7 +155,15 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
 
 +(NSArray*)calendarEntriesBetweenStartTime:(NSDate*)startTime andEndTime:(NSDate*)endTime {
     // Search all calendars
-    NSPredicate *predicate = [store predicateForEventsWithStartDate:startTime endDate:endTime calendars:nil];
+    NSMutableArray *searchableCalendars = [[store calendarsForEntityType:EKEntityTypeEvent] mutableCopy];
+    
+    for (EKCalendar *cal in [searchableCalendars copy]) {
+        if (cal.isHidden) {
+            [searchableCalendars removeObject:cal];
+        }
+    }
+    
+    NSPredicate *predicate = [store predicateForEventsWithStartDate:startTime endDate:endTime calendars:searchableCalendars];
     
     // Fetch all events that match the predicate
     NSMutableArray *events = [NSMutableArray arrayWithArray:[store eventsMatchingPredicate:predicate]];
