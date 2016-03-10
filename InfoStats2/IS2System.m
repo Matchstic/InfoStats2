@@ -7,7 +7,7 @@
 //
 
 #import "IS2System.h"
-#import <mach/mach.h>
+#include <mach/mach.h>
 #import <SpringBoard7.0/SBUIController.h>
 #import <mach/mach_host.h>
 #include <sys/sysctl.h>
@@ -18,13 +18,30 @@
 #import <SpringBoard7.0/SBAssistantController.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <sys/utsname.h>
+#include <sys/types.h>
+#include <mach/processor_info.h>
 
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
 
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 
+static processor_info_array_t cpuInfo, prevCpuInfo;
+static mach_msg_type_number_t numCpuInfo, numPrevCpuInfo;
+static unsigned numCPUs;
+static NSLock *CPUUsageLock;
+
 @implementation IS2System
+
++(void)setupAfterTweakLoaded {
+    int mib[2U] = { CTL_HW, HW_NCPU };
+    size_t sizeOfNumCPUs = sizeof(numCPUs);
+    int status = sysctl(mib, 2U, &numCPUs, &sizeOfNumCPUs, NULL, 0U);
+    if(status)
+        numCPUs = 1;
+    
+    CPUUsageLock = [[NSLock alloc] init];
+}
 
 #pragma mark Battery
 
@@ -206,6 +223,87 @@ void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id 
     [dict setObject:[NSNumber numberWithInt:1] forKey:@"Intensity"];
     
     AudioServicesPlaySystemSoundWithVibration(4095, nil, dict);
+}
+
++(double)cpuUsage {
+    natural_t numCPUsU = 0U;
+    kern_return_t err = host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &numCPUsU, &cpuInfo, &numCpuInfo);
+    
+    unsigned usage = 0;
+    
+    if(err == KERN_SUCCESS) {
+        [CPUUsageLock lock];
+        
+        for(unsigned i = 0U; i < numCPUs; ++i) {
+            float inUse, total;
+            if(prevCpuInfo) {
+                inUse = (
+                         (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER]   - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER])
+                         + (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM] - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM])
+                         + (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE]   - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE])
+                         );
+                total = inUse + (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE] - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE]);
+            } else {
+                inUse = cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER] + cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM] + cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE];
+                total = inUse + cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE];
+            }
+            
+            usage += inUse / total;
+        }
+        [CPUUsageLock unlock];
+        
+        if(prevCpuInfo) {
+            size_t prevCpuInfoSize = sizeof(integer_t) * numPrevCpuInfo;
+            vm_deallocate(mach_task_self(), (vm_address_t)prevCpuInfo, prevCpuInfoSize);
+        }
+        
+        prevCpuInfo = cpuInfo;
+        numPrevCpuInfo = numCpuInfo;
+        
+        cpuInfo = NULL;
+        numCpuInfo = 0U;
+    }
+    
+    return usage;
+}
+
++(uint64_t)freeDiskSpaceinBytesForPath:(NSString*)path {
+    uint64_t totalSpace = 0;
+    uint64_t totalFreeSpace = 0;
+    
+    __autoreleasing NSError *error = nil;
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:&error];
+    
+    if (dictionary) {
+        NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
+        NSNumber *freeFileSystemSizeInBytes = [dictionary objectForKey:NSFileSystemFreeSize];
+        totalSpace = [fileSystemSizeInBytes unsignedLongLongValue];
+        totalFreeSpace = [freeFileSystemSizeInBytes unsignedLongLongValue];
+    } else {
+        NSLog(@"[InfoStats2 | System] :: Failed to read storage data: %@", [error localizedDescription]);
+    }
+    
+    return totalFreeSpace;
+}
+
++(uint64_t)freeDiskSpaceInFormat:(int)format {
+    uint64_t bytes = [self freeDiskSpaceinBytesForPath:@"/"];
+    
+    switch (format) {
+        case 1: // kb
+            return bytes/(1024ll);
+            break;
+        case 2: // MB
+            return bytes/(1024ll)/(1024ll);
+            break;
+        case 3: // GB
+            return bytes/(1024ll)/(1024ll)/(1024ll);
+            
+        case 0: // Bytes
+        default:
+            return bytes;
+            break;
+    }
 }
 
 @end

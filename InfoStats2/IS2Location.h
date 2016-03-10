@@ -53,20 +53,55 @@ typedef enum : NSUInteger {
  */
 +(void)removeRequesterForLocationDistanceInterval:(NSString*)requester;
 
-/** 
+/** Checks if the user has enabled Location Services in Settings.
  */
 +(BOOL)isLocationServicesEnabled;
 
+/** @name Data retrieval
+ */
+
+/** The latitude of the user's current location
+ */
 +(double)currentLatitude;
+
+/** The longitude of the user's current location
+ */
 +(double)currentLongitude;
+
+/** The city the user's current location is within.
+ */
 +(NSString*)cityForCurrentLocation;
+
+/** The neighbourhood the user's current location is within. This may return null; at the time of writing, it is unsure whether this only works in the United States.
+ */
 +(NSString*)neighbourhoodForCurrentLocation;
+
+/** The state the user's current location is within. Note: not to be confused with county.
+ */
 +(NSString*)stateForCurrentLocation;
+
+/** The county the user's current location is within.
+ */
 +(NSString*)countyForCurrentLocation;
+
+/** The country the user's current location is within.
+ */
 +(NSString*)countryForCurrentLocation;
+
+/** The ISO Country Code for the country the user's current location is within.
+ */
 +(NSString*)ISOCountryCodeForCurrentLocation;
+
+/** The post code for where the user's current location is located. When requesting a location update interval of 1 kilometer, this will not be accurate.
+ */
 +(NSString*)postCodeForCurrentLocation;
+
+/** The street name for where the user's current location is located. When requesting a location update interval of 1 kilometer, this will not be accurate.
+ */
 +(NSString*)streetForCurrentLocation;
+
+/** The house number for where the user's current location is located. When requesting a location update interval of 1 kilometer, this will not be accurate.
+ */
 +(NSString*)houseNumberForCurrentLocation;
 
 @end

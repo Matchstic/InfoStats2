@@ -13,9 +13,7 @@
 
 @interface IS2System : NSObject
 
-
-/** @name Battery data 
- */
+/** @name Device Data */
 
 /** Gives the current percentage of the battery remaining. This value is equal to that shown in the status bar.
 @return The currrent battery remaining percentage
@@ -32,9 +30,6 @@
  */
 +(int)batteryStateAsInteger;
 
-/** @name RAM data
- */
-
 /** Gives the current amount of free RAM in megabytes (MB). This is calculated by adding the free RAM to the inactive RAM, since it appears iOS also treats inactive as free.
  @return The currrent amount of free RAM
  */
@@ -50,7 +45,15 @@
  */
 +(int)ramAvailable;
 
-/** @name Device Data */
+/** Gives the current CPU usage (across all available cores) 
+ @return Current CPU usage (combined for system processes and user processes)
+ */
++(double)cpuUsage;
+
+/** Gives the current free space left on the device. 
+ @param format Adjusts the output of the function to be in bytes, kb, MB or GB:<br/>0 - Bytes<br/>1 - kb<br/>2 - MB<br/>3 - GB
+ */
++(uint64_t)freeDiskSpaceInFormat:(int)format;
 
 /** Gives the device type, eg iPhone, iPad or iPod
  @return Device type

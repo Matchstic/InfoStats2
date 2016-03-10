@@ -12,6 +12,10 @@
 +(void)setupAfterTweakLoad;
 @end
 
+@interface IS2System : NSObject
++(void)setupAfterTweakLoaded;
+@end
+
 @interface IS2Notifications : NSObject
 +(void)setupAfterTweakLoaded;
 +(void)setupAfterSpringBoardLaunched;
@@ -40,6 +44,7 @@ static NSBundle *bundle; // strings bundle.
     [IS2Calendar setupAfterTweakLoad];
     [IS2Notifications setupAfterTweakLoaded];
     [IS2Location setupAfterTweakLoaded];
+    [IS2System setupAfterTweakLoaded];
 }
 
 +(void)setupAfterSpringBoardLoaded {
