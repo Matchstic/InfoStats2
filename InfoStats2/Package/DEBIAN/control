@@ -3,7 +3,7 @@ Name: InfoStats 2
 Version: 0.4.1
 Description: A highly powerful framework for widgets.
 Section: System
-Depends: firmware (>= 6.0), mobilesubstrate, com.saurik.webcycript
+Depends: firmware (>= 6.0), mobilesubstrate, com.saurik.webcycript, com.rpetrich.rocketbootstrap (>= 1.0.2) | firmware (<< 7.0)
 Priority: extra
 Architecture: iphoneos-arm
 Author: Matt Clarke <matt@incendo.ws>

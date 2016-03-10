@@ -77,6 +77,11 @@
  */
 +(NSString*)currentConditionAsString;
 
+/** Gives a longer string detailing general conditions for the current day; an example of this output can be seen in the Notification Center. Please note that this functionality is available for iOS 7+; for iOS 6, this will simply return the current condition.
+ @return A longer description of the day's conditions.
+ */
++(NSString*)naturalLanguageDescription;
+
 /** Gives the high temperature for the current day.
  @return Today's high temperature
  */

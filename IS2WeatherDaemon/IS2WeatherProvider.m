@@ -196,6 +196,8 @@ static int notifyToken;
      *  I bet the saving issues seen are casued by this method; the one where the false data is set to the first city
      */
     
+    // TODO: Verify City is valid.
+    
     BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
     
     if ([currentCity isLocalWeatherCity]) {
@@ -214,33 +216,6 @@ static int notifyToken;
     
     // Return a message back to SpringBoard that updating is now done.
     notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
-}
-
-#pragma mark Message listening from SpringBoard
-
-- (void)timerFireMethod:(NSTimer *)timer {
-	int status, check;
-	static char first = 0;
-	if (!first) {
-		status = notify_register_check("com.matchstic.infostats2/requestWeatherUpdate", &notifyToken);
-		if (status != NOTIFY_STATUS_OK) {
-			fprintf(stderr, "registration failed (%u)\n", status);
-			return;
-		}
-        
-		first = 1;
-        
-        return; // We don't want to update the weather on the first run, only when requested.
-	}
-    
-	status = notify_check(notifyToken, &check);
-	if (status == NOTIFY_STATUS_OK && check != 0) {
-		NSLog(@"*** [InfoStats2 | Weather] :: Weather update request received.");
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [self updateWeather];
-        });
-	}
 }
 
 @end

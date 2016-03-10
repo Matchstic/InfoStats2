@@ -17,6 +17,7 @@
 @property (nonatomic, weak) IS2LocationManager *locationManager;
 @property (nonatomic, strong) Reachability *reach;
 
+-(void)updateWeather;
 -(id)initWithLocationManager:(IS2LocationManager*)locationManager;
 
 @end

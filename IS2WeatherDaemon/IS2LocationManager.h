@@ -17,7 +17,7 @@ typedef enum : NSUInteger {
 } IS2LocationUpdateInterval;
 
 @interface IS2LocationManager : NSObject <CLLocationManagerDelegate> {
-    NSMutableSet *_locationCallbacks;
+    NSMutableArray *_locationCallbacks;
     int authorisationStatus;
     IS2LocationUpdateInterval _interval;
 }

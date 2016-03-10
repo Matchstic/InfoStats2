@@ -17,6 +17,7 @@
         self.locationManager = [[CLLocationManager alloc] init];
         
         // We'll default to manual updating.
+        _interval = kManualUpdate;
         
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
@@ -33,15 +34,18 @@
     switch (interval) {
         case kTurnByTurn:
             [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-            [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+            [self.locationManager setDistanceFilter:10];
+            [self.locationManager startUpdatingLocation];
             break;
         case k100Meters:
             [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
             [self.locationManager setDistanceFilter:100];
+            [self.locationManager startUpdatingLocation];
             break;
         case k1Kilometer:
             [self.locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
             [self.locationManager setDistanceFilter:1000];
+            [self.locationManager startUpdatingLocation];
             break;
         case kManualUpdate:
             [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
@@ -52,14 +56,16 @@
         default:
             break;
     }
+    
+    _interval = interval;
 }
 
 -(void)registerNewCallbackForLocationData:(void(^)(CLLocation*))callback {
     if (!_locationCallbacks) {
-        _locationCallbacks = [NSMutableSet set];
+        _locationCallbacks = [NSMutableArray array];
     }
     
-    [_locationCallbacks addObject:[NSValue valueWithNonretainedObject:callback]];
+    [_locationCallbacks addObject:callback];
 }
 
 -(int)currentAuthorisationStatus {
@@ -86,8 +92,7 @@
     CLLocation *mostRecentLocation = [[locations lastObject] copy];
 
     // Give callbacks our new location.
-    for (NSValue *value in _locationCallbacks) {
-        void(^callback)(CLLocation*) = [value nonretainedObjectValue];
+    for (void(^callback)(CLLocation*) in _locationCallbacks) {
         callback(mostRecentLocation);
     }
     

@@ -45,6 +45,7 @@
 @interface City (iOS7)
 @property (assign, nonatomic) unsigned conditionCode;
 @property (assign, nonatomic) BOOL isRequestedByFrameworkClient;
+- (id)naturalLanguageDescription;
 
 +(id)descriptionForWeatherUpdateDetail:(unsigned)arg1;
 @end
@@ -83,20 +84,22 @@ int status;
     self.isUpdating = YES;
     block = callbackBlock;
     
-    NSLog(@"*** [InfoStats2] :: Attempting to request weather update.");
+    NSLog(@"*** [InfoStats2 | Weather] :: Attempting to request weather update.");
     
     // Set status bar indicator going
     
     status = notify_register_dispatch("com.matchstic.infostats2/weatherUpdateCompleted", &notifyToken, dispatch_get_main_queue(), ^(int t) {
-        NSLog(@"*** [InfoStats2] :: Weather has been updated, reloading data.");
+        NSLog(@"*** [InfoStats2 | Weather] :: Weather has been updated, reloading data.");
         
         // it seems that when no data is available, we cannot use extrapolated data for the local
         // weather city. TODO: fix this.
         
         [self setCurrentCity];
         
-        // Run callback block!
-        block();
+        // Run callback block, but only if we actually have valid data.
+        if (currentCity) {
+            block();
+        }
         
         self.isUpdating = NO;
         
@@ -261,6 +264,18 @@ int status;
 
 -(NSString*)currentConditionAsString {
     return [self nameForCondition:[self currentCondition]];
+}
+
+-(NSString*)naturalLanguageDescription {
+    NSString *output = @"";
+    
+    if ([currentCity respondsToSelector:@selector(naturalLanguageDescription)]) {
+        output = [currentCity naturalLanguageDescription];
+    } else {
+        output = [self currentConditionAsString];
+    }
+    
+    return output;
 }
 
 -(int)highForCurrentDay {

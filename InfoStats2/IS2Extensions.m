@@ -17,6 +17,10 @@
 +(void)setupAfterSpringBoardLaunched;
 @end
 
+@interface IS2Location : NSObject
++(void)setupAfterTweakLoaded;
+@end
+
 static NSBundle *bundle; // strings bundle.
 
 @implementation IS2Private
@@ -35,6 +39,7 @@ static NSBundle *bundle; // strings bundle.
     [[IS2WeatherProvider sharedInstance] setupForTweakLoaded];
     [IS2Calendar setupAfterTweakLoad];
     [IS2Notifications setupAfterTweakLoaded];
+    [IS2Location setupAfterTweakLoaded];
 }
 
 +(void)setupAfterSpringBoardLoaded {

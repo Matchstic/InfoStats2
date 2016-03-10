@@ -195,7 +195,7 @@
     NSString *ident = [self bundleIdentifier];
     [IS2Notifications updateBadgeCountWithIdentifier:ident andValue:badgeCount];
     
-    NSLog(@"*** [InfoStats2 | Notifications] :: Updated for %@ with new count of %d", ident, badgeCount);
+    //NSLog(@"*** [InfoStats2 | Notifications] :: Updated for %@ with new count of %d", ident, badgeCount);
 }
 
 %end
@@ -214,7 +214,7 @@
     NSString *ident = [[self application] bundleIdentifier];
     [IS2Notifications updateBadgeCountWithIdentifier:ident andValue:badgeCount];
     
-    NSLog(@"*** [InfoStats2 | Notifications] :: Updated for %@ with new count of %d", ident, badgeCount);
+    //NSLog(@"*** [InfoStats2 | Notifications] :: Updated for %@ with new count of %d", ident, badgeCount);
 }
 
 %end

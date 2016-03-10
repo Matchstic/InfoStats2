@@ -30,6 +30,10 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
     return [[IS2WeatherProvider sharedInstance] currentConditionAsString];
 }
 
++(NSString*)naturalLanguageDescription {
+    return [[IS2WeatherProvider sharedInstance] naturalLanguageDescription];
+}
+
 +(int)highForCurrentDay {
     return [[IS2WeatherProvider sharedInstance] highForCurrentDay];
 }
@@ -171,7 +175,11 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
             [[IS2WeatherProvider sharedInstance] updateWeatherWithCallback:^{
                 for (void (^block)() in [weatherUpdateBlockQueueTest allValues]) {
                     dispatch_async(dispatch_get_main_queue(), ^(void){
-                        block(); // Runs all the callbacks whom requested a weather update.
+                        @try {
+                            block();
+                        } @catch (NSException *e) {
+                            NSLog(@"*** [InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
+                        }
                     });
                 }
             }];

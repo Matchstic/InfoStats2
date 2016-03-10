@@ -22,6 +22,7 @@
 -(int)currentTemperature;
 -(int)currentCondition;
 -(NSString*)currentConditionAsString;
+-(NSString*)naturalLanguageDescription;
 -(int)highForCurrentDay;
 -(int)lowForCurrentDay;
 -(int)currentWindSpeed;

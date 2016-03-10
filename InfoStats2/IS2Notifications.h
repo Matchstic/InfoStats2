@@ -21,7 +21,7 @@
 */
 +(void)registerForBulletinNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock;
 
-/** The inverse of registering for notifications. This must be called when your code is unloaded!
+/** The inverse of registering for notifications. This must be called when your code is unloaded, else your device will become as unstable as Windows Vista.
  @param identifier The identifier associated with your callback
  */
 +(void)unregisterForNotificationsWithIdentifier:(NSString*)identifier;
