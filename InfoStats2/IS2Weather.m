@@ -10,7 +10,24 @@
 #import "IS2WeatherProvider.h"
 #import "IS2WorkaroundDictionary.h"
 
+#define DEFAULT_WEATHER_UPDATE_INTERVAL 30
+
 static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
+static NSTimer *autoUpdateTimer;
+static NSMutableDictionary *requesters;
+
+static inline void buildRequestersDictionary() {
+    requesters = [NSMutableDictionary dictionary];
+    
+    [requesters setObject:[NSMutableArray array] forKey:@"k10"];
+    [requesters setObject:[NSMutableArray array] forKey:@"k15"];
+    [requesters setObject:[NSMutableArray array] forKey:@"k20"];
+    [requesters setObject:[NSMutableArray array] forKey:@"k30"];
+    [requesters setObject:[NSMutableArray array] forKey:@"k40"];
+    [requesters setObject:[NSMutableArray array] forKey:@"k50"];
+    [requesters setObject:[NSMutableArray array] forKey:@"k60"];
+    [requesters setObject:[NSMutableArray array] forKey:@"k120"];
+}
 
 @implementation IS2Weather
 
@@ -161,11 +178,150 @@ static IS2WorkaroundDictionary *weatherUpdateBlockQueueTest;
     
     if (callbackBlock && identifier) {
         [weatherUpdateBlockQueueTest addObject:callbackBlock forKey:identifier];
+        // Auto-update when a new widget adds itself.
+        [self setWeatherUpdateTimeInterval:DEFAULT_WEATHER_UPDATE_INTERVAL forRequester:identifier];
     }
 }
 
 +(void)unregisterForUpdatesWithIdentifier:(NSString*)identifier {
     [weatherUpdateBlockQueueTest removeObjectForKey:identifier];
+    [self removeRequesterForWeatherTimeInterval:identifier];
+}
+
++(void)setWeatherUpdateTimeInterval:(int)interval forRequester:(NSString*)requester {
+    if (!requesters) {
+        buildRequestersDictionary();
+    }
+    
+    NSLog(@"[InfoStats2 | Weather] :: DEBUG :: Adding update requester %@ for interval %d", requester, interval);
+    
+    NSString *key = [NSString stringWithFormat:@"k%d", interval];
+    
+    if (![[requesters allKeys] containsObject:key]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"InfoStats2 :: Debug" message:[NSString stringWithFormat:@"Invalid interval %d provided for requester %@", interval, requester] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        return;
+    }
+    
+    // if requester is already present, remove it from it's existing thing.
+    if ([self arrayForRequester:requester]) {
+        [self removeRequesterForWeatherTimeInterval:requester];
+    }
+    
+    NSMutableArray *requests = [requesters objectForKey:key];
+    [requests addObject:requester];
+    [requesters setObject:requests forKey:key];
+    
+    // Just now need to modify the timer's duration to suit the new time!
+    int currentRequester = [self currentlyMostAccurateRequester];
+    if (currentRequester != -1) {
+        // Do an update now, and reset the timer.
+        [self updateWeather];
+        [autoUpdateTimer invalidate];
+        autoUpdateTimer = nil;
+        
+        autoUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:currentRequester target:self selector:@selector(_timerUpdateWeather:) userInfo:nil repeats:YES];
+    } else {
+        // Invalidate timer
+        [autoUpdateTimer invalidate];
+        autoUpdateTimer = nil;
+    }
+}
+
++(NSMutableArray*)arrayForRequester:(NSString*)requester {
+    NSMutableArray *array;
+    
+    for (NSMutableArray *arr in [requesters allValues]) {
+        if ([arr containsObject:requester]) {
+            array = arr;
+            break;
+        }
+    }
+    
+    return array;
+}
+
++(int)currentlyMostAccurateRequester {
+    // 10 mins
+    if ([[requesters objectForKey:@"k10"] count] > 0) {
+        return 10;
+    }
+    
+    // 15 mins
+    if ([[requesters objectForKey:@"k15"] count] > 0) {
+        return 15;
+    }
+    
+    // 20 mins
+    if ([[requesters objectForKey:@"k20"] count] > 0) {
+        return 20;
+    }
+    
+    // 30 mins
+    if ([[requesters objectForKey:@"k30"] count] > 0) {
+        return 30;
+    }
+    
+    // 40 mins
+    if ([[requesters objectForKey:@"k40"] count] > 0) {
+        return 40;
+    }
+    
+    // 50 mins
+    if ([[requesters objectForKey:@"k50"] count] > 0) {
+        return 50;
+    }
+    
+    // 60 mins
+    if ([[requesters objectForKey:@"k60"] count] > 0) {
+        return 10;
+    }
+    
+    // 120 mins
+    if ([[requesters objectForKey:@"k120"] count] > 0) {
+        return 10;
+    }
+    
+    // Otherwise, manual only!
+    return -1;
+}
+
++(void)removeRequesterForWeatherTimeInterval:(NSString*)requester {
+    NSLog(@"[InfoStats2 | Weather] :: DEBUG :: Removing update requester %@", requester);
+    
+    NSMutableArray *currentArray = [self arrayForRequester:requester];
+    
+    // Get the key for this array!
+    NSString *key = @"";
+    for (NSString *key2 in [requesters allKeys]) {
+        NSMutableArray *arr = [requesters objectForKey:key];
+        
+        if ([arr containsObject:requester]) {
+            key = key2;
+            break;
+        }
+    }
+    
+    [currentArray removeObject:requester];
+    
+    [requesters setObject:currentArray forKey:key];
+    
+    // Just now need to modify the timer's duration to suit the new time!
+    int currentRequester = [self currentlyMostAccurateRequester];
+    if (currentRequester != -1) {
+        // Do an update now, and reset the timer.
+        [self updateWeather];
+        
+        autoUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:currentRequester target:self selector:@selector(_timerUpdateWeather:) userInfo:nil repeats:YES];
+    } else {
+        // Invalidate timer
+        [autoUpdateTimer invalidate];
+        autoUpdateTimer = nil;
+    }
+}
+
++(void)_timerUpdateWeather:(id)sender {
+    [self updateWeather];
 }
 
 +(void)updateWeather {

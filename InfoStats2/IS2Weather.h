@@ -31,7 +31,19 @@
  */
 +(void)unregisterForUpdatesWithIdentifier:(NSString*)identifier;
 
-/** Call this method to update the current weather data; your code will be notified when this update is completed via the callback block set in <i>-registerForWeatherUpdatesWithIdentifier:</i>.
+/** Sets the time interval after which weather data auto-updating is performed. By default, this is set to 30 minutes, though will be effectively off when no widgets are added.<br/><br/>If another client of the InfoStats2 API has requested a shorter time interval, that shorter interval will be used instead. You will be notified of new data being available via the callback specified with <i>registerForWeatherUpdatesWithIdentifier:andCallback:</i>
+ 
+ @param interval The interval to be requested for weather data auto-updates.<br/><br/>Available values:<br/>10 - Update every 10 minutes<br/>15 - Update every 15 minutes<br/>20 - Update every 20 minutes<br/>30 - Update every 30 minutes<br/>40 - Update every 40 minutes<br/>50 - Update every 50 minutes<br/>60 - Update every 1 hour<br/>120 - Update every 2 hours
+ @param requester A unique identifier used to identify your code as requesting a particular interval. It is recommended to use reverse DNS notation, such as "com.foo.bar".
+ */
++(void)setWeatherUpdateTimeInterval:(int)interval forRequester:(NSString*)requester;
+
+/** Removes your code as requesting a particular auto-update interval, as detailed in <i>setWeatherUpdateTimeInterval:forRequester:</i>. This should be called once your code is unloaded.
+ @param requester A unique identifier used to identify your code as requesting a particular interval. It is recommended to use reverse DNS notation, such as "com.foo.bar".
+ */
++(void)removeRequesterForWeatherTimeInterval:(NSString*)requester;
+
+/** Call this method to manually update the current weather data; your code will be notified when this update is completed via the callback block set in <i>-registerForWeatherUpdatesWithIdentifier:</i>.
  */
 +(void)updateWeather;
 
@@ -122,10 +134,10 @@
  */
 +(int)currentVisibilityPercent;
 
-/*/** Current chance of rain, as a percentage between 0-100
+/** Current chance of rain, as a percentage between 0-100
  @return Current chance of rain
  */
-//+(int)currentChanceOfRain;
++(int)currentChanceOfRain;
 
 /** The temperature it feels like, taking into account wind chill etc.
  @return Current "feels like" temperature; this is automatically converted between Celsius and Farenheit

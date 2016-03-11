@@ -53,7 +53,7 @@
 /** Gives the current free space left on the device. 
  @param format Adjusts the output of the function to be in bytes, kb, MB or GB:<br/>0 - Bytes<br/>1 - kb<br/>2 - MB<br/>3 - GB
  */
-+(uint64_t)freeDiskSpaceInFormat:(int)format;
++(double)freeDiskSpaceInFormat:(int)format;
 
 /** Gives the device type, eg iPhone, iPad or iPod
  @return Device type

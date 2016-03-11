@@ -196,8 +196,6 @@ static int notifyToken;
      *  I bet the saving issues seen are casued by this method; the one where the false data is set to the first city
      */
     
-    // TODO: Verify City is valid.
-    
     BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
     
     if ([currentCity isLocalWeatherCity]) {
@@ -211,6 +209,12 @@ static int notifyToken;
     }
     
     [[WeatherPreferences sharedPreferences] setCelsius:isCelsius];
+    
+    [[WeatherPreferences sharedPreferences] synchronizeStateToDisk];
+    [[WeatherPreferences sharedPreferences] saveToUbiquitousStore];
+    
+    // we have updated weather, but, shouldn't we just send this back to SB via a dict?
+    NSLog(@"%@", [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity]);
     
     NSLog(@"*** [InfoStats2 | Weather] :: Updated, returning data.");
     

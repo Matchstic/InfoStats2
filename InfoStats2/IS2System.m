@@ -286,22 +286,22 @@ static NSLock *CPUUsageLock;
     return totalFreeSpace;
 }
 
-+(uint64_t)freeDiskSpaceInFormat:(int)format {
++(double)freeDiskSpaceInFormat:(int)format {
     uint64_t bytes = [self freeDiskSpaceinBytesForPath:@"/"];
     
     switch (format) {
         case 1: // kb
-            return bytes/(1024ll);
+            return (double)bytes / 1024.f;
             break;
         case 2: // MB
-            return bytes/(1024ll)/(1024ll);
+            return (double)bytes / 1024.f / 1024.f;
             break;
         case 3: // GB
-            return bytes/(1024ll)/(1024ll)/(1024ll);
+            return (double)bytes / 1024.f / 1024.f / 1024.f;
             
         case 0: // Bytes
         default:
-            return bytes;
+            return (double)bytes;
             break;
     }
 }

@@ -46,7 +46,7 @@
 @property (assign, nonatomic) unsigned conditionCode;
 @property (assign, nonatomic) BOOL isRequestedByFrameworkClient;
 - (id)naturalLanguageDescription;
-
+- (int)precipitationForecast;
 +(id)descriptionForWeatherUpdateDetail:(unsigned)arg1;
 @end
 
@@ -327,8 +327,14 @@ int status;
     return (int)currentCity.visibility;
 }
 
+// Available for iOS 7+
 -(int)currentChanceOfRain {
-    
+    if ([currentCity respondsToSelector:@selector(precipitationForecast)]) {
+        return [currentCity precipitationForecast];
+    } else {
+        NSLog(@"*** [InfoStats2 | Weather] :: Current version of iOS does not support -currentChanceOfRain");
+        return 0;
+    }
 }
 
 -(int)currentlyFeelsLike {

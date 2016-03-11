@@ -46,6 +46,8 @@
     return [(SBWiFiManager*)[objc_getClass("SBWiFiManager") sharedInstance] currentNetworkName];
 }
 
+// Data shizzle
+
 +(BOOL)dataConnectionAvailable {
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
     return reach.isReachable;
@@ -55,5 +57,7 @@
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
     return reach.isReachableViaWiFi;
 }
+
+
 
 @end
