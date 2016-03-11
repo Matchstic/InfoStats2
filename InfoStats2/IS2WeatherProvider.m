@@ -50,9 +50,21 @@
 +(id)descriptionForWeatherUpdateDetail:(unsigned)arg1;
 @end
 
+@interface CPDistributedMessagingCenter : NSObject
++(CPDistributedMessagingCenter*)centerNamed:(NSString*)serverName;
+-(BOOL)sendMessageName:(NSString*)name userInfo:(NSDictionary*)info;
+-(void)runServerOnCurrentThread;
+-(void)stopServer;
+-(void)registerForMessageName:(NSString*)messageName target:(id)target selector:(SEL)selector;
+@end
+
+void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCenter *messaging_center);
+
 NSString *WeatherWindSpeedUnitForCurrentLocale();
 
+//static City *currentCity;
 static City *currentCity;
+static CPDistributedMessagingCenter *center;
 static IS2WeatherProvider *provider;
 static void (^block)();
 
@@ -73,6 +85,11 @@ int status;
 
 -(void)setupForTweakLoaded {
     [self setCurrentCity];
+    
+    center = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.weather"];
+    rocketbootstrap_distributedmessagingcenter_apply(center);
+    [center runServerOnCurrentThread];
+    [center registerForMessageName:@"weatherData" target:self selector:@selector(handleMessageNamed:withUserInfo:)];
 }
 
 -(id)city {
@@ -84,30 +101,28 @@ int status;
     self.isUpdating = YES;
     block = callbackBlock;
     
-    NSLog(@"*** [InfoStats2 | Weather] :: Attempting to request weather update.");
-    
-    // Set status bar indicator going
-    
-    status = notify_register_dispatch("com.matchstic.infostats2/weatherUpdateCompleted", &notifyToken, dispatch_get_main_queue(), ^(int t) {
-        NSLog(@"*** [InfoStats2 | Weather] :: Weather has been updated, reloading data.");
-        
-        // it seems that when no data is available, we cannot use extrapolated data for the local
-        // weather city. TODO: fix this.
-        
-        [self setCurrentCity];
-        
-        // Run callback block, but only if we actually have valid data.
-        if (currentCity) {
-            block();
-        }
-        
-        self.isUpdating = NO;
-        
-        notify_cancel(notifyToken); // No need to continue monitoring for this notification, saves battery power.
-    });
+    NSLog(@"[InfoStats2 | Weather] :: Attempting to request weather update.");
     
     // Communicate via notify() with daemon for weather updates.
     notify_post("com.matchstic.infostats2/requestWeatherUpdate");
+}
+
+-(NSDictionary *)handleMessageNamed:(NSString *)name withUserInfo:(NSDictionary *)userinfo {
+    // Process userinfo (simple dictionary) and return a dictionary (or nil)
+    NSLog(@"[InfoStats2 | Weather] :: Weather has been updated, reloading data.");
+    
+    // UserInfo will be the City in dict form!
+    
+    currentCity = [[WeatherPreferences sharedPreferences] cityFromPreferencesDictionary:userinfo];
+    
+    // Run callback block, but only if we actually have valid data.
+    if (currentCity && block) {
+        block();
+    }
+    
+    self.isUpdating = NO;
+    
+    return nil;
 }
 
 -(void)setCurrentCity {
@@ -123,7 +138,7 @@ int status;
             @try {
                 currentCity = [[[WeatherPreferences sharedPreferences] loadSavedCities] firstObject];
             } @catch (NSException *e) {
-                NSLog(@"*** [InfoStats2 | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
+                NSLog(@"[InfoStats2 | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
             }
         } else
             currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
@@ -332,7 +347,7 @@ int status;
     if ([currentCity respondsToSelector:@selector(precipitationForecast)]) {
         return [currentCity precipitationForecast];
     } else {
-        NSLog(@"*** [InfoStats2 | Weather] :: Current version of iOS does not support -currentChanceOfRain");
+        NSLog(@"[InfoStats2 | Weather] :: Current version of iOS does not support -currentChanceOfRain");
         return 0;
     }
 }

@@ -73,7 +73,7 @@
 }
 
 - (void)locationManager:(id)arg1 didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    NSLog(@"*** [InfoStats2 | Location Manager] :: Auth state changed to %d.", status);
+    NSLog(@"[InfoStats2d | Location Manager] :: Auth state changed to %d.", status);
     
     int oldStatus = authorisationStatus;
     authorisationStatus = status;
@@ -86,7 +86,7 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    NSLog(@"*** [InfoStats2 | Location Manager] :: Did update locations.");
+    NSLog(@"[InfoStats2d | Location Manager] :: Did update locations.");
     
     // Locations updated! We can now ask for an update to weather with the new locations.
     CLLocation *mostRecentLocation = [[locations lastObject] copy];

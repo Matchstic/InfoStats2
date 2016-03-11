@@ -70,6 +70,13 @@
 -(void)setPrivateMode:(bool)arg1;
 @end
 
+@interface CPDistributedMessagingCenter : NSObject
++(CPDistributedMessagingCenter*)centerNamed:(NSString*)serverName;
+-(BOOL)sendMessageName:(NSString*)name userInfo:(NSDictionary*)info;
+@end
+
+void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCenter *messaging_center);
+
 static City *currentCity;
 static int notifyToken;
 
@@ -85,7 +92,7 @@ static int notifyToken;
             if (mostRecentLocation) {
                 [self updateLocalCityWithLocation:mostRecentLocation];
             } else {
-                NSLog(@"*** [InfoStats2 | Weather] :: Cannot determine location; using extrapolated data from last update.");
+                NSLog(@"[InfoStats2d | Weather] :: Cannot determine location; using extrapolated data from last update.");
                 notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
             }
         }];
@@ -103,7 +110,7 @@ static int notifyToken;
     } else {
         // No data connection; allow for extrapolated data to be used instead from
         // the current City instance.
-        NSLog(@"*** [InfoStats2 | Weather] :: No data connection; using extrapolated data from last update.");
+        NSLog(@"[InfoStats2 | Weather]d :: No data connection; using extrapolated data from last update.");
         notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
         return;
     }
@@ -127,7 +134,7 @@ static int notifyToken;
     }
     
     if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusAuthorized) {
-        NSLog(@"*** [InfoStats2 | Weather] :: Updating, and also getting a new location");
+        NSLog(@"[InfoStats2 | Weather]d :: Updating, and also getting a new location");
         
         currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
         if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
@@ -140,17 +147,30 @@ static int notifyToken;
         // Force finding of new location, and then update from there.
         [self.locationManager.locationManager startUpdatingLocation];
     } else if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusDenied) {
-        NSLog(@"*** [InfoStats2 | Weather] :: Updating first city in Weather.app");
+        NSLog(@"[InfoStats2d | Weather] :: Updating first city in Weather.app");
         
         if (![[WeatherPreferences sharedPreferences] respondsToSelector:@selector(loadSavedCityAtIndex:)]) {
             // This is untested; I have no idea if this will work, but I hope so.
             @try {
                 currentCity = [[[WeatherPreferences sharedPreferences] loadSavedCities] firstObject];
             } @catch (NSException *e) {
-                NSLog(@"*** [InfoStats2 | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
+                NSLog(@"[InfoStats2d | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
             }
         } else
             currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
+        
+        if ([currentCity isLocalWeatherCity]) {
+            // Oh for crying out loud, still have old local city in place!
+            if (![[WeatherPreferences sharedPreferences] respondsToSelector:@selector(loadSavedCityAtIndex:)]) {
+                // This is untested; I have no idea if this will work, but I hope so.
+                @try {
+                    currentCity = [[WeatherPreferences sharedPreferences] loadSavedCities][1];
+                } @catch (NSException *e) {
+                    NSLog(@"[InfoStats2d | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
+                }
+            } else
+                currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:1];
+        }
         
         if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
             [currentCity associateWithDelegate:self];
@@ -196,7 +216,7 @@ static int notifyToken;
      *  I bet the saving issues seen are casued by this method; the one where the false data is set to the first city
      */
     
-    BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
+    /*BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
     
     if ([currentCity isLocalWeatherCity]) {
         [[WeatherPreferences sharedPreferences] saveToDiskWithLocalWeatherCity:city];
@@ -211,12 +231,16 @@ static int notifyToken;
     [[WeatherPreferences sharedPreferences] setCelsius:isCelsius];
     
     [[WeatherPreferences sharedPreferences] synchronizeStateToDisk];
-    [[WeatherPreferences sharedPreferences] saveToUbiquitousStore];
+    [[WeatherPreferences sharedPreferences] saveToUbiquitousStore];*/
+    
+    NSLog(@"[InfoStats2d | Weather] :: Updated, returning data.");
     
     // we have updated weather, but, shouldn't we just send this back to SB via a dict?
-    NSLog(@"%@", [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity]);
+    NSDictionary *updated = [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity];
     
-    NSLog(@"*** [InfoStats2 | Weather] :: Updated, returning data.");
+    CPDistributedMessagingCenter *c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.weather"];
+    rocketbootstrap_distributedmessagingcenter_apply(c);
+    [c sendMessageName:@"weatherData" userInfo:updated]; //send an NSDictionary here to pass data
     
     // Return a message back to SpringBoard that updating is now done.
     notify_post("com.matchstic.infostats2/weatherUpdateCompleted");

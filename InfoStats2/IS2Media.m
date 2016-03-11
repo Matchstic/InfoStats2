@@ -164,7 +164,7 @@ static char encodingTable[64] = {
 #pragma mark Private methods
 
 +(void)nowPlayingDataDidUpdate {
-    NSLog(@"Pulling data for media change");
+    NSLog(@"[InfoStats2 | Media] :: Pulling data for media change");
     MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFDictionaryRef information) {
         data = (__bridge NSDictionary*)information;
         
@@ -175,7 +175,7 @@ static char encodingTable[64] = {
                     @try {
                         block();
                     } @catch (NSException *e) {
-                        NSLog(@"*** [InfoStats2 | Media] :: Failed to update callback, with exception: %@", e);
+                        NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with exception: %@", e);
                     }
                 }
             });

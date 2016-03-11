@@ -48,7 +48,7 @@ static NSArray *areasOfInterest; // eg. Golden Gate Park
 +(void)setupAfterTweakLoaded {
     // Setup location.
     location = [[CLLocation alloc] initWithLatitude:0 longitude:0];
-    center = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2"];
+    center = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.location"];
     rocketbootstrap_distributedmessagingcenter_apply(center);
     [center runServerOnCurrentThread];
     [center registerForMessageName:@"locationData" target:self selector:@selector(handleMessageNamed:withUserInfo:)];
@@ -116,7 +116,7 @@ static NSArray *areasOfInterest; // eg. Golden Gate Park
                                @try {
                                    block();
                                } @catch (NSException *e) {
-                                   NSLog(@"*** [InfoStats2 | Location] :: Failed to update callback, with exception: %@", e);
+                                   NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with exception: %@", e);
                                }
                            }
                        });

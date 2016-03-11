@@ -101,7 +101,7 @@
 }
 
 -(void)webView:(WebView *)view addMessageToConsole:(NSDictionary *)message {
-    NSLog(@"addMessageToConsole: %@", message);
+    NSLog(@"[InfoStats2] :: addMessageToConsole: %@", message);
     
     if ([UIWebView instancesRespondToSelector:@selector(webView:addMessageToConsole:)])
         %orig;
@@ -123,9 +123,9 @@
         // Inject Cycript into this webview.
         @try {
             WebCycriptSetupView(webview);
-            NSLog(@"*** Cycript was injected into an instance of %@", [self class]);
+            NSLog(@"[InfoStats2] :: Cycript was injected into an instance of %@", [self class]);
         } @catch (NSException *e) {
-            NSLog(@"*** CydgetSetupContext => %@", e);
+            NSLog(@"[InfoStats2] :: CydgetSetupContext => %@", e);
         }
     }
     

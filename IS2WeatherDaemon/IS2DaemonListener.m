@@ -37,7 +37,7 @@ static int locationToken;
     
     status = notify_check(weatherToken, &check);
     if (status == NOTIFY_STATUS_OK && check != 0) {
-        NSLog(@"*** [InfoStats2 | Weather] :: Weather update request received.");
+        NSLog(@"[InfoStats2d | Weather] :: Weather update request received.");
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [self.weatherProvider updateWeather];
@@ -46,7 +46,7 @@ static int locationToken;
     
     status = notify_check(locationToken, &check);
     if (status == NOTIFY_STATUS_OK && check != 0) {
-        NSLog(@"*** [InfoStats2 | Location] :: Location interval modification request received.");
+        NSLog(@"[InfoStats2d | Location] :: Location interval modification request received.");
         
         // Will have to pass values BACK via CPDistributedMessagingCenter
         uint64_t incoming;

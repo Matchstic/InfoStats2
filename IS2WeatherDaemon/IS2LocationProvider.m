@@ -26,7 +26,7 @@ void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCent
         
         [self.locationManager registerNewCallbackForLocationData:^(CLLocation *location) {
             // Tell SpringBoard about new location.
-            CPDistributedMessagingCenter *c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2"];
+            CPDistributedMessagingCenter *c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.location"];
             rocketbootstrap_distributedmessagingcenter_apply(c);
             
             NSMutableDictionary *locDict = [NSMutableDictionary dictionary];

@@ -329,12 +329,13 @@ static inline void buildRequestersDictionary() {
         if (![[IS2WeatherProvider sharedInstance] isUpdating]) {
             // Update weather, and then call blocks for updated weather.
             [[IS2WeatherProvider sharedInstance] updateWeatherWithCallback:^{
+                NSLog(@"[InfoStats2 | Weather] :: Running through blocks");
                 for (void (^block)() in [weatherUpdateBlockQueueTest allValues]) {
                     dispatch_async(dispatch_get_main_queue(), ^(void){
                         @try {
                             block();
                         } @catch (NSException *e) {
-                            NSLog(@"*** [InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
+                            NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
                         }
                     });
                 }
