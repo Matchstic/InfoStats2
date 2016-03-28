@@ -70,6 +70,7 @@ static void (^block)();
 
 int notifyToken;
 int status;
+int firstUpdate = 0;
 
 @implementation IS2WeatherProvider
 
@@ -90,6 +91,8 @@ int status;
     rocketbootstrap_distributedmessagingcenter_apply(center);
     [center runServerOnCurrentThread];
     [center registerForMessageName:@"weatherData" target:self selector:@selector(handleMessageNamed:withUserInfo:)];
+    
+    lastUpdateTime = time(NULL);
 }
 
 -(id)city {
@@ -105,6 +108,8 @@ int status;
     
     // Communicate via notify() with daemon for weather updates.
     notify_post("com.matchstic.infostats2/requestWeatherUpdate");
+    
+    _updateTimoutTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(weatherUpdateTimeoutHandler:) userInfo:nil repeats:NO];
 }
 
 -(NSDictionary *)handleMessageNamed:(NSString *)name withUserInfo:(NSDictionary *)userinfo {
@@ -112,17 +117,25 @@ int status;
     NSLog(@"[InfoStats2 | Weather] :: Weather has been updated, reloading data.");
     
     // UserInfo will be the City in dict form!
+    //currentUpdateTime = time(NULL);
     
-    currentCity = [[WeatherPreferences sharedPreferences] cityFromPreferencesDictionary:userinfo];
-    
-    // Run callback block, but only if we actually have valid data.
-    if (currentCity && block) {
-        block();
-    }
+    //if (difftime(currentUpdateTime, lastUpdateTime) >= 5 || firstUpdate == 0) {
+    //    lastUpdateTime = currentUpdateTime;
+    //    firstUpdate = 1;
+        currentCity = [[WeatherPreferences sharedPreferences] cityFromPreferencesDictionary:userinfo];
+        // Run callback block, but only if we actually have valid data.
+        if (currentCity && block) {
+            block();
+        }
+    //}
     
     self.isUpdating = NO;
     
     return nil;
+}
+
+-(void)weatherUpdateTimeoutHandler:(id)sender {
+    self.isUpdating = NO;
 }
 
 -(void)setCurrentCity {

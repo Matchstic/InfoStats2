@@ -11,6 +11,7 @@
 #import <notify.h>
 #import "IS2WorkaroundDictionary.h"
 #import "IS2Telephony.h"
+#include <sys/time.h>
 
 @interface CPDistributedMessagingCenter : NSObject
 +(CPDistributedMessagingCenter*)centerNamed:(NSString*)serverName;
@@ -25,6 +26,7 @@ void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCent
 static CLLocation *location;
 static CPDistributedMessagingCenter *center;
 static int token;
+static int firstUpdate = 0;
 static IS2WorkaroundDictionary *locationUpdateBlockQueue;
 static NSMutableDictionary *requesters;
 static NSString *name; // eg. Apple Inc.
@@ -40,6 +42,8 @@ static NSString *country; // eg. United States
 static NSString *inlandWater; // eg. Lake Tahoe
 static NSString *ocean; // eg. Pacific Ocean
 static NSArray *areasOfInterest; // eg. Golden Gate Park
+
+static time_t lastUpdateTime;
 
 @implementation IS2Location
 
@@ -78,6 +82,8 @@ static NSArray *areasOfInterest; // eg. Golden Gate Park
     }
     
     [self requestUpdateToLocationData];
+    
+    lastUpdateTime = time(NULL);
 }
 
 +(NSDictionary *)handleMessageNamed:(NSString *)name withUserInfo:(NSDictionary *)userinfo {
@@ -90,36 +96,61 @@ static NSArray *areasOfInterest; // eg. Golden Gate Park
     CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
     [geocoder reverseGeocodeLocation:location
                    completionHandler:^(NSArray *placemarks, NSError *error) {
-                       NSLog(@"[InfoStats2 | Location] :: Updating strings for new location data");
+                       // Correctly implement rate limiting.
                        
-                       if (error){
-                           NSLog(@"[InfoStats2 | Location] :: Geocode failed with error: %@", error);
-                       } else {
-                           // Update names of things.
-                           CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                       time_t currentTime = time(NULL);
                        
-                           ISOcountryCode = placemark.ISOcountryCode;
-                           country = placemark.country;
-                           postalCode = placemark.postalCode;
-                           administrativeArea = placemark.administrativeArea;
-                           subAdministrativeArea = placemark.subAdministrativeArea;
-                           locality = placemark.locality;
-                           subLocality = placemark.subLocality;
-                           subThoroughfare = placemark.subThoroughfare;
-                           thoroughfare = placemark.thoroughfare;
-                        }
+                       // If less than a minute has passed, don't update geocoder.
+                       if (difftime(currentTime, lastUpdateTime) >= 60 || firstUpdate == 0) {
+                           lastUpdateTime = currentTime;
+                           firstUpdate = 1;
+                           NSLog(@"[InfoStats2 | Location] :: Updating strings for new location data");
                        
-                       // Tell callbacks we have new data!
-                       dispatch_async(dispatch_get_main_queue(), ^(void){
-                           // Let all our callbacks know we've got new data available.
-                           for (void (^block)() in [locationUpdateBlockQueue allValues]) {
-                               @try {
-                                   block();
-                               } @catch (NSException *e) {
-                                   NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with exception: %@", e);
-                               }
+                           if (error){
+                               NSLog(@"[InfoStats2 | Location] :: Geocode failed with error: %@", error);
+                           } else {
+                               // Update names of things.
+                               CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                       
+                               ISOcountryCode = placemark.ISOcountryCode;
+                               country = placemark.country;
+                               postalCode = placemark.postalCode;
+                               administrativeArea = placemark.administrativeArea;
+                               subAdministrativeArea = placemark.subAdministrativeArea;
+                               locality = placemark.locality;
+                               subLocality = placemark.subLocality;
+                               subThoroughfare = placemark.subThoroughfare;
+                               thoroughfare = placemark.thoroughfare;
+                           
+                               // Tell callbacks we have new data!
+                               dispatch_async(dispatch_get_main_queue(), ^(void){
+                                   // Let all our callbacks know we've got new data available.
+                                   for (void (^block)() in [locationUpdateBlockQueue allValues]) {
+                                       @try {
+                                           block();
+                                       } @catch (NSException *e) {
+                                           NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with exception: %@", e);
+                                       } @catch (...) {
+                                           NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with unknown exception");
+                                       }
+                                   }
+                               });
                            }
-                       });
+                       } else {
+                           // Just throw old data back at the requesters.
+                           dispatch_async(dispatch_get_main_queue(), ^(void){
+                               // Let all our callbacks know we've got new data available.
+                               for (void (^block)() in [locationUpdateBlockQueue allValues]) {
+                                   @try {
+                                       block();
+                                   } @catch (NSException *e) {
+                                       NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with exception: %@", e);
+                                   } @catch (...) {
+                                       NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with unknown exception");
+                                   }
+                               }
+                           });
+                       }
     }];
     
     return nil;
@@ -127,7 +158,7 @@ static NSArray *areasOfInterest; // eg. Golden Gate Park
 
 #pragma mark Public methods
 
-+(void)registerForNowPlayingNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock {
++(void)registerForLocationNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock {
     if (!locationUpdateBlockQueue) {
         locationUpdateBlockQueue = [IS2WorkaroundDictionary dictionary];
     }

@@ -18,14 +18,17 @@ typedef enum : NSUInteger {
 
 @interface IS2LocationManager : NSObject <CLLocationManagerDelegate> {
     NSMutableArray *_locationCallbacks;
+    NSMutableArray *_authCallbacks;
     int authorisationStatus;
     IS2LocationUpdateInterval _interval;
+    NSTimer *_locationStoppedTimer;
 }
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
 -(void)setLocationUpdateInterval:(IS2LocationUpdateInterval)interval;
 -(void)registerNewCallbackForLocationData:(void(^)(CLLocation*))callback;
+-(void)registerNewCallbackForAuth:(void(^)(int))callback;
 -(int)currentAuthorisationStatus;
 
 @end

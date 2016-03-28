@@ -27,7 +27,7 @@ typedef enum : NSUInteger {
  @param identifier The identifier associated with your callback
  @param callbackBlock The block to call once data changes
  */
-+(void)registerForNowPlayingNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock;
++(void)registerForLocationNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock;
 
 /** The inverse of registering for notifications. This must be called when your code is unloaded, else your device may play Disney's Let It Go at the worst possible moments.
  @param identifier The identifier associated with your callback

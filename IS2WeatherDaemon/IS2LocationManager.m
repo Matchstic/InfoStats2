@@ -22,7 +22,7 @@
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
         [self.locationManager setDelegate:self];
-        [self.locationManager setActivityType:CLActivityTypeOtherNavigation]; // Allows use of GPS
+        [self.locationManager setActivityType:CLActivityTypeAutomotiveNavigation]; // Allows use of GPS
         
         authorisationStatus = kCLAuthorizationStatusNotDetermined;
     }
@@ -33,18 +33,21 @@
 -(void)setLocationUpdateInterval:(IS2LocationUpdateInterval)interval {
     switch (interval) {
         case kTurnByTurn:
+            [self.locationManager stopUpdatingLocation];
             [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
             [self.locationManager setDistanceFilter:10];
             [self.locationManager startUpdatingLocation];
             break;
         case k100Meters:
-            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+            [self.locationManager stopUpdatingLocation];
+            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
             [self.locationManager setDistanceFilter:100];
             [self.locationManager startUpdatingLocation];
             break;
         case k1Kilometer:
-            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
-            [self.locationManager setDistanceFilter:1000];
+            [self.locationManager stopUpdatingLocation];
+            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+            [self.locationManager setDistanceFilter:500];
             [self.locationManager startUpdatingLocation];
             break;
         case kManualUpdate:
@@ -68,6 +71,14 @@
     [_locationCallbacks addObject:callback];
 }
 
+-(void)registerNewCallbackForAuth:(void(^)(int))callback {
+    if (!_authCallbacks) {
+        _authCallbacks = [NSMutableArray array];
+    }
+    
+    [_authCallbacks addObject:callback];
+}
+
 -(int)currentAuthorisationStatus {
     return authorisationStatus;
 }
@@ -78,6 +89,10 @@
     int oldStatus = authorisationStatus;
     authorisationStatus = status;
     
+    for (void(^callback)(int) in _authCallbacks) {
+        callback(authorisationStatus);
+    }
+    
     if (oldStatus == kCLAuthorizationStatusAuthorized && oldStatus != status) {
         [self.locationManager stopUpdatingLocation];
     } else if (_interval != kManualUpdate && authorisationStatus == kCLAuthorizationStatusAuthorized) {
@@ -86,7 +101,12 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    NSLog(@"[InfoStats2d | Location Manager] :: Did update locations.");
+    NSLog(@"[InfoStats2d | Location Manager] :: Did update locations, with array count %d.", locations.count);
+    
+    if (_locationStoppedTimer) {
+        [_locationStoppedTimer invalidate];
+        _locationStoppedTimer = nil;
+    }
     
     // Locations updated! We can now ask for an update to weather with the new locations.
     CLLocation *mostRecentLocation = [[locations lastObject] copy];
@@ -96,8 +116,19 @@
         callback(mostRecentLocation);
     }
     
-    if (_interval == kManualUpdate)
+    if (_interval == kManualUpdate) {
         [self.locationManager stopUpdatingLocation];
+    } else {
+        _locationStoppedTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(_locationStoppedTimer:) userInfo:nil repeats:NO];
+    }
+}
+
+-(void)_locationStoppedTimer:(id)sender {
+    [_locationStoppedTimer invalidate];
+    _locationStoppedTimer = nil;
+    
+    // Get one last location.
+    
 }
 
 @end

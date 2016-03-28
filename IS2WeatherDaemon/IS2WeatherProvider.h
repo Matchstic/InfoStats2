@@ -10,14 +10,19 @@
 #import <CoreLocation/CoreLocation.h>
 #import "Reachability.h"
 #import "IS2LocationManager.h"
+#include <sys/time.h>
 
-@interface IS2WeatherUpdater : NSObject
+@interface IS2WeatherUpdater : NSObject {
+    time_t _lastUpdateTime;
+    time_t _currentUpdateTime;
+}
 
 //@property (nonatomic) BOOL setup;
 @property (nonatomic, weak) IS2LocationManager *locationManager;
 @property (nonatomic, strong) Reachability *reach;
 
 -(void)updateWeather;
+-(void)locationAuthStateChangedTo:(int)state;
 -(id)initWithLocationManager:(IS2LocationManager*)locationManager;
 
 @end

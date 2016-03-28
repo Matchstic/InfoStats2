@@ -8,8 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#include <time.h>
 
-@interface IS2WeatherProvider : NSObject <CLLocationManagerDelegate>
+@interface IS2WeatherProvider : NSObject <CLLocationManagerDelegate> {
+    NSTimer *_updateTimoutTimer;
+    time_t lastUpdateTime;
+    time_t currentUpdateTime;
+}
 
 @property (nonatomic) BOOL setup;
 @property(strong, nonatomic) NSBundle *weatherFrameworkBundle;

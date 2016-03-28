@@ -220,7 +220,8 @@ static inline void buildRequestersDictionary() {
         [autoUpdateTimer invalidate];
         autoUpdateTimer = nil;
         
-        autoUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:currentRequester target:self selector:@selector(_timerUpdateWeather:) userInfo:nil repeats:YES];
+        NSLog(@"[InfoStats2 | Weather] :: Setting update requester to %d", currentRequester*60);
+        autoUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:currentRequester*60 target:self selector:@selector(_timerUpdateWeather:) userInfo:nil repeats:YES];
     } else {
         // Invalidate timer
         [autoUpdateTimer invalidate];
@@ -274,12 +275,12 @@ static inline void buildRequestersDictionary() {
     
     // 60 mins
     if ([[requesters objectForKey:@"k60"] count] > 0) {
-        return 10;
+        return 60;
     }
     
     // 120 mins
     if ([[requesters objectForKey:@"k120"] count] > 0) {
-        return 10;
+        return 120;
     }
     
     // Otherwise, manual only!
@@ -312,7 +313,11 @@ static inline void buildRequestersDictionary() {
         // Do an update now, and reset the timer.
         [self updateWeather];
         
-        autoUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:currentRequester target:self selector:@selector(_timerUpdateWeather:) userInfo:nil repeats:YES];
+        [autoUpdateTimer invalidate];
+        autoUpdateTimer = nil;
+        
+        NSLog(@"[InfoStats2 | Weather] :: Setting update requester to %d", currentRequester*60);
+        autoUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:currentRequester*60 target:self selector:@selector(_timerUpdateWeather:) userInfo:nil repeats:YES];
     } else {
         // Invalidate timer
         [autoUpdateTimer invalidate];
@@ -321,6 +326,7 @@ static inline void buildRequestersDictionary() {
 }
 
 +(void)_timerUpdateWeather:(id)sender {
+    NSLog(@"[InfoStats2 | Weather] :: Auto-update timer fired!");
     [self updateWeather];
 }
 

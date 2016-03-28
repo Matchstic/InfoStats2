@@ -97,57 +97,22 @@ static int notifyToken;
             }
         }];
         
+        [self.locationManager registerNewCallbackForAuth:^(int authState) {
+            [self configureCurrentCity:authState];
+        }];
+        
+        // Configure current city
+        [self configureCurrentCity:self.locationManager.currentAuthorisationStatus];
+        
         self.reach = [Reachability reachabilityForInternetConnection];
     }
     
     return self;
 }
 
--(void)updateWeather {
-    if (self.reach.isReachable) {
-        [self fullUpdate];
-        return;
-    } else {
-        // No data connection; allow for extrapolated data to be used instead from
-        // the current City instance.
-        NSLog(@"[InfoStats2 | Weather]d :: No data connection; using extrapolated data from last update.");
-        notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
-        return;
-    }
-}
-
-#pragma mark Backend
-
--(void)fullUpdate {
-    if (deviceVersion >= 8.0) {
-        if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setLocationTrackingReady:activelyTracking:)]) {
-            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
-        } else {
-            [(WeatherLocationManager*)[WeatherLocationManager sharedWeatherLocationManager] setDelegate:self.locationManager];
-            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO watchKitExtension:NO];
-        }
-        
-        if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(_setAuthorizationStatus:)])
-             [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:[self.locationManager currentAuthorisationStatus]];
-        else if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setAuthorizationStatus:)])
-            [[WeatherLocationManager sharedWeatherLocationManager] setAuthorizationStatus:[self.locationManager currentAuthorisationStatus]];
-    }
-    
-    if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusAuthorized) {
-        NSLog(@"[InfoStats2 | Weather]d :: Updating, and also getting a new location");
-        
-        currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
-        if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
-            [currentCity associateWithDelegate:self];
-        else if ([currentCity respondsToSelector:@selector(addUpdateObserver:)])
-            [currentCity addUpdateObserver:self]; // Essential for getting callbacks when the city is updated.
-        
-        [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
-        
-        // Force finding of new location, and then update from there.
-        [self.locationManager.locationManager startUpdatingLocation];
-    } else if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusDenied) {
-        NSLog(@"[InfoStats2d | Weather] :: Updating first city in Weather.app");
+-(void)configureCurrentCity:(int)authState {
+    if (authState != 3) {
+        [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:NO];
         
         if (![[WeatherPreferences sharedPreferences] respondsToSelector:@selector(loadSavedCityAtIndex:)]) {
             // This is untested; I have no idea if this will work, but I hope so.
@@ -158,8 +123,59 @@ static int notifyToken;
             }
         } else
             currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
+    } else {
+        [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
+        currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
+    }
+}
+
+-(void)updateWeather {
+    if (self.reach.isReachable) {
+        [self fullUpdate];
+        return;
+    } else {
+        // No data connection; allow for extrapolated data to be used instead from
+        // the current City instance.
+        NSLog(@"[InfoStats2d | Weather] :: No data connection; using extrapolated data from last update.");
+        notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
+        return;
+    }
+}
+
+#pragma mark Backend
+
+-(void)fullUpdate {
+    if (deviceVersion >= 8.0) {
+        //if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setLocationTrackingReady:activelyTracking:)]) {
+        //    [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
+        //} else {
+        //    [(WeatherLocationManager*)[WeatherLocationManager sharedWeatherLocationManager] setDelegate:self.locationManager];
+        //    [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO watchKitExtension:NO];
+        //}
         
-        if ([currentCity isLocalWeatherCity]) {
+        //if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(_setAuthorizationStatus:)])
+        //     [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:[self.locationManager currentAuthorisationStatus]];
+        //else if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setAuthorizationStatus:)])
+        //    [[WeatherLocationManager sharedWeatherLocationManager] setAuthorizationStatus:[self.locationManager currentAuthorisationStatus]];
+    }
+    
+    if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
+        [currentCity associateWithDelegate:self];
+    else if ([currentCity respondsToSelector:@selector(addUpdateObserver:)])
+        [currentCity addUpdateObserver:self];
+    
+    if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusAuthorized) {
+        NSLog(@"[InfoStats2d | Weather] :: Updating, and also getting a new location");
+        
+        // Force finding of new location, and then update from there.
+        [self.locationManager.locationManager startUpdatingLocation];
+    } else if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusDenied) {
+        NSLog(@"[InfoStats2d | Weather] :: Updating first city in Weather.app");
+        
+        // Update to whichever city the user may have set.
+        [self configureCurrentCity:self.locationManager.currentAuthorisationStatus];
+        
+        /*if ([currentCity isLocalWeatherCity]) {
             // Oh for crying out loud, still have old local city in place!
             if (![[WeatherPreferences sharedPreferences] respondsToSelector:@selector(loadSavedCityAtIndex:)]) {
                 // This is untested; I have no idea if this will work, but I hope so.
@@ -170,14 +186,7 @@ static int notifyToken;
                 }
             } else
                 currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:1];
-        }
-        
-        if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
-            [currentCity associateWithDelegate:self];
-        else if ([currentCity respondsToSelector:@selector(addUpdateObserver:)])
-            [currentCity addUpdateObserver:self];
-        
-        [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:NO];
+        }*/
         
         [self updateCurrentCityWithoutLocation];
     }
@@ -216,11 +225,17 @@ static int notifyToken;
      *  I bet the saving issues seen are casued by this method; the one where the false data is set to the first city
      */
     
-    /*BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
+    BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
     
-    if ([currentCity isLocalWeatherCity]) {
-        [[WeatherPreferences sharedPreferences] saveToDiskWithLocalWeatherCity:city];
-    } else {
+    BOOL allowSave = NO;
+    
+    if ([currentCity isLocalWeatherCity] && self.locationManager.currentAuthorisationStatus == 3) {
+        allowSave = YES;
+    } else if (![currentCity isLocalWeatherCity] && self.locationManager.currentAuthorisationStatus != 3) {
+        allowSave = YES;
+    }
+    
+    if (allowSave) {
         NSMutableArray *cities = [[[WeatherPreferences sharedPreferences] loadSavedCities] mutableCopy];
         [cities removeObjectAtIndex:0];
         [cities insertObject:city atIndex:0];
@@ -231,7 +246,7 @@ static int notifyToken;
     [[WeatherPreferences sharedPreferences] setCelsius:isCelsius];
     
     [[WeatherPreferences sharedPreferences] synchronizeStateToDisk];
-    [[WeatherPreferences sharedPreferences] saveToUbiquitousStore];*/
+    [[WeatherPreferences sharedPreferences] saveToUbiquitousStore];
     
     NSLog(@"[InfoStats2d | Weather] :: Updated, returning data.");
     
