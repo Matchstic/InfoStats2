@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv, char **envp) {
     
-    NSLog(@"*** [InfoStats2 | Weather] :: Loading up weather provider.");
+    NSLog(@"*** [InfoStats2d] :: Loading up daemon.");
     
 	// initialize our daemon
     IS2DaemonListener *listener = [[IS2DaemonListener alloc] init];

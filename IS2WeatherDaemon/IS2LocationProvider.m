@@ -15,6 +15,7 @@
 @end
 
 void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCenter *messaging_center);
+static CPDistributedMessagingCenter *c;
 
 @implementation IS2LocationProvider
 
@@ -24,11 +25,11 @@ void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCent
     if (self) {
         self.locationManager = locationManager;
         
+        c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.location"];
+        rocketbootstrap_distributedmessagingcenter_apply(c);
+        
         [self.locationManager registerNewCallbackForLocationData:^(CLLocation *location) {
             // Tell SpringBoard about new location.
-            CPDistributedMessagingCenter *c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.location"];
-            rocketbootstrap_distributedmessagingcenter_apply(c);
-            
             NSMutableDictionary *locDict = [NSMutableDictionary dictionary];
             [locDict setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"latitude"];
             [locDict setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"longitude"];
@@ -42,6 +43,10 @@ void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCent
 
 -(void)setLocationUpdateInterval:(uint64_t)interval {
     [self.locationManager setLocationUpdateInterval:(int)interval];
+}
+
+-(void)setLocationUpdateAccuracy:(uint64_t)accuracy {
+    [self.locationManager setLocationUpdateAccuracy:(int)accuracy];
 }
 
 -(void)requestLocationUpdate {

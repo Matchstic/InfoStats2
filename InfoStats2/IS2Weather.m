@@ -342,6 +342,8 @@ static inline void buildRequestersDictionary() {
                             block();
                         } @catch (NSException *e) {
                             NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
+                        } @catch (...) {
+                            NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with unknown exception");
                         }
                     });
                 }

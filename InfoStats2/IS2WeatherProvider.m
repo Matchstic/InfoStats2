@@ -102,6 +102,7 @@ int firstUpdate = 0;
 // PLEASE do not ever call this directly; it's not exposed publicly in the API for a reason.
 -(void)updateWeatherWithCallback:(void (^)(void))callbackBlock {
     self.isUpdating = YES;
+    block = nil;
     block = callbackBlock;
     
     NSLog(@"[InfoStats2 | Weather] :: Attempting to request weather update.");
@@ -114,20 +115,16 @@ int firstUpdate = 0;
 
 -(NSDictionary *)handleMessageNamed:(NSString *)name withUserInfo:(NSDictionary *)userinfo {
     // Process userinfo (simple dictionary) and return a dictionary (or nil)
+    if (![name isEqualToString:@"weatherData"]) return nil;
+    
     NSLog(@"[InfoStats2 | Weather] :: Weather has been updated, reloading data.");
     
     // UserInfo will be the City in dict form!
-    //currentUpdateTime = time(NULL);
-    
-    //if (difftime(currentUpdateTime, lastUpdateTime) >= 5 || firstUpdate == 0) {
-    //    lastUpdateTime = currentUpdateTime;
-    //    firstUpdate = 1;
-        currentCity = [[WeatherPreferences sharedPreferences] cityFromPreferencesDictionary:userinfo];
-        // Run callback block, but only if we actually have valid data.
-        if (currentCity && block) {
-            block();
-        }
-    //}
+    currentCity = [[WeatherPreferences sharedPreferences] cityFromPreferencesDictionary:userinfo];
+    // Run callback block, but only if we actually have valid data.
+    if (currentCity && block) {
+        block();
+    }
     
     self.isUpdating = NO;
     
@@ -135,7 +132,11 @@ int firstUpdate = 0;
 }
 
 -(void)weatherUpdateTimeoutHandler:(id)sender {
+    NSLog(@"[InfoStats2 | Weather] :: Update timed out.");
     self.isUpdating = NO;
+    
+    [_updateTimoutTimer invalidate];
+    _updateTimoutTimer = nil;
 }
 
 -(void)setCurrentCity {

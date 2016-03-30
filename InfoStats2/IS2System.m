@@ -168,6 +168,17 @@ static NSLock *CPUUsageLock;
     return MIN(SCREEN_HEIGHT, SCREEN_WIDTH);
 }
 
++(BOOL)isDeviceIn24Time {
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    [formatter setDateStyle:NSDateFormatterNoStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *dateString = [formatter stringFromDate:[NSDate date]];
+    NSRange amRange = [dateString rangeOfString:[formatter AMSymbol]];
+    NSRange pmRange = [dateString rangeOfString:[formatter PMSymbol]];
+    BOOL is24Hour = amRange.location == NSNotFound && pmRange.location == NSNotFound;
+    return is24Hour;
+}
+
 #pragma mark System functions
 
 +(void)takeScreenshot {

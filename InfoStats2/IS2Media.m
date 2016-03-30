@@ -176,6 +176,8 @@ static char encodingTable[64] = {
                         block();
                     } @catch (NSException *e) {
                         NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with exception: %@", e);
+                    } @catch (...) {
+                        NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with unknown exception");
                     }
                 }
             });

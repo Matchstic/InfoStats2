@@ -75,6 +75,11 @@
  */
 +(int)deviceDisplayWidth;
 
+/** Gives whether the user is using their device in 24hr time, or in 12hr time
+ @return Whether device is in 24hr time or not
+ */
++(BOOL)isDeviceIn24Time;
+
 /** @name System functions 
  */
 

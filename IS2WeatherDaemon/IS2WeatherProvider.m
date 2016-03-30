@@ -76,6 +76,7 @@
 @end
 
 void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCenter *messaging_center);
+static CPDistributedMessagingCenter *c;
 
 static City *currentCity;
 static int notifyToken;
@@ -105,6 +106,9 @@ static int notifyToken;
         [self configureCurrentCity:self.locationManager.currentAuthorisationStatus];
         
         self.reach = [Reachability reachabilityForInternetConnection];
+        
+        c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.weather"];
+        rocketbootstrap_distributedmessagingcenter_apply(c);
     }
     
     return self;
@@ -253,12 +257,10 @@ static int notifyToken;
     // we have updated weather, but, shouldn't we just send this back to SB via a dict?
     NSDictionary *updated = [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity];
     
-    CPDistributedMessagingCenter *c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.weather"];
-    rocketbootstrap_distributedmessagingcenter_apply(c);
     [c sendMessageName:@"weatherData" userInfo:updated]; //send an NSDictionary here to pass data
     
     // Return a message back to SpringBoard that updating is now done.
-    notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
+    //notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
 }
 
 @end

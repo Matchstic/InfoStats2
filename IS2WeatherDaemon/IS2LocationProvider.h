@@ -15,6 +15,7 @@
 
 -(id)initWithLocationManager:(IS2LocationManager*)locationManager;
 -(void)setLocationUpdateInterval:(uint64_t)interval;
+-(void)setLocationUpdateAccuracy:(uint64_t)accuracy;
 -(void)requestLocationUpdate;
 
 @end

@@ -19,8 +19,10 @@
         // We'll default to manual updating.
         _interval = kManualUpdate;
         
-        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+        //[self.locationManager setDesiredAccuracy:kCLLocationAccuracyBestForNavigation];
+        //[self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+        [self setLocationUpdateAccuracy:4];
+        [self setLocationUpdateInterval:_interval];
         [self.locationManager setDelegate:self];
         [self.locationManager setActivityType:CLActivityTypeAutomotiveNavigation]; // Allows use of GPS
         
@@ -33,25 +35,24 @@
 -(void)setLocationUpdateInterval:(IS2LocationUpdateInterval)interval {
     switch (interval) {
         case kTurnByTurn:
-            [self.locationManager stopUpdatingLocation];
-            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-            [self.locationManager setDistanceFilter:10];
+            NSLog(@"[InfoStats2d | Location] :: Setting interval to 10 meters");
+            [self.locationManager setDistanceFilter:10.0];
             [self.locationManager startUpdatingLocation];
             break;
         case k100Meters:
-            [self.locationManager stopUpdatingLocation];
-            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-            [self.locationManager setDistanceFilter:100];
+            //[self.locationManager stopUpdatingLocation];
+            NSLog(@"[InfoStats2d | Location] :: Setting interval to 100 meters");
+            [self.locationManager setDistanceFilter:100.0];
             [self.locationManager startUpdatingLocation];
             break;
         case k1Kilometer:
-            [self.locationManager stopUpdatingLocation];
-            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
-            [self.locationManager setDistanceFilter:500];
+            //[self.locationManager stopUpdatingLocation];
+            NSLog(@"[InfoStats2d | Location] :: Setting interval to 1 km");
+            [self.locationManager setDistanceFilter:1000.0];
             [self.locationManager startUpdatingLocation];
             break;
         case kManualUpdate:
-            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+            NSLog(@"[InfoStats2d | Location] :: Setting interval to manual mode");
             [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
             [self.locationManager stopUpdatingLocation];
             break;
@@ -61,6 +62,44 @@
     }
     
     _interval = interval;
+}
+
+-(void)setLocationUpdateAccuracy:(int)accuracy {
+    switch (accuracy) {
+        case 1:
+            NSLog(@"[InfoStats2d | Location] :: Setting accuracy to BestForNavigation");
+            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBestForNavigation];
+            break;
+        case 2:
+            NSLog(@"[InfoStats2d | Location] :: Setting accuracy to Best");
+            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+            break;
+        case 3:
+            NSLog(@"[InfoStats2d | Location] :: Setting accuracy to within 10 meters");
+            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+            break;
+        case 4:
+            NSLog(@"[InfoStats2d | Location] :: Setting accuracy to within 100 meters");
+            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+            break;
+        case 5:
+            NSLog(@"[InfoStats2d | Location] :: Setting accuracy to within 1 kilometer");
+            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
+            break;
+        case 6:
+            NSLog(@"[InfoStats2d | Location] :: Setting accuracy to within 3 kilometers");
+            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyThreeKilometers];
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (_interval != kManualUpdate) {
+        [self.locationManager startUpdatingLocation];
+    }
+    
+    _accuracy = accuracy;
 }
 
 -(void)registerNewCallbackForLocationData:(void(^)(CLLocation*))callback {
@@ -100,8 +139,20 @@
     }
 }
 
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"[InfoStats2d | Location Manager] :: Failed to update locations, %@", error.localizedDescription);
+}
+
+-(void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager {
+    NSLog(@"[InfoStats2d | Location Manager] :: Updating locations has been paused by the system");
+}
+
+- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager {
+    NSLog(@"[InfoStats2d | Location Manager] :: Updating locations has been resumed by the system");
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    NSLog(@"[InfoStats2d | Location Manager] :: Did update locations, with array count %d.", locations.count);
+    NSLog(@"[InfoStats2d | Location Manager] :: Did update locations, with array count %d.", (int)locations.count);
     
     if (_locationStoppedTimer) {
         [_locationStoppedTimer invalidate];

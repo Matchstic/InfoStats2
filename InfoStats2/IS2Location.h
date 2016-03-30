@@ -41,7 +41,7 @@ typedef enum : NSUInteger {
  */
 +(void)requestUpdateToLocationData;
 
-/** Sets the distance interval the user must travel before a location data update is performed. By default, this is set to "manual updating", whereupon location data is only updated after calling <i>requestUpdateToLocationData</i>.<br/><br/>If another client of the InfoStats2 API has requested a more accurate distance interval, that more accurate interval will be used instead.
+/** Sets the distance interval the user must travel before a location data update is performed. By default, this is set to "manual updating", whereupon location data is only updated after calling <i>requestUpdateToLocationData</i>.<br/><br/>If another client of the InfoStats2 API has requested a more fine-grained distance interval, that more fine-grained interval will be used instead.
  
  @param interval The interval to be requested for location data updates.<br/><br/>Available values:<br/>1 - Update every 10 meters moved<br/>2 - Update every 100 meters<br/>3 - Update every 1 kilometer
  @param requester A unique identifier used to identify your code as requesting a particular interval. It is recommended to use reverse DNS notation, such as "com.foo.bar".
@@ -52,6 +52,17 @@ typedef enum : NSUInteger {
  @param requester A unique identifier used to identify your code as requesting a particular interval. It is recommended to use reverse DNS notation, such as "com.foo.bar".
  */
 +(void)removeRequesterForLocationDistanceInterval:(NSString*)requester;
+
+/** Sets the accuracy of the resulting location data. Please be aware though that the higher the accuracy, the faster the battery will drain. By default, this will be set to an accuracy of within 100 meters of the user.<br/><br/>If another client of the InfoStats2 API has requested a greater accuracy, that accuracy will be used instead.
+ @param accuracy The accuracy to be requested for location data updates.<br/><br/>Available values:<br/>1 - Satellite navigation quality (GPS and additional sensors)<br/>2 - Satellite navigation quality (GPS only)<br/>3 - Within 10 meters of the user<br/>4 - Within 100 meters<br/>5 - Within 1 kilometer<br/>6 - Within 3 kilometers
+ @param requester A unique identifier used to identify your code as requesting a particular acuracy. It is recommended to use reverse DNS notation, such as "com.foo.bar".
+ */
++(void)setLocationUpdateAccuracy:(int)accuracy forRequester:(NSString*)requester;
+
+/** Removes your code as requesting a particular acuracy, as detailed in <i>setLocationUpdateAccuracy:forRequester:</i>. This must be called once your code is unloaded, else location data will continue to update at the accuracy requested; if greater in accuracy than to within 100 meters, this will result in increased battery drainage.
+ @param requester A unique identifier used to identify your code as requesting a particular interval. It is recommended to use reverse DNS notation, such as "com.foo.bar".
+ */
++(void)removeRequesterForLocationAccuracy:(NSString*)requester;
 
 /** Checks if the user has enabled Location Services in Settings.
  */

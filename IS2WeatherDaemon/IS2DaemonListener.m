@@ -11,6 +11,7 @@
 
 static int weatherToken;
 static int locationToken;
+static int locationAccuracyToken;
 
 @implementation IS2DaemonListener
 
@@ -25,6 +26,12 @@ static int locationToken;
         }
         
         status = notify_register_check("com.matchstic.infostats2/requestLocationIntervalUpdate", &locationToken);
+        if (status != NOTIFY_STATUS_OK) {
+            fprintf(stderr, "registration failed (%u)\n", status);
+            return;
+        }
+        
+        status = notify_register_check("com.matchstic.infostats2/requestLocationAccuracyUpdate", &locationAccuracyToken);
         if (status != NOTIFY_STATUS_OK) {
             fprintf(stderr, "registration failed (%u)\n", status);
             return;
@@ -58,6 +65,18 @@ static int locationToken;
             } else {
                 [self.locationProvider setLocationUpdateInterval:incoming];
             }
+        });
+    }
+    
+    status = notify_check(locationAccuracyToken, &check);
+    if (status == NOTIFY_STATUS_OK && check != 0) {
+        NSLog(@"[InfoStats2d | Location] :: Location accuracy modification request received.");
+        
+        uint64_t incoming;
+        notify_get_state(locationAccuracyToken, &incoming);
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [self.locationProvider setLocationUpdateAccuracy:incoming];
         });
     }
 }
