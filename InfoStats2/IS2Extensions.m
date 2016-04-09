@@ -26,6 +26,7 @@
 @end
 
 static NSBundle *bundle; // strings bundle.
+static IS2Private *instance;
 
 @implementation IS2Private
 
@@ -61,6 +62,23 @@ static NSBundle *bundle; // strings bundle.
     [s replaceOccurrencesOfString:@"\r" withString:@"\\r" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
     [s replaceOccurrencesOfString:@"\t" withString:@"\\t" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
     return [NSString stringWithString:s];
+}
+
++(instancetype)sharedInstance {
+    // structure used to test whether the block has completed or not
+    static dispatch_once_t p = 0;
+    
+    // executes a block object once and only once for the lifetime of an application
+    dispatch_once(&p, ^{
+        instance = [[self alloc] init];
+    });
+    
+    // returns the same object each time
+    return instance;
+}
+
+-(void)performBlockOnMainThread:(void (^)(void))callbackBlock {
+    callbackBlock();
 }
 
 @end

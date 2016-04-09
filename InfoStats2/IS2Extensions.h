@@ -14,6 +14,9 @@
 +(void)setupForTweakLoaded;
 +(void)setupAfterSpringBoardLoaded;
 
++(instancetype)sharedInstance;
+-(void)performBlockOnMainThread:(void (^)(void))callbackBlock;
+
 +(NSString*)JSONescapedStringForString:(NSString*)input;
 
 // Calendar

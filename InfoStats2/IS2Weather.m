@@ -9,6 +9,7 @@
 #import "IS2Weather.h"
 #import "IS2WeatherProvider.h"
 #import "IS2WorkaroundDictionary.h"
+#import "IS2Extensions.h"
 
 #define DEFAULT_WEATHER_UPDATE_INTERVAL 30
 
@@ -305,7 +306,10 @@ static inline void buildRequestersDictionary() {
     
     [currentArray removeObject:requester];
     
-    [requesters setObject:currentArray forKey:key];
+    if (currentArray)
+        [requesters setObject:currentArray forKey:key];
+    else
+        [requesters setObject:[NSMutableArray array] forKey:key];
     
     // Just now need to modify the timer's duration to suit the new time!
     int currentRequester = [self currentlyMostAccurateRequester];
@@ -336,16 +340,15 @@ static inline void buildRequestersDictionary() {
             // Update weather, and then call blocks for updated weather.
             [[IS2WeatherProvider sharedInstance] updateWeatherWithCallback:^{
                 NSLog(@"[InfoStats2 | Weather] :: Running through blocks");
+                
                 for (void (^block)() in [weatherUpdateBlockQueueTest allValues]) {
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
-                        @try {
-                            block();
-                        } @catch (NSException *e) {
-                            NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
-                        } @catch (...) {
-                            NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with unknown exception");
-                        }
-                    });
+                    @try {
+                        [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
+                    } @catch (NSException *e) {
+                        NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
+                    } @catch (...) {
+                        NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with unknown exception");
+                    }
                 }
             }];
         }
@@ -354,6 +357,10 @@ static inline void buildRequestersDictionary() {
 
 +(BOOL)isCelsius {
     return [[IS2WeatherProvider sharedInstance] isCelsius];
+}
+
++(BOOL)isDay {
+    return [[IS2WeatherProvider sharedInstance] isDay];
 }
 
 @end

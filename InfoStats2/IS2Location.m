@@ -12,6 +12,7 @@
 #import "IS2WorkaroundDictionary.h"
 #import "IS2Telephony.h"
 #include <sys/time.h>
+#import "IS2Extensions.h"
 
 @interface CPDistributedMessagingCenter : NSObject
 +(CPDistributedMessagingCenter*)centerNamed:(NSString*)serverName;
@@ -170,11 +171,11 @@ static time_t lastUpdateTime;
 
 +(void)fireOffCallbacks {
     // Just throw old data back at the requesters.
-    //dispatch_async(dispatch_get_main_queue(), ^(void){
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         // Let all our callbacks know we've got new data available.
         for (void (^block)() in [locationUpdateBlockQueue allValues]) {
             @try {
-                block();
+                [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
             } @catch (NSException *e) {
                 NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with exception: %@", e);
             } @catch (...) {

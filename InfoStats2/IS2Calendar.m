@@ -19,7 +19,7 @@ static IS2Calendar *sharedInstance;
 static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
 
 @interface EKCalendar (Private)
-@property (nonatomic, readonly) BOOL isHidden;
+@property (nonatomic, readonly) NSString *calendarIdentifier;
 @end
 
 @implementation IS2Calendar
@@ -157,16 +157,22 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
     // Search all calendars
     NSMutableArray *searchableCalendars = [[store calendarsForEntityType:EKEntityTypeEvent] mutableCopy];
     
-    for (EKCalendar *cal in [searchableCalendars copy]) {
-        if (cal.isHidden) {
-            [searchableCalendars removeObject:cal];
-        }
-    }
-    
     NSPredicate *predicate = [store predicateForEventsWithStartDate:startTime endDate:endTime calendars:searchableCalendars];
     
     // Fetch all events that match the predicate
     NSMutableArray *events = [NSMutableArray arrayWithArray:[store eventsMatchingPredicate:predicate]];
+    
+    // Grab prefs for disabled calendars
+    CFPreferencesAppSynchronize(CFSTR("com.apple.mobilecal"));
+    
+    NSDictionary *settings = (__bridge NSDictionary *)CFPreferencesCopyMultiple(CFPreferencesCopyKeyList(CFSTR("com.apple.mobilecal"), kCFPreferencesCurrentUser, kCFPreferencesAnyHost), CFSTR("com.apple.mobilecal"), kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+    NSArray *deselected = settings[@"LastDeselectedCalendars"];
+    
+    for (EKEvent *event in [events copy]) {
+        if ([deselected containsObject:event.calendar.calendarIdentifier]) {
+            [events removeObject:event];
+        }
+    }
     
     return events;
 }

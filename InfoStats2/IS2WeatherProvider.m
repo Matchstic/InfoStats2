@@ -411,6 +411,10 @@ int firstUpdate = 0;
     return currentCity.pressure;
 }
 
+-(BOOL)isDay {
+    return currentCity.isDay;
+}
+
 // Degrees
 -(int)windDirection {
     return currentCity.windDirection;

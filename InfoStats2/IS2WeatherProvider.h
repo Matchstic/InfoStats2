@@ -48,6 +48,8 @@
 -(float)currentPressure;
 -(int)windDirection;
 
+-(BOOL)isDay;
+
 -(NSString*)translatedWindSpeedUnits;
 
 -(NSString*)currentLocation;

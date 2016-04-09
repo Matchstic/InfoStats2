@@ -125,7 +125,7 @@
             WebCycriptSetupView(webview);
             NSLog(@"[InfoStats2] :: Cycript was injected into an instance of %@", [self class]);
         } @catch (NSException *e) {
-            NSLog(@"[InfoStats2] :: CydgetSetupContext => %@", e);
+            NSLog(@"[InfoStats2] :: Exception in Cycript injection => %@", e);
         }
     }
     

@@ -131,6 +131,9 @@ static int notifyToken;
         [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
         currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
     }
+    
+    NSDictionary *updated = [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity];
+    [c sendMessageName:@"weatherData" userInfo:updated];
 }
 
 -(void)updateWeather {
@@ -141,7 +144,8 @@ static int notifyToken;
         // No data connection; allow for extrapolated data to be used instead from
         // the current City instance.
         NSLog(@"[InfoStats2d | Weather] :: No data connection; using extrapolated data from last update.");
-        notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
+        NSDictionary *updated = [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity];
+        [c sendMessageName:@"weatherData" userInfo:updated];
         return;
     }
 }

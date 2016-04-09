@@ -15,6 +15,8 @@
 @implementation IS2Telephony
 
 +(int)phoneSignalBars {
+    if ([self airplaneModeEnabled]) return 0;
+    
     return (int)[(SBTelephonyManager*)[objc_getClass("SBTelephonyManager") sharedTelephonyManager] signalStrengthBars];
 }
 
