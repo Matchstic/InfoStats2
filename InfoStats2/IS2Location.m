@@ -29,6 +29,7 @@ static CPDistributedMessagingCenter *center;
 static int token;
 static int accuracyToken;
 static int firstUpdate = 0;
+static BOOL isGeocoding = NO;
 static CLGeocoder *geocoder;
 static IS2WorkaroundDictionary *locationUpdateBlockQueue;
 static NSMutableDictionary *requesters;
@@ -72,6 +73,9 @@ static time_t lastUpdateTime;
         
         NSMutableArray *meters = [NSMutableArray array];
         [requesters setObject:meters forKey:@"k100Meters"];
+        
+        NSMutableArray *meters500 = [NSMutableArray array];
+        [requesters setObject:meters500 forKey:@"k500Meters"];
         
         NSMutableArray *kilometer = [NSMutableArray array];
         [requesters setObject:kilometer forKey:@"k1Kilometer"];
@@ -126,22 +130,25 @@ static time_t lastUpdateTime;
     
     time_t currentTime = time(NULL);
     
+    // First, give notice of new location data to callbacks, if they just want co-ordinates.
+    [self fireOffCallbacks];
+    
     // If less than 5 seconds has passed, don't update geocoder. Rate limiting really for battery life.
-    if (difftime(currentTime, lastUpdateTime) >= 5 || firstUpdate == 0) {
+    if ((difftime(currentTime, lastUpdateTime) >= 10 || firstUpdate == 0) && !isGeocoding) {
         lastUpdateTime = currentTime;
         firstUpdate = 1;
+        isGeocoding = YES;
         NSLog(@"[InfoStats2 | Location] :: Updating strings for new location data");
-        
-        // First, give notice of new location data to callbacks, if they just want co-ordinates.
-        [self fireOffCallbacks];
     
+        // This will be draining battery power...
         if (!geocoder)
             geocoder = [[CLGeocoder alloc] init];
         [geocoder reverseGeocodeLocation:location
                    completionHandler:^(NSArray *placemarks, NSError *error) {
+                       isGeocoding = NO;
+                       
                        if (error){
                             NSLog(@"[InfoStats2 | Location] :: Geocode failed with error: %@", error);
-                           
                         } else {
                             // Update names of things.
                             CLPlacemark *placemark = [placemarks objectAtIndex:0];
@@ -162,8 +169,6 @@ static time_t lastUpdateTime;
                        
                        
             }];
-    } else {
-        [self fireOffCallbacks];
     }
     
     return nil;
@@ -234,6 +239,9 @@ static time_t lastUpdateTime;
         case k100Meters:
             key = @"k100Meters";
             break;
+        case k500Meters:
+            key = @"k500Meters";
+            break;
         case k1Kilometer:
             key = @"k1Kilometer";
             break;
@@ -270,6 +278,11 @@ static time_t lastUpdateTime;
     
     // 100 Meters
     if ([[requesters objectForKey:@"k100Meters"] count] > 0) {
+        return k100Meters;
+    }
+    
+    // 500 Meters
+    if ([[requesters objectForKey:@"k500Meters"] count] > 0) {
         return k100Meters;
     }
     

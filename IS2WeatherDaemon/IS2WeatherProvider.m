@@ -39,7 +39,7 @@
 - (bool)localWeatherAuthorized;
 - (void)_setAuthorizationStatus:(int)arg1;
 - (void)setAuthorizationStatus:(int)arg1;
-- (void)setLocationTrackingReady:(bool)arg1 activelyTracking:(bool)arg2; // not in 8.3
+- (void)setLocationTrackingReady:(bool)arg1 activelyTracking:(bool)arg2; // not in 8.3 or lower
 @end
 
 @interface WeatherLocationManager (iOS8_3)
@@ -94,7 +94,8 @@ static int notifyToken;
                 [self updateLocalCityWithLocation:mostRecentLocation];
             } else {
                 NSLog(@"[InfoStats2d | Weather] :: Cannot determine location; using extrapolated data from last update.");
-                notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
+                NSDictionary *updated = [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity];
+                [c sendMessageName:@"weatherData" userInfo:updated];
             }
         }];
         
@@ -127,9 +128,21 @@ static int notifyToken;
             }
         } else
             currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:0];
+        
     } else {
         [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
         currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
+    }
+    
+    // if currentCity is nil, then substitute for Cupertino.
+    if (!currentCity) {
+        NSMutableDictionary *newCity = [NSMutableDictionary dictionary];
+        
+        [newCity setObject:[NSNumber numberWithFloat:37.323] forKey:@"Lat"];
+        [newCity setObject:[NSNumber numberWithFloat:-122.0322] forKey:@"Lon"];
+        [newCity setObject:@"Cupertino" forKey:@"Name"];
+        
+        currentCity = [[WeatherPreferences sharedPreferences] cityFromPreferencesDictionary:newCity];
     }
     
     NSDictionary *updated = [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity];

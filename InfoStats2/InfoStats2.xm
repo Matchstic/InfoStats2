@@ -30,6 +30,8 @@
 @interface IS2Private : NSObject
 +(void)setupForTweakLoaded;
 +(void)setupAfterSpringBoardLoaded;
++(instancetype)sharedInstance;
+-(void)setScreenOffState:(BOOL)screenState;
 @end
 
 @interface IS2Media : NSObject
@@ -332,6 +334,54 @@ static BBServer *sharedServer;
     
     NSString *section = bulletin.sectionID;
     [IS2Notifications updateNCCountWithIdentifier:section andValue:[IS2Notifications notificationCountForApplication:section] - (int)arg1.count];
+}
+
+%end
+
+// Display status...
+
+// iOS 7+
+%hook SBLockScreenViewController
+
+- (void)_handleDisplayTurnedOnWhileUILocked:(id)locked {
+    [[IS2Private sharedInstance] setScreenOffState:NO];
+    
+    %orig;
+}
+
+-(void)_handleDisplayTurnedOn {
+    [[IS2Private sharedInstance] setScreenOffState:NO];
+    
+    %orig;
+}
+
+-(void)_handleDisplayTurnedOff {
+    %orig;
+    
+    [[IS2Private sharedInstance] setScreenOffState:YES];
+}
+
+%end
+
+// iOS 6
+%hook SBAwayController
+
+- (void)undimScreen {
+    [[IS2Private sharedInstance] setScreenOffState:NO];
+    
+    %orig;
+}
+
+- (void)undimScreen:(BOOL)arg1 {
+    [[IS2Private sharedInstance] setScreenOffState:NO];
+    
+    %orig;
+}
+
+- (void)dimScreen:(BOOL)arg1 {
+    %orig;
+    
+    [[IS2Private sharedInstance] setScreenOffState:YES];
 }
 
 %end

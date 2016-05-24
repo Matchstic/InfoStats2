@@ -96,6 +96,10 @@ static NSLock *CPUUsageLock;
     return [self ramDataForType:0];
 }
 
++(int)ramPhysical {
+    return [self ramDataForType:-1];
+}
+
 +(int)ramDataForType:(int)type {
     mach_port_t host_port;
     mach_msg_type_number_t host_size;
@@ -115,6 +119,8 @@ static NSLock *CPUUsageLock;
     
     if (type == 0) {
         return (int)[self getSysInfo:HW_USERMEM] / giga;
+    } else if (type == -1) {
+        return (int)[self getSysInfo:HW_PHYSMEM] / giga;
     }
     
     natural_t wired = vm_stat.wire_count * (natural_t)pagesize / (1024 * 1024);

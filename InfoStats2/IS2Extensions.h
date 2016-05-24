@@ -8,7 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@interface IS2Private : NSObject
+@interface IS2Private : NSObject {
+    BOOL _screenState;
+    
+    // Timers used for IS1 legacy support.
+    NSTimer *_batterytimer;
+    NSTimer *_ramtimer;
+}
 
 +(NSBundle*)stringsBundle;
 +(void)setupForTweakLoaded;
@@ -16,6 +22,8 @@
 
 +(instancetype)sharedInstance;
 -(void)performBlockOnMainThread:(void (^)(void))callbackBlock;
+-(void)setScreenOffState:(BOOL)screenState;
+-(BOOL)getIsScreenOff;
 
 +(NSString*)JSONescapedStringForString:(NSString*)input;
 

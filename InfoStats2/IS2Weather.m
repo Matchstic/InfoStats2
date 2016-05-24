@@ -65,7 +65,7 @@ static inline void buildRequestersDictionary() {
     return [[IS2WeatherProvider sharedInstance] currentWindSpeed];
 }
 
-// Check for celsusis and farenheit
+// Check for celsius and farenheit
 +(int)currentDewPoint {
     return [[IS2WeatherProvider sharedInstance] currentDewPoint];
 }

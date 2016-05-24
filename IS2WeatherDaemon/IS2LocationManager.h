@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <time.h>
 
 typedef enum : NSUInteger {
     kManualUpdate,
     kTurnByTurn,
     k100Meters,
+    k500Meters,
     k1Kilometer
 } IS2LocationUpdateInterval;
 
@@ -23,9 +25,13 @@ typedef enum : NSUInteger {
     IS2LocationUpdateInterval _interval;
     int _accuracy;
     NSTimer *_locationStoppedTimer;
+    BOOL _isUpdatingPaused;
+    int _currentPauseInterval;
+    CLLocation *_lastLocation;
 }
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, readwrite) BOOL isDisplayOff;
 
 -(void)setLocationUpdateInterval:(IS2LocationUpdateInterval)interval;
 -(void)setLocationUpdateAccuracy:(int)accuracy;

@@ -12,6 +12,7 @@ typedef enum : NSUInteger {
     kManualUpdate,
     kTurnByTurn,
     k100Meters,
+    k500Meters,
     k1Kilometer
 } IS2LocationUpdateInterval;
 
@@ -43,7 +44,7 @@ typedef enum : NSUInteger {
 
 /** Sets the distance interval the user must travel before a location data update is performed. By default, this is set to "manual updating", whereupon location data is only updated after calling <i>requestUpdateToLocationData</i>.<br/><br/>If another client of the InfoStats2 API has requested a more fine-grained distance interval, that more fine-grained interval will be used instead.
  
- @param interval The interval to be requested for location data updates.<br/><br/>Available values:<br/>1 - Update every 10 meters moved (walking or cycling)<br/>2 - Update every 100 meters (driving or other such transport)<br/>3 - Update every 1 kilometer (driving or other such transport)
+ @param interval The interval to be requested for location data updates.<br/><br/>Available values:<br/>1 - Update every 10 meters moved (walking or cycling)<br/>2 - Update every 100 meters (driving or other such transport)<br/>3 - Update every 500 meters<br/>4 - Update every 1 kilometer (best for weather data)
  @param requester A unique identifier used to identify your code as requesting a particular interval. It is recommended to use reverse DNS notation, such as "com.foo.bar".
  */
 +(void)setLocationUpdateDistanceInterval:(int)interval forRequester:(NSString*)requester;

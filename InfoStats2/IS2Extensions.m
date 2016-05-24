@@ -7,13 +7,16 @@
 
 #import "IS2Extensions.h"
 #import "IS2WeatherProvider.h"
+#import "IS2System.h"
+#include <notify.h>
 
 @interface IS2Calendar : NSObject
 +(void)setupAfterTweakLoad;
 @end
 
-@interface IS2System : NSObject
+@interface IS2System (additions)
 +(void)setupAfterTweakLoaded;
++(int)ramPhysical;
 @end
 
 @interface IS2Notifications : NSObject
@@ -27,6 +30,7 @@
 
 static NSBundle *bundle; // strings bundle.
 static IS2Private *instance;
+static int displayToken;
 
 @implementation IS2Private
 
@@ -71,14 +75,124 @@ static IS2Private *instance;
     // executes a block object once and only once for the lifetime of an application
     dispatch_once(&p, ^{
         instance = [[self alloc] init];
+        notify_register_check("com.matchstic.infostats2/displayUpdate", &displayToken);
     });
     
     // returns the same object each time
     return instance;
 }
 
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        // Setup ram and battery timers for IS1 legacy support.
+        _ramtimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(IS1RamChanged) userInfo:nil repeats:YES];
+        _batterytimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(IS1BatteryChanged) userInfo:nil repeats:YES];
+        
+        // And also get notified when the battery state changes.
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(IS1BatteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
+    }
+    
+    return self;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 -(void)performBlockOnMainThread:(void (^)(void))callbackBlock {
     callbackBlock();
+}
+
+-(void)setScreenOffState:(BOOL)screenState {
+    _screenState = screenState;
+    
+    if (!screenState) {
+        [self updateIS1AfterSleep];
+    }
+    
+    notify_set_state(displayToken, (int)screenState);
+    notify_post("com.matchstic.infostats2/displayUpdate");
+}
+
+-(BOOL)getIsScreenOff {
+    return _screenState;
+}
+
+#pragma mark Stuff used for IS1 support. This is pretty much lifted from the legacy code.
+
+-(void)updateIS1AfterSleep {
+    [self IS1RamChanged];
+    [self IS1BatteryChanged];
+}
+
+-(void)IS1RamChanged {
+    // Check if file exists, create if not
+    if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Library/Stats/RAMStats.txt"]) {
+        system("touch /var/mobile/Library/Stats/RAMStats.txt");
+    }
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Library/RAMStats.txt"]) {
+        system("ln -s '/var/mobile/Library/Stats/RAMStats.txt' '/var/mobile/Library/RAMStats.txt'");
+    }
+    
+    NSMutableArray *lines = [NSMutableArray array];
+    
+    // Free
+    [lines addObject:[NSString stringWithFormat:@"Free: %d", [IS2System ramFree]]];
+    
+    // Used
+    [lines addObject:[NSString stringWithFormat:@"Used: %d", [IS2System ramUsed]]];
+    
+    // Total usable
+    [lines addObject:[NSString stringWithFormat:@"Total usable: %d", [IS2System ramAvailable]]];
+    
+    // Total physical
+    [lines addObject:[NSString stringWithFormat:@"Total physical: %d", [IS2System ramPhysical]]];
+    
+    [self IS1WriteArray:lines toFile:@"/var/mobile/Library/Stats/RAMStats.txt"];
+}
+
+-(void)IS1BatteryStateChanged:(id)sender {
+    [self IS1BatteryChanged];
+}
+
+-(void)IS1BatteryChanged {
+    // Called for both charging state changes and for level changes.
+
+    // Check if file exists, create if not
+    if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Library/Stats/BatteryStats.txt"]) {
+        system("touch /var/mobile/Library/Stats/BatteryStats.txt.txt");
+    }
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Library/BatteryStats.txt"]) {
+        system("ln -s '/var/mobile/Library/Stats/BatteryStats.txt.txt' '/var/mobile/Library/BatteryStats.txt.txt'");
+    }
+    
+    NSMutableArray *lines = [NSMutableArray array];
+    
+    // Free
+    [lines addObject:[NSString stringWithFormat:@"Level: %d", [IS2System batteryPercent]]];
+    
+    // Used
+    [lines addObject:[NSString stringWithFormat:@"State: %@", [IS2System batteryState]]];
+    
+    // Total usable
+    [lines addObject:[NSString stringWithFormat:@"State-Raw: %d", [IS2System batteryStateAsInteger]]];
+    
+    [self IS1WriteArray:lines toFile:@"/var/mobile/Library/BatteryStats.txt"];
+}
+
+-(void)IS1WriteArray:(NSArray*)array toFile:(NSString*)filepath {
+    NSString *write = [array componentsJoinedByString:@"\n"];
+    
+    NSError *error;
+    [write writeToFile:filepath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    
+    if (error) {
+        NSLog(@"*** [InfoStats2 | Legacy] :: Failed to write to '%@', with error:\n'%@'", filepath, error.localizedDescription);
+    }
 }
 
 @end

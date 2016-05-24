@@ -21,7 +21,7 @@
         
         //[self.locationManager setDesiredAccuracy:kCLLocationAccuracyBestForNavigation];
         //[self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-        [self setLocationUpdateAccuracy:4];
+        [self setLocationUpdateAccuracy:5];
         [self setLocationUpdateInterval:_interval];
         [self.locationManager setDelegate:self];
         [self.locationManager setActivityType:CLActivityTypeAutomotiveNavigation]; // Allows use of GPS
@@ -33,23 +33,39 @@
 }
 
 -(void)setLocationUpdateInterval:(IS2LocationUpdateInterval)interval {
+    // Cleanup from pausing etc.
+    [_locationStoppedTimer invalidate];
+    _locationStoppedTimer = nil;
+    
+    _isUpdatingPaused = NO;
+    
     switch (interval) {
         case kTurnByTurn:
             NSLog(@"[InfoStats2d | Location] :: Setting interval to 10 meters");
             [self.locationManager setDistanceFilter:10.0];
             [self.locationManager startUpdatingLocation];
+            _currentPauseInterval = 1 * 60;
             break;
         case k100Meters:
             //[self.locationManager stopUpdatingLocation];
             NSLog(@"[InfoStats2d | Location] :: Setting interval to 100 meters");
             [self.locationManager setDistanceFilter:100.0];
             [self.locationManager startUpdatingLocation];
+            _currentPauseInterval = 2 * 60;
+            break;
+        case k500Meters:
+            //[self.locationManager stopUpdatingLocation];
+            NSLog(@"[InfoStats2d | Location] :: Setting interval to 500 meters");
+            [self.locationManager setDistanceFilter:500.0];
+            [self.locationManager startUpdatingLocation];
+            _currentPauseInterval = 4 * 60;
             break;
         case k1Kilometer:
             //[self.locationManager stopUpdatingLocation];
             NSLog(@"[InfoStats2d | Location] :: Setting interval to 1 km");
             [self.locationManager setDistanceFilter:1000.0];
             [self.locationManager startUpdatingLocation];
+            _currentPauseInterval = 6 * 60;
             break;
         case kManualUpdate:
             NSLog(@"[InfoStats2d | Location] :: Setting interval to manual mode");
@@ -134,6 +150,12 @@
     
     if (oldStatus == kCLAuthorizationStatusAuthorized && oldStatus != status) {
         [self.locationManager stopUpdatingLocation];
+        
+        // Cleanup from pausing etc.
+        [_locationStoppedTimer invalidate];
+        _locationStoppedTimer = nil;
+        
+        _isUpdatingPaused = NO;
     } else if (_interval != kManualUpdate && authorisationStatus == kCLAuthorizationStatusAuthorized) {
         [self.locationManager startUpdatingLocation];
     }
@@ -159,8 +181,29 @@
         _locationStoppedTimer = nil;
     }
     
+    _isUpdatingPaused = NO;
+    
     // Locations updated! We can now ask for an update to weather with the new locations.
     CLLocation *mostRecentLocation = [[locations lastObject] copy];
+    
+    if (self.isDisplayOff && _lastLocation && _interval != kManualUpdate) {
+        // Hold up. Only forward new event if user has moved past the threshold.
+        CLLocationDistance distance = [mostRecentLocation distanceFromLocation:_lastLocation];
+        
+        if (distance < self.locationManager.distanceFilter) {
+            // Not allowed to update.
+            NSLog(@"[InfoStats2d | Location Manager] :: Preventing update due to screen off and not over threshold.");
+            if (_interval == kManualUpdate) {
+                [self.locationManager stopUpdatingLocation];
+            } else {
+                _locationStoppedTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(_locationStoppedTimer:) userInfo:nil repeats:NO];
+            }
+            
+            return;
+        }
+    }
+    
+    _lastLocation = mostRecentLocation;
 
     // Give callbacks our new location.
     for (void(^callback)(CLLocation*) in _locationCallbacks) {
@@ -169,8 +212,24 @@
     
     if (_interval == kManualUpdate) {
         [self.locationManager stopUpdatingLocation];
-    } else {
-        _locationStoppedTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(_locationStoppedTimer:) userInfo:nil repeats:NO];
+    } else if (self.isDisplayOff) {
+        _locationStoppedTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(_locationStoppedTimer:) userInfo:nil repeats:NO];
+    }
+}
+
+-(void)setIsDisplayOff:(BOOL)isDisplayOff {
+    _isDisplayOff = isDisplayOff;
+    
+    if (!isDisplayOff && _isUpdatingPaused && _interval != kManualUpdate) {
+        // Just had the display turned back on again, restart updating if paused
+        [_locationStoppedTimer invalidate];
+        _locationStoppedTimer = nil;
+        
+        _isUpdatingPaused = NO;
+        
+        [self.locationManager startUpdatingLocation];
+        
+        NSLog(@"[InfoStats2d | Location Manager] :: Resuming updates to location data due to display on.");
     }
 }
 
@@ -178,8 +237,20 @@
     [_locationStoppedTimer invalidate];
     _locationStoppedTimer = nil;
     
-    // Get one last location.
-    
+    // No significant movement has been detected. Begin pausing.
+    if (!_isUpdatingPaused) {
+        NSLog(@"[InfoStats2d | Location Manager] :: Pausing updates to location data.");
+        
+        _isUpdatingPaused = YES;
+        [self.locationManager stopUpdatingLocation];
+        
+        _locationStoppedTimer = [NSTimer scheduledTimerWithTimeInterval:_currentPauseInterval target:self selector:@selector(_locationStoppedTimer:) userInfo:nil repeats:NO];
+    } else {
+        // Continue another update to check if we've moved.
+        [self.locationManager startUpdatingLocation];
+        
+        NSLog(@"[InfoStats2d | Location Manager] :: Resuming updates to location data.");
+    }
 }
 
 @end

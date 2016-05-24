@@ -12,6 +12,7 @@
 static int weatherToken;
 static int locationToken;
 static int locationAccuracyToken;
+static int displayToken;
 
 @implementation IS2DaemonListener
 
@@ -32,6 +33,12 @@ static int locationAccuracyToken;
         }
         
         status = notify_register_check("com.matchstic.infostats2/requestLocationAccuracyUpdate", &locationAccuracyToken);
+        if (status != NOTIFY_STATUS_OK) {
+            fprintf(stderr, "registration failed (%u)\n", status);
+            return;
+        }
+        
+        status = notify_register_check("com.matchstic.infostats2/displayUpdate", &displayToken);
         if (status != NOTIFY_STATUS_OK) {
             fprintf(stderr, "registration failed (%u)\n", status);
             return;
@@ -78,6 +85,16 @@ static int locationAccuracyToken;
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [self.locationProvider setLocationUpdateAccuracy:incoming];
         });
+    }
+    
+    status = notify_check(displayToken, &check);
+    if (status == NOTIFY_STATUS_OK && check != 0) {
+        NSLog(@"[InfoStats2d | General] :: Display status update recieved.");
+        
+        uint64_t incoming;
+        notify_get_state(displayToken, &incoming);
+        
+        self.locationProvider.locationManager.isDisplayOff = (BOOL)incoming;
     }
 }
 

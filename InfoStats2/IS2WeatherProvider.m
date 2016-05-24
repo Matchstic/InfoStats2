@@ -214,7 +214,7 @@ int firstUpdate = 0;
         case 24:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionWindy" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 25:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionCold" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
+            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionFrigid" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 26:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionCloudy" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 27:
@@ -225,16 +225,15 @@ int firstUpdate = 0;
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionPartlyCloudyNight" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 30:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionPartlyCloudyDay" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
+        case 32:
         case 31:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionClearNight" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 32:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSunny" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 33:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMostlySunnyNight" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 34:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMostlySunnyDay" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 35:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMixedRainAndHail" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
+            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHail" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 36:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHot" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 37:
@@ -242,7 +241,7 @@ int firstUpdate = 0;
         case 38:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionScatteredThunderstorms" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 39:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionScatteredThunderstorms" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
+            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHeavyRain" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 40:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionScatteredShowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 41:
@@ -252,15 +251,15 @@ int firstUpdate = 0;
         case 43:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHeavySnow" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 44:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionPartlyCloudy" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
+            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionPartlyCloudyDay" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 45:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionThundershowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
+            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionIsolatedThundershowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 46:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSnowShowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         case 47:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionIsolatedThundershowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
         default:
-            return @"";
+        return @"";
     }
 }
 
@@ -285,10 +284,22 @@ int firstUpdate = 0;
 }
 
 -(int)currentCondition {
+    int cond = 0;
+    
     if (deviceVersion >= 7.0)
-        return currentCity.conditionCode;
+        cond =  currentCity.conditionCode;
     else
-        return currentCity.bigIcon;
+        cond = currentCity.bigIcon;
+    
+    if (cond == 32 && ![self isDay]) {
+        cond = 31;
+    }
+    
+    if (cond < 0) {
+        cond = 0;
+    }
+    
+    return cond;
 }
 
 -(NSString*)currentConditionAsString {
