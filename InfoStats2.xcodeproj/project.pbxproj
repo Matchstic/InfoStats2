@@ -107,6 +107,7 @@
 		C9F191151C8CBFE6006DF5B4 /* IS2LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2LocationManager.m; sourceTree = "<group>"; };
 		C9F191171C8CC6F6006DF5B4 /* IS2DaemonListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2DaemonListener.h; sourceTree = "<group>"; };
 		C9F191181C8CC6F6006DF5B4 /* IS2DaemonListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2DaemonListener.m; sourceTree = "<group>"; };
+		C9F5C6811CF677C10066AEB7 /* libcycript.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcycript.dylib; path = ../../../../../opt/iOSOpenDev/lib/libcycript.dylib; sourceTree = "<group>"; };
 		C9FAC32C1B605AC800199CAC /* IS2Calendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Calendar.h; sourceTree = "<group>"; };
 		C9FAC32D1B605AC800199CAC /* IS2Calendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Calendar.m; sourceTree = "<group>"; };
 		C9FAC3301B605AD400199CAC /* IS2Notes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Notes.h; sourceTree = "<group>"; };
@@ -321,6 +322,7 @@
 		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9F5C6811CF677C10066AEB7 /* libcycript.dylib */,
 				C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */,
 				C909FAF01C8DEAFA000B48CD /* AppSupport.framework */,
 				C92838A21C4E88F00019ABEC /* AudioToolbox.framework */,

@@ -1,6 +1,11 @@
 #import <objc/runtime.h>
 #include "WebCycript.h"
 #import <UIKit/UIKit.h>
+#include <typeinfo> // for bad_cast
+#include <JavaScriptCore/JSContextRef.h> // For libcycript hooks
+#include <JavaScriptCore/JSObjectRef.h> // For libcycript hooks
+
+static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSString(JSContextRef, JSObjectRef, JSStringRef);
 
 @class WebScriptObject;
 
@@ -386,6 +391,37 @@ static BBServer *sharedServer;
 
 %end
 
+#pragma mark Hooks into libcycript ( :( )
+
+// First up, crash on bad_cast in All_hasProperty (http://gitweb.saurik.com/cycript.git/blob/HEAD:/Execute.cpp#l1399)
+static bool (*ori_All_hasProperty)(JSContextRef, JSObjectRef, JSStringRef);
+
+MSHook(bool, All_hasProperty, JSContextRef context, JSObjectRef object, JSStringRef property) {
+    try {
+        return ori_All_hasProperty(context, object, property);
+    } catch (std::bad_cast& bc) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught bad_cast in All_hasProperty");
+        return false;
+    } catch (...) {
+        return false;
+    }
+}
+
+static JSValueRef (*ori_CYCallAsFunction)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]);
+
+MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function, JSObjectRef _this, size_t count, const JSValueRef arguments[]) {
+    if (context == NULL || function == NULL) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught illegal arguments to CYCallAsFunction");
+        
+        // Load up CYJSNull.
+        JSValueRef (*CYJSNull)(JSContextRef) = (JSValueRef(*)(JSContextRef))MSFindSymbol(NULL, "__Z8CYJSNullPK15OpaqueJSContext");
+        
+        return CYJSNull(context);
+    }
+    
+    return ori_CYCallAsFunction(context, function, _this, count, arguments);
+}
+
 #pragma mark Constructor
 
 %ctor {
@@ -393,6 +429,22 @@ static BBServer *sharedServer;
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     
     %init;
+    
+    dlopen("/usr/lib/libcycript.dylib", RTLD_NOW);
+    MSImageRef Cycript(MSGetImageByName("/usr/lib/libcycript.dylib"));
+    
+    bool (*All_hasProperty_sym)(JSContextRef, JSObjectRef, JSStringRef) = (bool(*)(JSContextRef, JSObjectRef, JSStringRef))MSFindSymbol(Cycript, "__ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSString");
+    
+    JSValueRef (*CYCallAsFunction_sym)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]) = (JSValueRef(*)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]))MSFindSymbol(Cycript, "__Z16CYCallAsFunctionPK15OpaqueJSContextP13OpaqueJSValueS3_mPKPKS2_");
+    
+    // Load hooks into libcycript.
+    if (All_hasProperty_sym != NULL) {
+        MSHookFunction(All_hasProperty_sym, $All_hasProperty, &ori_All_hasProperty);
+    }
+    
+    if (CYCallAsFunction_sym != NULL) {
+        MSHookFunction(CYCallAsFunction_sym, $CYCallAsFunction, &ori_CYCallAsFunction);
+    }
     
     [IS2Private setupForTweakLoaded];
 }

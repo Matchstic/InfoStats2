@@ -9,6 +9,9 @@
 #import "IS2WeatherProvider.h"
 #import "IS2System.h"
 #include <notify.h>
+#include <sys/stat.h>
+
+#define LEGACY 1
 
 @interface IS2Calendar : NSObject
 +(void)setupAfterTweakLoad;
@@ -54,6 +57,11 @@ static int displayToken;
 
 +(void)setupAfterSpringBoardLoaded {
     [IS2Notifications setupAfterSpringBoardLaunched];
+    
+#if (LEGACY)
+    // Force IS1 support to begin running.
+    [[IS2Private sharedInstance] updateIS1AfterSleep];
+#endif
 }
 
 +(NSString*)JSONescapedStringForString:(NSString*)input {
@@ -82,6 +90,7 @@ static int displayToken;
     return instance;
 }
 
+#if (LEGACY)
 -(instancetype)init {
     self = [super init];
     
@@ -96,6 +105,7 @@ static int displayToken;
     
     return self;
 }
+#endif
 
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -108,9 +118,11 @@ static int displayToken;
 -(void)setScreenOffState:(BOOL)screenState {
     _screenState = screenState;
     
+#if (LEGACY)
     if (!screenState) {
         [self updateIS1AfterSleep];
     }
+#endif
     
     notify_set_state(displayToken, (int)screenState);
     notify_post("com.matchstic.infostats2/displayUpdate");
@@ -122,6 +134,7 @@ static int displayToken;
 
 #pragma mark Stuff used for IS1 support. This is pretty much lifted from the legacy code.
 
+#if (LEGACY)
 -(void)updateIS1AfterSleep {
     [self IS1RamChanged];
     [self IS1BatteryChanged];
@@ -130,6 +143,7 @@ static int displayToken;
 -(void)IS1RamChanged {
     // Check if file exists, create if not
     if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Library/Stats/RAMStats.txt"]) {
+        mkdir("/var/mobile/Library/Stats/", 0755);
         system("touch /var/mobile/Library/Stats/RAMStats.txt");
     }
     
@@ -163,11 +177,12 @@ static int displayToken;
 
     // Check if file exists, create if not
     if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Library/Stats/BatteryStats.txt"]) {
-        system("touch /var/mobile/Library/Stats/BatteryStats.txt.txt");
+        mkdir("/var/mobile/Library/Stats/", 0755);
+        system("touch /var/mobile/Library/Stats/BatteryStats.txt");
     }
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/mobile/Library/BatteryStats.txt"]) {
-        system("ln -s '/var/mobile/Library/Stats/BatteryStats.txt.txt' '/var/mobile/Library/BatteryStats.txt.txt'");
+        system("ln -s '/var/mobile/Library/Stats/BatteryStats.txt' '/var/mobile/Library/BatteryStats.txt'");
     }
     
     NSMutableArray *lines = [NSMutableArray array];
@@ -181,7 +196,7 @@ static int displayToken;
     // Total usable
     [lines addObject:[NSString stringWithFormat:@"State-Raw: %d", [IS2System batteryStateAsInteger]]];
     
-    [self IS1WriteArray:lines toFile:@"/var/mobile/Library/BatteryStats.txt"];
+    [self IS1WriteArray:lines toFile:@"/var/mobile/Library/Stats/BatteryStats.txt"];
 }
 
 -(void)IS1WriteArray:(NSArray*)array toFile:(NSString*)filepath {
@@ -194,5 +209,6 @@ static int displayToken;
         NSLog(@"*** [InfoStats2 | Legacy] :: Failed to write to '%@', with error:\n'%@'", filepath, error.localizedDescription);
     }
 }
+#endif
 
 @end
