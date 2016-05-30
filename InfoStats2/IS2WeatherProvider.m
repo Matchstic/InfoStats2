@@ -378,7 +378,12 @@ int firstUpdate = 0;
 }
 
 -(int)currentlyFeelsLike {
-    return (int)currentCity.feelsLike;
+    int temp = (int)currentCity.feelsLike;
+    
+    if (![[WeatherPreferences sharedPreferences] isCelsius])
+        lattemp = ((temp*9)/5) + 32;
+    
+    return temp;
 }
 
 -(NSString*)intTimeToString:(int)input {

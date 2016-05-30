@@ -10,7 +10,7 @@
 		C909FAEF1C8DE732000B48CD /* IS2LocationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C909FAEE1C8DE732000B48CD /* IS2LocationProvider.m */; };
 		C909FAF11C8DEAFA000B48CD /* AppSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF01C8DEAFA000B48CD /* AppSupport.framework */; };
 		C909FAF71C8E4951000B48CD /* librocketbootstrap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */; };
-		C909FAF81C8E4993000B48CD /* librocketbootstrap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */; };
+		C909FAF81C8E4993000B48CD /* librocketbootstrap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C909FAF91C8E49A3000B48CD /* AppSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF01C8DEAFA000B48CD /* AppSupport.framework */; };
 		C92838A31C4E88F00019ABEC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C92838A21C4E88F00019ABEC /* AudioToolbox.framework */; };
 		C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9372A1B1B557D1600592CCF /* MediaRemote.framework */; settings = {ATTRIBUTES = (Weak, ); }; };

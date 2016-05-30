@@ -109,7 +109,10 @@ static int notifyToken;
         self.reach = [Reachability reachabilityForInternetConnection];
         
         c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.weather"];
-        rocketbootstrap_distributedmessagingcenter_apply(c);
+        
+        // Not needed on iOS 6
+        if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/lib/librocketbootstrap.dylib"])
+            rocketbootstrap_distributedmessagingcenter_apply(c);
     }
     
     return self;

@@ -26,7 +26,10 @@ static CPDistributedMessagingCenter *c;
         self.locationManager = locationManager;
         
         c = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.location"];
-        rocketbootstrap_distributedmessagingcenter_apply(c);
+        
+        // Not needed on iOS 6
+        if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/lib/librocketbootstrap.dylib"])
+            rocketbootstrap_distributedmessagingcenter_apply(c);
         
         [self.locationManager registerNewCallbackForLocationData:^(CLLocation *location) {
             // Tell SpringBoard about new location.
