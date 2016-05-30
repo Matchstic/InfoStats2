@@ -21,6 +21,11 @@
 #include <sys/types.h>
 #include <mach/processor_info.h>
 
+@interface SBScreenShotter : NSObject
++ (id)sharedInstance;
+- (void)saveScreenshot:(BOOL)arg1;
+@end
+
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
 
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -188,13 +193,11 @@ static NSLock *CPUUsageLock;
 #pragma mark System functions
 
 +(void)takeScreenshot {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This function isn't implemented yet" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [av show];
+    [[objc_getClass("SBScreenShotter") sharedInstance] saveScreenshot:YES];
 }
 
 +(void)lockDevice {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This function isn't implemented yet" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [av show];
+    [[objc_getClass("SBUserAgent") sharedUserAgent] lockAndDimDevice];
 }
 
 +(void)openSwitcher {
@@ -324,7 +327,7 @@ static NSLock *CPUUsageLock;
             break;
         case 3: // GB
             return (double)bytes / 1024.f / 1024.f / 1024.f;
-            
+            break;
         case 0: // Bytes
         default:
             return (double)bytes;

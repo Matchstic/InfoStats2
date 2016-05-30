@@ -372,7 +372,7 @@ int firstUpdate = 0;
 
 // Available for iOS 7+
 -(CGFloat)currentChanceOfRain {
-    CGFloat output = 0.0;
+    /*CGFloat output = 0.0;
     
     void *weather = dlopen("/System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
     float (*ChanceOfRainWithHourlyForecasts)(NSArray*) = (float (*)(NSArray*))dlsym(weather, "_ChanceOfRainWithHourlyForecasts");
@@ -383,15 +383,14 @@ int firstUpdate = 0;
     }
     
     //return ChanceOfRainWithHourlyForecasts([self hourlyForecastsForCurrentLocation]);
+     return 0.0;*/
     
-    /*if ([currentCity respondsToSelector:@selector(precipitationForecast)]) {
+    if ([currentCity respondsToSelector:@selector(precipitationForecast)]) {
         return [currentCity precipitationForecast];
     } else {
         NSLog(@"[InfoStats2 | Weather] :: Current version of iOS does not support -currentChanceOfRain");
         return 0;
-    }*/
-
-    return output;
+    }
 }
 
 -(int)currentlyFeelsLike {
