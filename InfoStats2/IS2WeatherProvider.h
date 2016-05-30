@@ -37,7 +37,7 @@
 -(int)currentWindChill;
 -(BOOL)isWindSpeedMph;
 -(int)currentVisibilityPercent;
--(int)currentChanceOfRain;
+-(CGFloat)currentChanceOfRain;
 -(int)currentlyFeelsLike;
 -(NSString*)sunsetTime;
 -(NSString*)sunriseTime;

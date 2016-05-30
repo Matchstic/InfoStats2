@@ -246,27 +246,30 @@ static NSLock *CPUUsageLock;
     natural_t numCPUsU = 0U;
     kern_return_t err = host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &numCPUsU, &cpuInfo, &numCpuInfo);
     
-    unsigned usage = 0;
+    double usage = 0.0;
     
     if(err == KERN_SUCCESS) {
         [CPUUsageLock lock];
         
         for(unsigned i = 0U; i < numCPUs; ++i) {
-            float inUse, total;
+            float inUse, totalTicks;
             if(prevCpuInfo) {
-                inUse = (
-                         (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER]   - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER])
-                         + (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM] - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM])
-                         + (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE]   - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE])
-                         );
-                total = inUse + (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE] - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE]);
+                
+                float userDiff = (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER]   - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER]);
+                float systemDiff = (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM] - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM]);
+                float niceDiff = (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE]   - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE]);
+                float idleDiff = (cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE] - prevCpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE]);
+                
+                inUse = (userDiff + systemDiff + niceDiff);
+                totalTicks = inUse + idleDiff;
             } else {
                 inUse = cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER] + cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM] + cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE];
-                total = inUse + cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE];
+                totalTicks = inUse + cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE];
             }
             
-            usage += inUse / total;
+            usage += inUse / totalTicks;
         }
+        
         [CPUUsageLock unlock];
         
         if(prevCpuInfo) {
@@ -279,6 +282,9 @@ static NSLock *CPUUsageLock;
         
         cpuInfo = NULL;
         numCpuInfo = 0U;
+        
+        usage *= 100.0;
+        usage /= numCPUsU;
     }
     
     return usage;

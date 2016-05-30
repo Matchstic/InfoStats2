@@ -12,6 +12,9 @@
 #import <Weather/Weather.h>
 #import <notify.h>
 #import "IS2Extensions.h"
+#include <dlfcn.h>
+
+//extern float ChanceOfRainWithHourlyForecasts(NSArray *forecasts);
 
 #define deviceVersion [[[UIDevice currentDevice] systemVersion] floatValue]
 
@@ -347,7 +350,7 @@ int firstUpdate = 0;
 }
 
 -(BOOL)isWindSpeedMph {
-    NSNumber *val = [[NSLocale currentLocale] objectForKey:NSLocaleMeasurementSystem];
+    NSNumber *val = [[NSLocale currentLocale] objectForKey:NSLocaleUsesMetricSystem];
     return [val boolValue];
 }
 
@@ -368,20 +371,34 @@ int firstUpdate = 0;
 }
 
 // Available for iOS 7+
--(int)currentChanceOfRain {
-    if ([currentCity respondsToSelector:@selector(precipitationForecast)]) {
+-(CGFloat)currentChanceOfRain {
+    CGFloat output = 0.0;
+    
+    void *weather = dlopen("/System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
+    float (*ChanceOfRainWithHourlyForecasts)(NSArray*) = (float (*)(NSArray*))dlsym(weather, "_ChanceOfRainWithHourlyForecasts");
+    
+    if (ChanceOfRainWithHourlyForecasts != NULL) {
+        NSLog(@"*** [InfoStats2 | DEBUG] :: WAHEY!");
+        output = ChanceOfRainWithHourlyForecasts([self hourlyForecastsForCurrentLocation]);
+    }
+    
+    //return ChanceOfRainWithHourlyForecasts([self hourlyForecastsForCurrentLocation]);
+    
+    /*if ([currentCity respondsToSelector:@selector(precipitationForecast)]) {
         return [currentCity precipitationForecast];
     } else {
         NSLog(@"[InfoStats2 | Weather] :: Current version of iOS does not support -currentChanceOfRain");
         return 0;
-    }
+    }*/
+
+    return output;
 }
 
 -(int)currentlyFeelsLike {
     int temp = (int)currentCity.feelsLike;
     
     if (![[WeatherPreferences sharedPreferences] isCelsius])
-        lattemp = ((temp*9)/5) + 32;
+        temp = ((temp*9)/5) + 32;
     
     return temp;
 }
