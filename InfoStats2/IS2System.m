@@ -311,6 +311,9 @@ static NSLock *CPUUsageLock;
 
 +(double)freeDiskSpaceInFormat:(int)format {
     uint64_t bytes = [self freeDiskSpaceinBytesForPath:@"/"];
+    uint64_t mobile = [self freeDiskSpaceinBytesForPath:@"/var/mobile/"];
+    
+    bytes += mobile;
     
     switch (format) {
         case 1: // kb
