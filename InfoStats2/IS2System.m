@@ -290,6 +290,8 @@ static NSLock *CPUUsageLock;
         usage /= numCPUsU;
     }
     
+    if (usage == NAN) usage = 0.0;
+    
     return usage;
 }
 
@@ -333,6 +335,14 @@ static NSLock *CPUUsageLock;
             return (double)bytes;
             break;
     }
+}
+
++(double)networkSpeedUp {
+    
+}
+
++(double)networkSpeedDown {
+    
 }
 
 @end

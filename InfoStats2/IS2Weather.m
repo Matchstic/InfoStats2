@@ -91,7 +91,7 @@ static inline void buildRequestersDictionary() {
     return [[IS2WeatherProvider sharedInstance] currentVisibilityPercent];
 }
 
-+(CGFloat)currentChanceOfRain {
++(int)currentChanceOfRain {
     return [[IS2WeatherProvider sharedInstance] currentChanceOfRain];
 }
 

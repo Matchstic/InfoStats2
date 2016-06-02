@@ -206,7 +206,7 @@ static int displayToken;
     [write writeToFile:filepath atomically:YES encoding:NSUTF8StringEncoding error:&error];
     
     if (error) {
-        NSLog(@"*** [InfoStats2 | Legacy] :: Failed to write to '%@', with error:\n'%@'", filepath, error.localizedDescription);
+        NSLog(@"*** [InfoStats2 | Legacy] :: Failed to write to '%@', with error:\n'%@'", filepath, error);
     }
 }
 #endif

@@ -154,6 +154,17 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 %end
 
+// Hacky fix for iOS 6 iWidgets (Can't believe this is necessary)
+
+%hook UIView
+
+%new
+-(id)_newCloseBoxOfType:(int)type {
+    return nil;
+}
+
+%end
+
 #pragma mark Hooks needed for data access
 
 #pragma mark Finished loading notifier

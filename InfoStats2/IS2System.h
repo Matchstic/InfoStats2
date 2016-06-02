@@ -55,6 +55,16 @@
  */
 +(double)freeDiskSpaceInFormat:(int)format;
 
+/** Gives the current up speed of the user's network connection.
+ @return Up speed in kb/s
+ */
++(double)networkSpeedUp;
+
+/** Gives the current down speed of the user's network connection.
+ @return Down speed in kb/s
+ */
++(double)networkSpeedDown;
+
 /** Gives the device type, eg iPhone, iPad or iPod
  @return Device type
  */

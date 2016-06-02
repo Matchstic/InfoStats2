@@ -24,6 +24,12 @@
 -(SBIconModel*)iconModel;
 @end
 
+@interface SBApplicationIcon : NSObject
+- (id)initWithApplication:(id)arg1;
+-(id)badgeNumberOrString;
+-(void)setBadge:(id)arg1;
+@end
+
 @interface SBApplication : NSObject
 -(void)setBadge:(id)arg1;
 -(id)badgeNumberOrString;
@@ -99,8 +105,10 @@ inline int bestCountForApp(NSString *identifier) {
     [lockscreenBulletins setObject:[NSMutableDictionary dictionary] forKey:@"countDictionary"];
 }
 
+// I cut corners in this function.
 +(void)setupAfterSpringBoardLaunched {
     // Setup badge counts for first run
+    
     NSArray *appIcons = [[[objc_getClass("SBIconViewMap") homescreenMap] iconModel] visibleIconIdentifiers];
     for (NSString *identifier in appIcons) {
         id cls = [objc_getClass("SBApplicationController") sharedInstance];
@@ -109,7 +117,13 @@ inline int bestCountForApp(NSString *identifier) {
             app = [cls applicationWithDisplayIdentifier:identifier];
         else
             app = [cls applicationWithBundleIdentifier:identifier];
-        [app setBadge:[app badgeNumberOrString]];
+        
+        if ([app respondsToSelector:@selector(badgeNumberOrString)]) {
+            [app setBadge:[app badgeNumberOrString]];
+        } else {
+            SBApplicationIcon *icon = [[objc_getClass("SBApplicationIcon") alloc] initWithApplication:app];
+            [icon setBadge:[icon badgeNumberOrString]];
+        }
     }
 }
 

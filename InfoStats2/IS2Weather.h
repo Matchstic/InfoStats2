@@ -137,7 +137,7 @@
 /** Current chance of rain, as a percentage between 0-100
  @return Current chance of rain
  */
-+(CGFloat)currentChanceOfRain;
++(int)currentChanceOfRain;
 
 /** The temperature it feels like, taking into account wind chill etc.
  @return Current "feels like" temperature; this is automatically converted between Celsius and Farenheit

@@ -58,7 +58,10 @@ static time_t lastUpdateTime;
     // Setup location.
     location = [[CLLocation alloc] initWithLatitude:0 longitude:0];
     center = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.location"];
-    rocketbootstrap_distributedmessagingcenter_apply(center);
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/lib/librocketbootstrap.dylib"])
+        rocketbootstrap_distributedmessagingcenter_apply(center);
+    
     [center runServerOnCurrentThread];
     [center registerForMessageName:@"locationData" target:self selector:@selector(handleMessageNamed:withUserInfo:)];
     

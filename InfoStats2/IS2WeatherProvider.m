@@ -91,7 +91,10 @@ int firstUpdate = 0;
     [self setCurrentCity];
     
     center = [CPDistributedMessagingCenter centerNamed:@"com.matchstic.infostats2.weather"];
-    rocketbootstrap_distributedmessagingcenter_apply(center);
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/lib/librocketbootstrap.dylib"])
+        rocketbootstrap_distributedmessagingcenter_apply(center);
+    
     [center runServerOnCurrentThread];
     [center registerForMessageName:@"weatherData" target:self selector:@selector(handleMessageNamed:withUserInfo:)];
     
@@ -341,7 +344,7 @@ int firstUpdate = 0;
 }
 
 -(int)currentWindSpeed {
-    // Convert between mph and kph. Data comes in as kph
+    // TODO: Convert between mph and kph. Data comes in as kph?
     return currentCity.windSpeed;
 }
 
@@ -371,7 +374,9 @@ int firstUpdate = 0;
 }
 
 // Available for iOS 7+
--(CGFloat)currentChanceOfRain {
+-(int)currentChanceOfRain {
+    return 0.0;
+    
     /*CGFloat output = 0.0;
     
     void *weather = dlopen("/System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
