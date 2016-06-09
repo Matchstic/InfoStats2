@@ -37,7 +37,7 @@
 
 @interface SBBannerController : NSObject
 +(instancetype)sharedInstance;
--(id)_bannerContext;
+-(BOOL)isShowingBanner;
 -(void)_replaceIntervalElapsed;
 -(void)_dismissIntervalElapsed;
 @end
@@ -171,7 +171,7 @@ inline int bestCountForApp(NSString *identifier) {
         [[objc_getClass("BBServer") IS2_sharedInstance] publishBulletin:bulletin destinations:4 alwaysToLockScreen:YES];
     } else {
         SBBannerController *controller = [objc_getClass("SBBannerController") sharedInstance];
-        if ([controller _bannerContext]) { // Don't do anything if there is already a banner showing.
+        if ([controller isShowingBanner]) { // Don't do anything if there is already a banner showing.
             return;
         }
         // Not sure if these are needed - see TinyBar.

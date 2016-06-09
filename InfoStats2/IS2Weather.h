@@ -104,7 +104,7 @@
  */
 +(int)lowForCurrentDay;
 
-/** The current wind speed, automatically converted between mph and km/h dependant on the user's locale settings
+/** The current wind speed, automatically converted between MPH and KM/h dependant on the user's locale settings
  @return The current wind speed
  */
 +(int)currentWindSpeed;

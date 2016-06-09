@@ -344,7 +344,16 @@ int firstUpdate = 0;
 }
 
 -(int)currentWindSpeed {
-    // TODO: Convert between mph and kph. Data comes in as kph?
+    // Convert between mph and kph. Data comes in as kph
+    if ([self isWindSpeedMph]) {
+        float val = (float)currentCity.windSpeed / 1.609344;
+        
+        // Round val to nearest whole number.
+        val = roundf(val);
+        
+        return val;
+    }
+    
     return currentCity.windSpeed;
 }
 
@@ -353,8 +362,14 @@ int firstUpdate = 0;
 }
 
 -(BOOL)isWindSpeedMph {
+    // *sigh* There is no easy way to determine when a locale uses metric, but also mph for speeds.
+    // This is mainly Ol' Blighty being a pain in the arse.
+    
+    if ([[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode] isEqualToString:@"GB"])
+        return YES;
+    
     NSNumber *val = [[NSLocale currentLocale] objectForKey:NSLocaleUsesMetricSystem];
-    return [val boolValue];
+    return ![val boolValue];
 }
 
 -(int)currentDewPoint {

@@ -45,7 +45,7 @@
  */
 +(int)ramAvailable;
 
-/** Gives the current CPU usage (across all available cores) 
+/** Gives the current CPU usage in percent (across all available cores)
  @return Current CPU usage (combined for system processes and user processes)
  */
 +(double)cpuUsage;

@@ -85,7 +85,7 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
 }
 
 // This allows us to fire off a callback when the user changes which calendars to display in-app.
--(void)monitorPath:(NSString*) path {
+-(void)monitorPath:(NSString*)path {
     
     int descriptor = open([path fileSystemRepresentation], O_EVTONLY);
     if (descriptor < 0) {
