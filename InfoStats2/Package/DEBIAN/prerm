@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "Disengaging..."
+
 if [[ $1 == remove || $1 == purge ]]; then
     /bin/launchctl unload /Library/LaunchDaemons/com.matchstic.infostats2d.plist
 fi

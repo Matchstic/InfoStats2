@@ -105,7 +105,7 @@ inline int bestCountForApp(NSString *identifier) {
     [lockscreenBulletins setObject:[NSMutableDictionary dictionary] forKey:@"countDictionary"];
 }
 
-// I cut corners in this function.
+// I used to cut corners in this function...
 +(void)setupAfterSpringBoardLaunched {
     // Setup badge counts for first run
     
@@ -118,12 +118,19 @@ inline int bestCountForApp(NSString *identifier) {
         else
             app = [cls applicationWithBundleIdentifier:identifier];
         
+        id badgeNumberOrString = nil;
+        int badgeCount = 0;
+        
         if ([app respondsToSelector:@selector(badgeNumberOrString)]) {
-            [app setBadge:[app badgeNumberOrString]];
+            badgeNumberOrString = [app badgeNumberOrString];
         } else {
             SBApplicationIcon *icon = [[objc_getClass("SBApplicationIcon") alloc] initWithApplication:app];
-            [icon setBadge:[icon badgeNumberOrString]];
+            badgeNumberOrString = [icon badgeNumberOrString];
         }
+        
+        badgeCount = [badgeNumberOrString intValue];
+        
+        [self updateBadgeCountWithIdentifier:identifier andValue:badgeCount];
     }
 }
 
