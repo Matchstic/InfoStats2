@@ -22,6 +22,10 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
 @property (nonatomic, readonly) NSString *calendarIdentifier;
 @end
 
+@interface IS2Calendar ()
+@property(assign) dispatch_source_t source;
+@end
+
 @implementation IS2Calendar
 
 #pragma Private methods
@@ -60,6 +64,7 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
 
 -(void)setupNotificationMonitoring {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(calendarUpdateNotificationRecieved:) name:@"EKEventStoreChangedNotification" object:store];
+    [self monitorPath:@"/var/mobile/Library/Preferences/com.apple.mobilecal.plist"];
 }
 
 -(void)calendarUpdateNotificationRecieved:(NSNotification*)notification {
@@ -77,6 +82,43 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
             }
         }
     });
+}
+
+// This allows us to fire off a callback when the user changes which calendars to display in-app.
+-(void)monitorPath:(NSString*) path {
+    
+    int descriptor = open([path fileSystemRepresentation], O_EVTONLY);
+    if (descriptor < 0) {
+        return;
+    }
+    
+    __block typeof(self) blockSelf = self;
+    _source = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, descriptor,                                                  DISPATCH_VNODE_DELETE | DISPATCH_VNODE_WRITE | DISPATCH_VNODE_EXTEND | DISPATCH_VNODE_ATTRIB | DISPATCH_VNODE_LINK | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_REVOKE, dispatch_get_global_queue(0, 0));
+    
+    dispatch_source_set_event_handler(_source, ^{
+        unsigned long flags = dispatch_source_get_data(_source);
+        
+        if (flags & DISPATCH_VNODE_DELETE) {
+           [blockSelf monitorPath:path];
+        } else {
+            // Update our data.
+            [self calendarUpdateNotificationRecieved:nil];
+        }
+    });
+    
+    dispatch_source_set_cancel_handler(_source, ^(void) {
+        close(descriptor);
+    });
+    
+    dispatch_resume(_source);
+}
+
+-(void)dealloc {
+    if (_source) {
+        dispatch_source_cancel(_source);
+        dispatch_release(_source);
+        _source = NULL;
+    }
 }
 
 #pragma mark Public methods

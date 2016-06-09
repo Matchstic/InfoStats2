@@ -12,6 +12,8 @@
 		C909FAF71C8E4951000B48CD /* librocketbootstrap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C909FAF81C8E4993000B48CD /* librocketbootstrap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C909FAF91C8E49A3000B48CD /* AppSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF01C8DEAFA000B48CD /* AppSupport.framework */; };
+		C9162D5D1D00C5C90042027C /* IS2Pedometer.h in Headers */ = {isa = PBXBuildFile; fileRef = C9162D5B1D00C5C90042027C /* IS2Pedometer.h */; };
+		C9162D5E1D00C5C90042027C /* IS2Pedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = C9162D5C1D00C5C90042027C /* IS2Pedometer.m */; };
 		C92838A31C4E88F00019ABEC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C92838A21C4E88F00019ABEC /* AudioToolbox.framework */; };
 		C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9372A1B1B557D1600592CCF /* MediaRemote.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C9372A201B557DC000592CCF /* IS2Weather.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A1E1B557DC000592CCF /* IS2Weather.h */; };
@@ -62,6 +64,8 @@
 		C909FAEE1C8DE732000B48CD /* IS2LocationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2LocationProvider.m; sourceTree = "<group>"; };
 		C909FAF01C8DEAFA000B48CD /* AppSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppSupport.framework; path = System/Library/PrivateFrameworks/AppSupport.framework; sourceTree = SDKROOT; };
 		C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = librocketbootstrap.dylib; path = ../../../../../opt/iOSOpenDev/lib/librocketbootstrap.dylib; sourceTree = "<group>"; };
+		C9162D5B1D00C5C90042027C /* IS2Pedometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Pedometer.h; sourceTree = "<group>"; };
+		C9162D5C1D00C5C90042027C /* IS2Pedometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Pedometer.m; sourceTree = "<group>"; };
 		C92838A21C4E88F00019ABEC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C9372A1B1B557D1600592CCF /* MediaRemote.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaRemote.framework; path = System/Library/PrivateFrameworks/MediaRemote.framework; sourceTree = SDKROOT; };
 		C9372A1E1B557DC000592CCF /* IS2Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Weather.h; sourceTree = "<group>"; };
@@ -153,6 +157,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C9162D5F1D00C5CD0042027C /* Pedometer */ = {
+			isa = PBXGroup;
+			children = (
+				C9162D5B1D00C5C90042027C /* IS2Pedometer.h */,
+				C9162D5C1D00C5C90042027C /* IS2Pedometer.m */,
+			);
+			name = Pedometer;
+			sourceTree = "<group>";
+		};
 		C931A99F1BD1789C00823E60 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -341,6 +354,7 @@
 		C9D72A7E1B1DC99300C44076 /* InfoStats2 */ = {
 			isa = PBXGroup;
 			children = (
+				C9162D5F1D00C5CD0042027C /* Pedometer */,
 				C978133F1BD0021200A8CEC4 /* Private classes */,
 				C931A99F1BD1789C00823E60 /* Calendar */,
 				C978133A1BD0006000A8CEC4 /* Location Services */,
@@ -427,6 +441,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9162D5D1D00C5C90042027C /* IS2Pedometer.h in Headers */,
 				C9FAC33A1B605AF300199CAC /* IS2Notifications.h in Headers */,
 				C9372A201B557DC000592CCF /* IS2Weather.h in Headers */,
 				C9372A2C1B557DEA00592CCF /* IS2System.h in Headers */,
@@ -575,6 +590,7 @@
 				C9FAC33B1B605AF300199CAC /* IS2Notifications.m in Sources */,
 				C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */,
 				C9372A251B557DD000592CCF /* IS2Media.m in Sources */,
+				C9162D5E1D00C5C90042027C /* IS2Pedometer.m in Sources */,
 				C97B8CC61C31A40200525449 /* IS2WorkaroundDictionary.m in Sources */,
 				C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */,
 				C9372A2D1B557DEA00592CCF /* IS2System.m in Sources */,

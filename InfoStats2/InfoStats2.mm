@@ -91,7 +91,7 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 #include <logos/logos.h>
 #include <substrate.h>
-@class SBApplication; @class BBServer; @class SBLockScreenViewController; @class SBAwayBulletinListController; @class SBMediaController; @class UIWebView; @class SBApplicationIcon; @class SpringBoard; @class IWWidget; @class SBLockScreenNotificationListController; @class UIView; @class SBAwayController; 
+@class IWWidget; @class SBApplication; @class UIWebView; @class SBApplicationIcon; @class UIView; @class SBAwayController; @class SBAwayBulletinListController; @class SBMediaController; @class SpringBoard; @class SBLockScreenViewController; @class SBLockScreenNotificationListController; @class BBServer; 
 static id (*_logos_orig$_ungrouped$UIWebView$initWithFrame$)(UIWebView*, SEL, CGRect); static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView*, SEL, CGRect); static void (*_logos_orig$_ungrouped$UIWebView$webView$addMessageToConsole$)(UIWebView*, SEL, WebView *, NSDictionary *); static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWebView*, SEL, WebView *, NSDictionary *); static void (*_logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$)(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void (*_logos_orig$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$)(IWWidget*, SEL, id, id, id); static void _logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$(IWWidget*, SEL, id, id, id); static id _logos_method$_ungrouped$UIView$_newCloseBoxOfType$(UIView*, SEL, int); static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(SpringBoard*, SEL, id); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard*, SEL, id); static void (*_logos_orig$_ungrouped$SBMediaController$_nowPlayingInfoChanged)(SBMediaController*, SEL); static void _logos_method$_ungrouped$SBMediaController$_nowPlayingInfoChanged(SBMediaController*, SEL); static void (*_logos_orig$_ungrouped$SBApplication$setBadge$)(SBApplication*, SEL, id); static void _logos_method$_ungrouped$SBApplication$setBadge$(SBApplication*, SEL, id); static void (*_logos_orig$_ungrouped$SBApplicationIcon$setBadge$)(SBApplicationIcon*, SEL, id); static void _logos_method$_ungrouped$SBApplicationIcon$setBadge$(SBApplicationIcon*, SEL, id); static void (*_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForAddition$)(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *); static void _logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForAddition$(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *); static void (*_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForModification$originalHeight$)(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *, float); static void _logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForModification$originalHeight$(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *, float); static void (*_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForRemoval$originalHeight$)(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *, float); static void _logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForRemoval$originalHeight$(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *, float); static void (*_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForAdditionOfItem$)(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *); static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForAdditionOfItem$(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *); static void (*_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForReplacingItem$withNewItem$)(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *, SBAwayBulletinListItem *); static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForReplacingItem$withNewItem$(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *, SBAwayBulletinListItem *); static void (*_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForModificationOfItem$)(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *); static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForModificationOfItem$(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *); static void (*_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelForRemovalOfItem$updateView$)(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *, BOOL); static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelForRemovalOfItem$updateView$(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *, BOOL); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_releaseLockScreenView)(SBLockScreenViewController*, SEL); static void _logos_method$_ungrouped$SBLockScreenViewController$_releaseLockScreenView(SBLockScreenViewController*, SEL); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOnWhileUILocked$)(SBLockScreenViewController*, SEL, id); static void _logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOnWhileUILocked$(SBLockScreenViewController*, SEL, id); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOn)(SBLockScreenViewController*, SEL); static void _logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOn(SBLockScreenViewController*, SEL); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff)(SBLockScreenViewController*, SEL); static void _logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff(SBLockScreenViewController*, SEL); static void (*_logos_orig$_ungrouped$SBAwayController$_releaseAwayView)(SBAwayController*, SEL); static void _logos_method$_ungrouped$SBAwayController$_releaseAwayView(SBAwayController*, SEL); static void (*_logos_orig$_ungrouped$SBAwayController$undimScreen)(SBAwayController*, SEL); static void _logos_method$_ungrouped$SBAwayController$undimScreen(SBAwayController*, SEL); static void (*_logos_orig$_ungrouped$SBAwayController$undimScreen$)(SBAwayController*, SEL, BOOL); static void _logos_method$_ungrouped$SBAwayController$undimScreen$(SBAwayController*, SEL, BOOL); static void (*_logos_orig$_ungrouped$SBAwayController$dimScreen$)(SBAwayController*, SEL, BOOL); static void _logos_method$_ungrouped$SBAwayController$dimScreen$(SBAwayController*, SEL, BOOL); static id _logos_meta_method$_ungrouped$BBServer$IS2_sharedInstance(Class, SEL); static id (*_logos_orig$_ungrouped$BBServer$init)(BBServer*, SEL); static id _logos_method$_ungrouped$BBServer$init(BBServer*, SEL); static void (*_logos_orig$_ungrouped$BBServer$publishBulletin$destinations$alwaysToLockScreen$)(BBServer*, SEL, __unsafe_unretained BBBulletin*, unsigned long long, _Bool); static void _logos_method$_ungrouped$BBServer$publishBulletin$destinations$alwaysToLockScreen$(BBServer*, SEL, __unsafe_unretained BBBulletin*, unsigned long long, _Bool); static void (*_logos_orig$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shouldSync$)(BBServer*, SEL, __unsafe_unretained NSSet*, unsigned long long, _Bool); static void _logos_method$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shouldSync$(BBServer*, SEL, __unsafe_unretained NSSet*, unsigned long long, _Bool); 
 
 #line 91 "/Users/Matt/iOS/Projects/InfoStats2/InfoStats2/InfoStats2.xm"
@@ -231,15 +231,17 @@ static void _logos_method$_ungrouped$SBApplication$setBadge$(SBApplication* self
 static void _logos_method$_ungrouped$SBApplicationIcon$setBadge$(SBApplicationIcon* self, SEL _cmd, id arg1) {
     _logos_orig$_ungrouped$SBApplicationIcon$setBadge$(self, _cmd, arg1);
     
-    int badgeCount = 0;
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 7.0) {
+        int badgeCount = 0;
     
-    if ([self respondsToSelector:@selector(badgeNumberOrString)])
-        badgeCount = [[self badgeNumberOrString] intValue];
+        if ([self respondsToSelector:@selector(badgeNumberOrString)])
+            badgeCount = [[self badgeNumberOrString] intValue];
         
-    NSString *ident = [[self application] bundleIdentifier];
-    [IS2Notifications updateBadgeCountWithIdentifier:ident andValue:badgeCount];
+        NSString *ident = [[self application] bundleIdentifier];
+        [IS2Notifications updateBadgeCountWithIdentifier:ident andValue:badgeCount];
     
-    
+        
+    }
 }
 
 
@@ -437,12 +439,27 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
         return CYJSNull(context);
     }
     
-    return ori_CYCallAsFunction(context, function, _this, count, arguments);
+    try {
+        return ori_CYCallAsFunction(context, function, _this, count, arguments);
+    } catch (std::bad_cast& bc) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught bad_cast in CYCallAsFunction");
+        
+        
+        JSValueRef (*CYJSNull)(JSContextRef) = (JSValueRef(*)(JSContextRef))MSFindSymbol(NULL, "__Z8CYJSNullPK15OpaqueJSContext");
+        
+        return CYJSNull(context);
+    } catch (...) {
+        
+        
+        JSValueRef (*CYJSNull)(JSContextRef) = (JSValueRef(*)(JSContextRef))MSFindSymbol(NULL, "__Z8CYJSNullPK15OpaqueJSContext");
+        
+        return CYJSNull(context);
+    }
 }
 
 #pragma mark Constructor
 
-static __attribute__((constructor)) void _logosLocalCtor_3c714889() {
+static __attribute__((constructor)) void _logosLocalCtor_1d0df149() {
     
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     

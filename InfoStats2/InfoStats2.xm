@@ -224,15 +224,17 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 -(void)setBadge:(id)arg1 {
     %orig;
     
-    int badgeCount = 0;
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 7.0) {
+        int badgeCount = 0;
     
-    if ([self respondsToSelector:@selector(badgeNumberOrString)])
-        badgeCount = [[self badgeNumberOrString] intValue];
+        if ([self respondsToSelector:@selector(badgeNumberOrString)])
+            badgeCount = [[self badgeNumberOrString] intValue];
         
-    NSString *ident = [[self application] bundleIdentifier];
-    [IS2Notifications updateBadgeCountWithIdentifier:ident andValue:badgeCount];
+        NSString *ident = [[self application] bundleIdentifier];
+        [IS2Notifications updateBadgeCountWithIdentifier:ident andValue:badgeCount];
     
-    //NSLog(@"*** [InfoStats2 | Notifications] :: Updated for %@ with new count of %d", ident, badgeCount);
+        //NSLog(@"*** [InfoStats2 | Notifications] :: Updated for %@ with new count of %d", ident, badgeCount);
+    }
 }
 
 %end
@@ -430,7 +432,22 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
         return CYJSNull(context);
     }
     
-    return ori_CYCallAsFunction(context, function, _this, count, arguments);
+    try {
+        return ori_CYCallAsFunction(context, function, _this, count, arguments);
+    } catch (std::bad_cast& bc) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught bad_cast in CYCallAsFunction");
+        
+        // Load up CYJSNull.
+        JSValueRef (*CYJSNull)(JSContextRef) = (JSValueRef(*)(JSContextRef))MSFindSymbol(NULL, "__Z8CYJSNullPK15OpaqueJSContext");
+        
+        return CYJSNull(context);
+    } catch (...) {
+        
+        // Load up CYJSNull.
+        JSValueRef (*CYJSNull)(JSContextRef) = (JSValueRef(*)(JSContextRef))MSFindSymbol(NULL, "__Z8CYJSNullPK15OpaqueJSContext");
+        
+        return CYJSNull(context);
+    }
 }
 
 #pragma mark Constructor

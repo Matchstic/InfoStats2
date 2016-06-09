@@ -70,7 +70,7 @@
  &emsp;&emsp;"startTimeTimestamp": 1451528264000, (Timestamp in milliseconds)<br/>
  &emsp;&emsp;"endTimeTimestamp": 1451692799000, (Timestamp in milliseconds)<br/>
  &emsp;&emsp;"associatedCalendarName": "Default",<br/>
- &emsp;&emsp;"associatedCalendarColor": "#C6F4D2"<br/>
+ &emsp;&emsp;"associatedCalendarHexColor": "#C6F4D2"<br/>
  &emsp;},<br/>
  &emsp;{<br/>
  &emsp;&emsp;...<br/>

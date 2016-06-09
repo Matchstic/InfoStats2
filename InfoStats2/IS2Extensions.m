@@ -31,6 +31,12 @@
 +(void)setupAfterTweakLoaded;
 @end
 
+@interface IS2Pedometer : NSObject
++(void)setupAfterSpringBoardLaunched;
++(void)setupAfterTweakLoaded;
++(void)significantTimeChange; // TODO
+@end
+
 static NSBundle *bundle; // strings bundle.
 static IS2Private *instance;
 static int displayToken;
@@ -53,10 +59,14 @@ static int displayToken;
     [IS2Notifications setupAfterTweakLoaded];
     [IS2Location setupAfterTweakLoaded];
     [IS2System setupAfterTweakLoaded];
+    [IS2Pedometer setupAfterTweakLoaded];
 }
 
 +(void)setupAfterSpringBoardLoaded {
     [IS2Notifications setupAfterSpringBoardLaunched];
+    
+    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0)
+        [IS2Pedometer setupAfterSpringBoardLaunched];
     
 #if (LEGACY)
     // Force IS1 support to begin running.
