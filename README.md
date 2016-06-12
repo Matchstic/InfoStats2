@@ -1,3 +1,5 @@
+(This readme will be changed soon, at the moment it's used as the index page for documentation: http://incendo.ws/projects/InfoStats2/)
+
 InfoStats 2 is a far better implementation of the original InfoStats. It allows both HTML/JS and Objective-C developers to access various information, and to call system functions without the need for reverse engineering. In short, it's a powerful, easy-to-use API.
 
 At the bottom of this page can be found references to all the classes that make up this API, along with their constituent methods.
