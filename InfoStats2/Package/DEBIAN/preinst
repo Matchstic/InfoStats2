@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Tower, this is Ghost Rider requesting a flyby."
+echo "Negative, Ghost Rider, the pattern is full."

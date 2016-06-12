@@ -1,0 +1,11 @@
+Package: com.matchstic.TestLockscreens
+Name: InfoStats 2 Test Lockscreens
+Version: 0.1.1
+Description: HTML lockscreens used for testing functions of InfoStats2 on different versions of iOS. Supports GroovyLock, LockHTML, and Convergance.
+Section: System
+Depends: firmware (>= 6.0), mobilesubstrate, com.matchstic.InfoStats2
+Priority: extra
+Architecture: iphoneos-arm
+Author: Matt Clarke <matt@incendo.ws>
+dev: Matt Clarke <matt@incendo.ws>
+Maintainer: Matt Clarke <matt@incendo.ws>

@@ -1,0 +1,72 @@
+    *{
+		margin: 0;
+		padding: 0;
+	}
+	
+	html {
+     	font-family:"Helvetica Neue Light", "HelveticaNeueLight", sans-serif;
+	}
+	
+	#wrap{
+		color: white;
+		width:190%; 
+		position:fixed;
+		bottom:0;
+		left:2.5%;
+	}
+	
+	#notifications {
+     	width:50%;
+     	height:75px;
+	}
+	
+	#notifications img {
+     	width:40px;
+     	height:40px;
+	}
+	
+	#notifications p {
+     	line-height:210%;
+	}
+	
+	#weather {
+     	height:50px;
+     	width:25%;
+     	float:left;
+	}
+	
+	#weather img {
+     	height:80%;
+     	margin:10% 0;
+	}
+	
+	#weather p {
+     	font-size:1.5em;
+     	vertical-align:middle;
+     	font-weight:200;
+     	line-height:190%;
+	}
+	
+	#time {
+     	height:50px;
+     	width:25%;
+     	float:left;
+	}
+	
+	#timeP {
+         font-size:2.3em;
+         font-weight:200;
+     }
+	
+	#date {
+     	height:155px;
+     	width:50%;
+     	font-size:2.3em;
+     	font-weight:200;
+	}
+	
+	#calendar {
+     	height:100px;
+     	width:50%;
+     	font-size:1.15em;
+	}

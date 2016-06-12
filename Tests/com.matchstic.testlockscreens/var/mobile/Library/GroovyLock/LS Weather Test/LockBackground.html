@@ -1,0 +1,56 @@
+<html>
+<head>
+	<title>Weather Test</title>
+	<style type="text/css">
+   	*{
+		margin: 0;
+		padding: 0;
+	}
+	#wrap{
+		color: white;
+		background-color: black;
+	}
+	</style>
+</head>
+
+<body>
+  <div id="wrap" style="width:360; height:480;">
+    <center>
+    <div id="temp">Temp: Unknown</div>
+    <br>
+    <div id="location">Location: Unknown</div>
+    <br>
+    <div id="wind">Wind speed: Unknown</div>
+    <br>
+    <div id="condition">Condition: Unknown</div>
+    <br>
+    <div id="high">Today high: Unknown</div>
+    <br>
+    <div id="low">Today low: Unknown</div>
+    <br>
+    <div id="uw" ontouchend="updateWeatherTwo()"><h2>Tap to update weather</h2></div>
+    </center>
+  </div>
+
+  <script type="text/cycript">
+  
+    [IS2Weather registerForWeatherUpdatesWithIdentifier:"com.matchstic.weathertestls" andCallback:^ void () {
+		   document.getElementById('location').innerHTML = "Location: " + [IS2Weather currentLocation];
+	        document.getElementById('temp').innerHTML = "Temp: " + [IS2Weather currentTemperature];
+	        document.getElementById('wind').innerHTML = "Wind speed: " + [IS2Weather currentWindSpeed];
+	        document.getElementById('condition').innerHTML = "Condition: " + [IS2Weather currentConditionAsString];
+	        document.getElementById('high').innerHTML = "Today high: " + [IS2Weather highForCurrentDay];
+	        document.getElementById('low').innerHTML = "Today low: " + [IS2Weather lowForCurrentDay];
+	}];
+
+	window.onunload = function(){ [IS2Weather unregisterForUpdatesWithIdentifier:"com.matchstic.weathertestls"]; return null; };
+
+    function updateWeatherTwo() {
+        // Begin weather updating
+        [IS2Weather updateWeather];
+    }
+
+    updateWeatherTwo(); // Update for first run.
+  </script>
+</body>
+</html>

@@ -73,7 +73,7 @@
 /** @name Functions
  */
 
-/** Displays a new notification to the user, and will <b>not</b> be stored in the Notification Centre. The default sound for alerts will be used if the device is un-muted, or the default vibration pattern will be used if available. On the lockscreen, this notification will be seen as a new cell in the notification list, and when unlocked, a banner will be shown to the user.
+/** Displays a new notification to the user, and will <b>not</b> be stored in the Notification Centre. The default sound for alerts will be used if the device is un-muted, or the default vibration pattern will be used if available. On the lockscreen, this notification will be seen as a new cell in the notification list, or when unlocked, a banner will be shown to the user.
  @param title The title of the notification
  @param message A short message to display to the user
  @param bundleIdentifier A bundle identifier associated with an application on the user's device. This controls the icon of the notification, and if not set, will default to the identifier for the Settings application.

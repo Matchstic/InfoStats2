@@ -1,0 +1,119 @@
+<html>
+<head>
+	<title>Combined Test</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+     <link rel="stylesheet" media="screen" href="css/main.css" type="text/css" />
+     <script type="text/cycript" src="js/main.js"></script>
+     <script type="text/cycript">
+     /*
+      It seems there are a few issues when using Cycript that are not caused by InfoStats2. These are as follows:
+      - If a function modifies any DOM element via document.getElement..., and you are calling said function from a function
+        that is using Cycript, then it must be called from an inline script in the main HTML file. eg, updateWeather() below 
+        leads to the callback for weather being called, which in turn modifies onscreen elements. Essentially, if you get a 
+        crash, try moving code to be inline until it works.
+      - The above also applies to when using CSS animations.
+      
+     */
+     
+     [IS2Weather registerForWeatherUpdatesWithIdentifier:"com.matchstic.LS-Combined-Test" andCallback:^ void () {
+        updateWeatherValues();
+     }];
+	
+	[IS2Notifications registerForBulletinNotificationsWithIdentifier:"com.matchstic.LS-Combined-Test" andCallback:^ void () {
+     	updateNotificationValues();
+	}];
+	
+	[IS2Calendar registerForCalendarNotificationsWithIdentifier:"com.matchstic.LS-Combined-Test" andCallback:^ void () {
+     	updateCalendarValues();
+	}];
+	
+	window.onunload = function(){ 
+       	// Make sure to unregister ourselves from notifications, else InfoStats2 will try to send updates to this webpage after its unloaded.
+     	[IS2Weather unregisterForUpdatesWithIdentifier:"com.matchstic.LS-Combined-Test"]; 
+     	[IS2Notifications unregisterForNotificationsWithIdentifier:"com.matchstic.LS-Combined-Test"];
+     	[IS2Calendar unregisterForNotificationsWithIdentifier:"com.matchstic.LS-Combined-Test"];
+     	
+     	return null; 
+     };
+	
+	function didLoadPage() {
+	   // Grab default values
+        updateWeatherValues();
+        updateCalendarValues();
+        updateNotificationValues();
+        updateClock();
+        
+        // Request weather update, and begin weather timers
+        updateWeather();
+        
+        // Setup timer to re-refresh data
+        setInterval(updateWeather, weatherTimerLength);
+        setInterval(updateClock, 1000);
+	}
+	
+	function updateWeather() {
+        // Begin weather updating
+        [IS2Weather updateWeather];
+     }
+	</script>
+</head>
+
+<body onload="didLoadPage()">
+  <div id="wrap">
+    <section id="time">
+      <div>
+        <p id="timeP">00:00</p>
+      </div>
+    </section>
+    
+    <section id="weather">
+      <div style="float:right">
+        <p style="width:100%;" align="right"><span id="temperature">10</span><span style="font-size:0.75em;vertical-align:5;">&deg;</span>
+      </div>
+      <div style="float:right;width:50px;">
+        <img id="weatherImg" src="img/flat_white/0.png" />
+      </div>
+    </section>
+    
+    <section id="date">
+      <p id="timeDay">Thursday</p>
+      <p id="timeRest">November 15</p>
+    </section>
+    
+    <section id="calendar">
+      <div id="noEvents">
+        <p>No upcoming events</p>
+      </div>
+      <div id="eventsExist" style="display:none;">
+        <p id="eventTitle">Example event title</p>
+        <p id="eventLocation">Example event location</p>
+        <p id="eventTime">Today: 11:00 to 15:00</p>
+      </div>
+    </section>
+    
+    <section id="notifications">
+      <!-- One div per application to be displayed in the notification section. -->
+      <div id="phone" style="float:left;width:20%;">
+        <center>
+          <img src="img/phone.png" />
+          <p id="phoneNotifCount">2</p>
+        </center>
+      </div>
+      
+      <div id="messages" style="float:left;width:20%;">
+        <center>
+          <img src="img/messages.png" />
+          <p id="messagesNotifCount">5</p>
+        </center>
+      </div>
+      
+      <div id="mail" style="float:left;width:20%;">
+        <center>
+          <img src="img/mail.png" />
+          <p id="mailNotifCount">1</p>
+        </center>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

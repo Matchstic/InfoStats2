@@ -1,0 +1,69 @@
+<html>
+ <head>
+  <title>Location Test</title>
+
+  <style type="text/css">
+    *{
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+ </head>
+
+ <body>
+
+  <div style="width:200px; background-color: black; color: white;">
+   <p id="lat">Lat: 0.0</p>
+   <p id="long">Long: 0.0</p>
+   <p id="city">City: null</p>
+   <p id="neighbourhood">Neig.: null</p>
+   <p id="state">State: null</p>
+   <p id="county">County: null</p>
+   <p id="country">Country: null</p>
+   <p id="ISOCode">ISO Code: null</p>
+   <p id="postCode">Postcode: null</p>
+   <p id="street">Street: null</p>
+   <p id="houseNum">House #: null</p>
+  </div>
+
+  <script type="text/cycript">
+  
+  function updateLocationData() {
+    document.getElementById("lat").innerHTML = "Lat: " + [IS2Location currentLatitude];
+    document.getElementById("long").innerHTML = "Long: " + [IS2Location currentLongitude];
+    document.getElementById("city").innerHTML = "City: " + [IS2Location cityForCurrentLocation];
+    document.getElementById("neighbourhood").innerHTML = "Neig.: " + [IS2Location neighbourhoodForCurrentLocation];
+    document.getElementById("state").innerHTML = "State: " + [IS2Location stateForCurrentLocation];
+    document.getElementById("county").innerHTML = "County: " + [IS2Location countyForCurrentLocation];
+    document.getElementById("country").innerHTML = "Country: " + [IS2Location countryForCurrentLocation];
+    document.getElementById("ISOCode").innerHTML = "ISO Code: " + [IS2Location ISOCountryCodeForCurrentLocation];
+    document.getElementById("postCode").innerHTML = "Postcode: " + [IS2Location postCodeForCurrentLocation];
+    document.getElementById("street").innerHTML = "Street: " + [IS2Location streetForCurrentLocation];
+    document.getElementById("houseNum").innerHTML = "House #: " + [IS2Location houseNumberForCurrentLocation];
+  }
+  
+  window.onload = function(){
+    // Code to run after location data updates.
+    [IS2Location registerForLocationNotificationsWithIdentifier:"com.matchstic.locationtest" andCallback:^ void () {
+      // Update onscreen elements
+      updateLocationData();
+    }];
+    
+    // Configure how often location data updates, and how accurate it is.
+    [IS2Location setLocationUpdateDistanceInterval:2 forRequester:"com.matchstic.locationtest"];
+    [IS2Location setLocationUpdateAccuracy:4 forRequester:"com.matchstic.locationtest"];
+  
+    updateLocationData();
+  }
+
+  window.onunload = function() { 
+   [IS2Location unregisterForNotificationsWithIdentifier:"com.matchstic.locationtest"]; 
+   [IS2Location removeRequesterForLocationDistanceInterval:"com.matchstic.locationtest"];
+   [IS2Location removeRequesterForLocationAccuracy:"com.matchstic.locationtest"];
+   return null; 
+  };
+
+  </script>
+
+ </body>
+</html>

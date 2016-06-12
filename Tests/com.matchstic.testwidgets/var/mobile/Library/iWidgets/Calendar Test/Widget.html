@@ -1,0 +1,292 @@
+<html>
+ <head>
+  <title>Calendar Test</title>
+
+  <style type="text/css">
+    *{
+      margin: 0;
+      padding: 0;
+      font-family: 'HelveticaNeue', 'Helvetica Neue', sans-serif;
+    }
+    
+    .event {
+      margin: 5;
+      height: 60px;
+    }
+    
+    p {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    
+    .colour {
+      height: 55px;
+      width: 1px;
+      position: relative;
+      left: 5px;
+      top: 2px;
+      background-color: #00FF00;
+      float: left;
+    }
+    
+    .title {
+      height: 25px;
+      width: 90%;
+      position: relative;
+      left: -5px;
+      top: 3;
+      float: right;
+    }
+    
+    .location {
+      height: 18px;
+      font-size: 13;
+      width: 90%;
+      position: relative;
+      left: -5px;
+      top: -2;
+      float: right;
+    }
+    
+    .time {
+      height: 18px;
+      width: 90%;
+      font-size: 11;
+      position: relative;
+      left: -5px;
+      top: -2;
+      float: right;
+    }
+    
+    #noevents {
+      display: none;
+      height: 100%;
+      width: 100%;
+    }
+    
+    #noevents p {
+      padding-top: 45%;
+      padding-bottom: 45%;
+      height: 10%;
+    }
+  </style>
+ </head>
+
+ <body>
+
+  <div style="width:300px; height:400px;background-color: black; color: white;">
+   <h3>Upcoming Events</h3>
+   
+   <div id="eventscontainer">
+    <!-- We'll show the next five events in the next 7 days. -->
+    <div id="eventOne" class="event">
+      <p id="eventOneColour" class="colour"> </p>
+      <p id="eventOneTitle" class="title">Lorem Ipsum</p>
+      <p id="eventOneLocation" class="location">Location...</p>
+      <p id="eventOneTime" class="time">11:40, Today</p>
+    </div>
+    
+    <div id="eventTwo" class="event">
+      <p id="eventTwoColour" class="colour"> </p>
+      <p id="eventTwoTitle" class="title">Lorem Ipsum</p>
+      <p id="eventTwoLocation" class="location">Location...</p>
+      <p id="eventTwoTime" class="time">11:40, Today</p>
+    </div>
+    
+    <div id="eventThree" class="event">
+      <p id="eventThreeColour" class="colour"> </p>
+      <p id="eventThreeTitle" class="title">Lorem Ipsum</p>
+      <p id="eventThreeLocation" class="location">Location...</p>
+      <p id="eventThreeTime" class="time">11:40, Today</p>
+    </div>
+    
+    <div id="eventFour" class="event">
+      <p id="eventFourColour" class="colour"> </p>
+      <p id="eventFourTitle" class="title">Lorem Ipsum</p>
+      <p id="eventFourLocation" class="location">Location...</p>
+      <p id="eventFourTime" class="time">11:40, Today</p>
+    </div>
+    
+    <div id="eventFive" class="event">
+      <p id="eventFiveColour" class="colour"> </p>
+      <p id="eventFiveTitle" class="title">Lorem Ipsum</p>
+      <p id="eventFiveLocation" class="location">Location...</p>
+      <p id="eventFiveTime" class="time">11:40, Today</p>
+    </div>
+   
+   </div>
+   
+   <div id="noevents">
+    <center><p>No Events</p></center>
+   </div>
+   
+  </div>
+
+  <script type="text/cycript">
+  
+  function hideAllAvailableEvents() {
+    for (i = 0; i < 5; i++) {
+      document.getElementById(elementIdForNumber(i) + 'Title').innerHTML = "";
+      document.getElementById(elementIdForNumber(i) + 'Location').innerHTML = "";
+      document.getElementById(elementIdForNumber(i) + 'Colour').style.backgroundColor = "transparent";
+      document.getElementById(elementIdForNumber(i) + 'Time').innerHTML = "";
+    }  
+  }
+  
+  function elementIdForNumber(x) {
+    switch (x) {
+      case 0:
+        return "eventOne";
+      case 1:
+        return "eventTwo";
+      case 2:
+        return "eventThree";
+      case 3:
+        return "eventFour";
+      case 4:
+        return "eventFive";
+      default:
+        return "";
+    }
+  }
+  
+  function timeValueCorrection(value) {
+     if (value < 10) {
+          return "0" + value;
+     } else {
+          return value;
+     }
+  }
+	
+  function timeToDayName(time) {
+      var dayNumber = time.getDay();
+      var today = new Date();
+      var tomorrow = new Date(today.getTime() + (24 * 60 * 60 * 1000));
+        
+      if (dayNumber == today.getDay()) {
+            return "Today";
+      } else if (dayNumber == tomorrow.getDay()) {
+            return "Tomorrow";
+      }
+        
+      switch(dayNumber) {
+          case 0:
+            return "Sunday";
+          case 1:
+            return "Monday";
+          case 2:
+            return "Tuesday";
+          case 3:
+            return "Wednesday";
+          case 4:
+            return "Thursday";
+          case 5:
+            return "Friday";
+          case 6:
+            return "Saturday";
+          default:
+            return "";
+        } 
+  }
+  
+  function timerFiredEventDidEnd() {
+      updateCalendarData();
+      
+      // The above will also handle resetting the timer for an event's end.
+  }
+  
+  function updateCalendarData() {
+    // First, grab the data between right now and in 7 days' time.
+    var timeNow = new Date();
+    var timeInWeek = timeNow.getTime() + (7 * 24 * 60 * 60 * 1000);
+    
+    var firstEndTime = 0;
+     	
+    var eventsArray = JSON.parse("" + [IS2Calendar calendarEntriesJSONBetweenStartTimeAsTimestamp:timeNow.getTime() andEndTimeAsTimestamp:timeInWeek]);
+     	
+    if (eventsArray.length > 0) {
+          document.getElementById('noevents').style.display = "none";
+          document.getElementById('eventscontainer').style.display = "inline";
+          
+          // Initially, hide all the available events we can show.
+          hideAllAvailableEvents();
+           	
+          // Go over events available.
+          for (i = 0; i < eventsArray.length; i++) {
+            var event = eventsArray[i];
+             
+            // Update title and location data
+            document.getElementById(elementIdForNumber(i) + 'Title').innerHTML = event.title;
+            
+            var location = event.location;
+            if (location == "") location = "Unknown";
+            
+            document.getElementById(elementIdForNumber(i) + 'Location').innerHTML = location;
+            
+            // Also, update the colour to display.
+            document.getElementById(elementIdForNumber(i) + 'Colour').style.backgroundColor = event.associatedCalendarHexColor;
+            
+            if (event.allDay == 0) {
+                // Work out date display.
+                var timeStart = new Date(event.startTimeTimestamp);
+                var timeEnd = new Date(event.endTimeTimestamp);
+               	
+                if (timeStart.getDay() == timeEnd.getDay()) {
+                    // Event is all on the same day, huzzah.
+                    var timeString = "" + timeToDayName(timeStart) + ": " + timeValueCorrection(timeStart.getHours()) + ":" + timeValueCorrection(timeStart.getMinutes());
+                    timeString += " to " + timeValueCorrection(timeEnd.getHours()) + ":" + timeValueCorrection(timeEnd.getMinutes());
+                   	
+                    document.getElementById(elementIdForNumber(i) + 'Time').innerHTML = timeString;
+                } else {
+                      // Event goes over multiple days...
+                      var timeString = "" + timeToDayName(timeStart) + ", " + timeValueCorrection(timeStart.getHours()) + ":" + timeValueCorrection(timeStart.getMinutes());
+                      timeString += " to " + timeToDayName(timeEnd) + ", " + timeValueCorrection(timeEnd.getHours()) + ":" + timeValueCorrection(timeEnd.getMinutes());
+                      document.getElementById(elementIdForNumber(i) + 'Time').innerHTML = timeString;
+                }
+            } else {
+                var timeStart = new Date(event.startTimeTimestamp);
+                document.getElementById(elementIdForNumber(i) + 'Time').innerHTML = timeToDayName(timeStart) + ": all day";
+            }
+            
+            // handle end times for timer.
+            if (firstEndTime == 0 || event.endTimeTimestamp < firstEndTime) {
+              firstEndTime = event.endTimeTimestamp;
+            }
+            
+            if (i == 4) {
+              // Can't display more than 5 upcoming events!
+              break;
+            }
+          }
+           	
+     } else {
+          // Just display that there's no events.
+           document.getElementById('noevents').style.display = "inline";
+           document.getElementById('eventscontainer').style.display = "none";
+     }
+  
+      // Also, ensure we refresh when the first end time is reached of events.
+      // Setting timeout is in milliseconds, and both timeNow and firstEndTime are too.
+      setTimeout(timerFiredEventDidEnd, firstEndTime - timeNow);
+  }
+  
+  window.onload = function(){
+    // Code to run after calendar data updates.
+    [IS2Calendar registerForCalendarNotificationsWithIdentifier:"com.matchstic.calendartest" andCallback:^ void () {
+      // Update onscreen elements
+      updateCalendarData();
+    }];
+  
+    // Populate initial data fields.
+    updateCalendarData();
+  }
+
+  window.onunload = function() { 
+   [IS2Calendar unregisterForNotificationsWithIdentifier:"com.matchstic.calendartest"]; 
+   return null; 
+  };
+
+  </script>
+
+ </body>
+</html>

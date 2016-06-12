@@ -1,5 +1,4 @@
 WORKING/
-Tests/
 LatestBuild/
 Packages/
 InfoStats2 Weather Provider/
@@ -8,3 +7,10 @@ Depiction/
 infostats2d
 *.dylib
 changelog.txt
+*.deb
+Website/
+Update Checklist.txt
+InfoStats2.dylib
+Tests/Media Test
+Tests/System Test
+Tests/Weather Test

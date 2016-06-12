@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Introduction to Cycript and InfoStats 2</title>
+
+	<link rel="stylesheet" href="css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="index.html">InfoStats 2 </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="http://incendo.ws">Matchstic</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview-contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">Introduction to Cycript and InfoStats 2 (Draft 2)</h1>
+
+					
+					<div class="section section-overview index-overview">
+						
+						
+						<p>When building JavaScript based widgets, for any tweak that supports them, Cycript is always accessible to you immediately after installing InfoStats 2. This gives you as a developer a tremendous scope for building anything at all, whether it be a widget that controls the device's media, or perhaps a widget that allows users to create calendar entries. The possibilities are endless.</p>
+
+<h2>General syntax</h2>
+
+<p>To use Cycript (and therefore InfoStats 2) within your widgets, you will need to use the syntax for Objective-C to call functions. An explained example is below:</p>
+<p><code><span style="color:#002966">&lt;script</span> type=<span style="color:green">"text/cycript"</span><span style="color:#002966">&gt;</span><br />
+&emsp;function getVariableFromAPI() {<br />
+&emsp;&emsp;var currentBatteryPercent = [<span style="color:#800000">IS2System</span> batteryPercent];<br />
+&emsp;}<br />
+<span style="color:#002966">&lt;/script&gt;</span>
+</code></p>
+
+<p>The first line stating <code><span style="color:green">"text/cycript"</span></code> is used to define a script that Cycript can process. Without this, your code will be processed as a standard JavaScript script, and will be seen as invalid as a result.</p>
+
+<p>Next, we will focus upon <code>[<span style="color:#800000">IS2System</span> batteryPercent]</code>, as this is the syntax you will be using to call Objective-C functions.</p><p>The given example is calling a <b>class function</b>, that is, a function that does not require you to create an <b>object</b> to call it. InfoStats 2 has been built to avoid having to deal with objects where possible to make things easier for you.</p><p>A <b>class function</b> is always called in the same manner as the example. After the first <code>[</code>, you add in the <b>class name</b> where you want to call a given function from. The example above is using <code><span style="color:#800000">IS2System</span></code> as its <b>class name</b>. Using InfoStats 2, a few other <b>class names</b> you can use are:</p>
+
+<ul>
+  <li>IS2Calendar</li>
+  <li>IS2Location</li>
+  <li>IS2Media</li>
+  <li>IS2Notifications</li>
+  <li>IS2System</li>
+  <li>IS2Telephony</li>
+  <li>IS2Weather</li>
+</ul>
+
+<p>Please note this is a small subset of all <b>class names</b> available; InfoStats 2 has others, and you are free to use all that Apple uses too.</p>
+
+<p>Say we choose to call a function from <code><span style="color:#800000">IS2Telephony</span></code>. Looking at the above example, our code will now be like so:</p>
+<p><code>[<span style="color:#800000">IS2Telephony</span></code></p>
+<p>
+
+<p>With the <a href="Classes/IS2Telephony.html">reference</a> in hand for <code><span style="color:#800000">IS2Telephony</span></code>, we can then see the <b>class functions</b> available. These are always denoted by a <code>+</code> prefix, whether for InfoStats 2, or any other code. If a reference like that isn't available, then you can usually search the <b>class name</b> online, and look at its header file.</p>
+
+<p>Here, we'll use the <code>+(NSString*)wifiName</code> <b>class function</b> to get the current WiFi SSID. To call this, our code will now look like:</p>
+<p><code>[<span style="color:#800000">IS2Telephony</span> wifiName]</code></p>
+<p>You should be able to see the similarity between this and the first example; all <b>class functions</b> are called in exactly the same manner.</p>
+
+<h2>Using InfoStats 2</h2>
+
+<p>In all classes provided in InfoStats 2, there are three types of functions you will be working with:</p>
+<ul>
+  <li>Data retrieval</li>
+  <li>Task performing</li>
+  <li>Callback listeners</li>
+</ul>
+
+<p><b>Data retrieval</b> has already been covered by the main example given in the General syntax section, whereupon the current battery level is set to a variable.</p>
+
+<p><b>Task performing</b> is a fancy way of saying "calling void functions". An example is shown below:</p>
+<p><code><span style="color:#002966">&lt;script</span> type=<span style="color:green">"text/cycript"</span><span style="color:#002966">&gt;</span><br />
+&emsp;function performTask() {<br />
+&emsp;&emsp;[<span style="color:#800000">IS2Media</span> togglePlayPause];<br />
+&emsp;}<br />
+<span style="color:#002966">&lt;/script&gt;</span>
+</code></p>
+<p>This will simply toggle the current playing state of any media; therefore, it has perfomed a task. Within Objective-C's syntax, you can safely assume that any function that has type <code>void</code>, eg:</p>
+<p><code>+(void)togglePlayPause;</code></p>
+<p>will be a function that enacts an action on the device.</p>
+
+<p><b>Callback listeners</b> are more interesting. 
+
+<p>Some functions within InfoStats 2 will run asynchronously; they will run in the background. However, some will also return data to you or notify you when it has finished, so you will need a way of your code to be ran once this background operation completes. A <b>callback</b> function allows this to take place. Within Objective-C, you can pass code to a function using a feature known as <b>blocks</b>. This code will the be run once the function is finished doing its operation; it calls back to your code, hence the name <b>callback</b>. Below is an example of <b>blocks</b> in action:</p>
+<p><code><span style="color:#002966">&lt;script</span> type=<span style="color:green">"text/cycript"</span><span style="color:#002966">&gt;</span><br />
+&emsp;function runFunctionWithCallback() {<br />
+&emsp;&emsp;// Begin weather updating<br />
+&emsp;&emsp;[<span style="color:#800000">IS2Weather</span> registerForWeatherUpdatesWithIdentifier:<span style="color:green">"com.test.identifier"</span> andCallback:^ void () {<br />
+&emsp;&emsp;&emsp;document.getElementById(<span style="color:green">'location'</span>).innerHTML = <span style="color:green">"Location: "</span> + [<span style="color:#800000">IS2Weather</span> currentLocation];<br />
+&emsp;&emsp;&emsp;document.getElementById(<span style="color:green">'temp'</span>).innerHTML = <span style="color:green">"Temp: "</span> + [<span style="color:#800000">IS2Weather</span> currentTemperature];<br />
+&emsp;&emsp;}];<br />
+&emsp;}<br />
+<span style="color:#002966">&lt;/script&gt;</span>
+</code></p>
+
+<p>Above, the code within <code>^ void () { }</code> will be run whenever the API needs to notify you that new data is available.</p>
+
+<p><b>Listeners</b> can be said to be a subset of <b>callback</b> functions, and above is an example of this. The idea is that you register a <b>block</b> to be run automatically; say the current playing track changes, you'd want to be able to be notified when that occurs. This scenario is shown below:</p>
+<p><code><span style="color:#002966">&lt;script</span> type=<span style="color:green">"text/cycript"</span><span style="color:#002966">&gt;</span><br />
+&emsp;// Setup being notified of media changes<br />
+&emsp;[<span style="color:#800000">IS2Media</span> registerForNowPlayingNotificationsWithIdentifier:<span style="color:green">"com.matchstic.mediatest"</span> andCallback:^ void () {<br />
+&emsp;&emsp;updateMedia();<br />
+&emsp;}];<br />
+<br />
+&emsp;window.onunload = function(){<br />
+&emsp;&emsp;[<span style="color:#800000">IS2Media</span> unregisterForNotificationsWithIdentifier:<span style="color:green">"com.matchstic.mediatest"</span>];<br />
+&emsp;&emsp;return null;<br />
+&emsp;};<br />
+<span style="color:#002966">&lt;/script&gt;</span>
+</code></p>
+
+<p>To register a <b>listener</b>, come up with any arbitrary identifier, such as <code>"com.test.identifier"</code> as used above. Then, the next parameter will be a <b>callback</b> block. Internally, the identifier is used to keep track of your <b>block</b>. In this example, a function named <code>updateMedia();</code> will be run on each time the <b>callback</b> is ran. It is necessary to de-register your <b>listener</b> when your widget is being removed from the display; this is achieved by the code in <code>window.onunload</code>.</p>
+
+<p>All <b>listener</b> functions in InfoStats 2 will always be prefixed with <code>registerFor</code> or <code>unregisterFor</code>, and all functions that take a <b>callback</b> will have the suffix <code>withCallback</code>.</p>
+
+<h2>Further reading</h2>
+
+<p>If you're wanting to do further reading into the internals of Cycript, see:
+<ul>
+ <li>
+   <p>Saurik's manual <a href="http://www.cycript.org/manual/">here</a>, which goes both using Cycript from the command line, and also more in-depth on the fundamentals covered in this page.</p>
+ </li>
+ <li>
+   <p>Further information on syntax <a href="http://iphonedevwiki.net/index.php/Cycript">here</a></p>
+ </li>
+ <li>
+   <p>Advanced tips and tricks <a href="http://iphonedevwiki.net/index.php/Cycript_Tricks">here</a></p>
+ </li>
+</ul> 
+
+
+					</div>
+
+					<footer>
+						<div class="footer-copyright">
+							
+							<p class="copyright">Copyright &copy; 2015 Matchstic. All rights reserved. Updated: 2015-07-22</p>
+							
+							
+							<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+							
+						</div>
+					</footer>
+				</main>
+			</div>
+		</div>
+	</article>
+
+	<script src="js/script.js"></script>
+</body>
+</html>
