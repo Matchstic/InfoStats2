@@ -66,15 +66,12 @@
 	
 	<script type="text/cycript">
 	
-	var refreshTimerLength = 1800000; // 1000 = 1 second, default is half an hour (1800000)
-  
-    [IS2Weather registerForWeatherUpdatesWithIdentifier:"com.matchstic.weathertest" andCallback:^ void () {
-        updateCurrentValues();
-        updateHourValues();
-        updateDayValues();
-	}];
+	// Used by InfoStats 2 to uniquely identify your widget. 
+	// *** You MUST change this! ***
+	var widgetIdentifier = "com.matchstic.weathertest";
 	
 	function updateDayValues() {
+   	     // Get all the available day forecasts from IS2.
      	var dayArray = JSON.parse("" + [IS2Weather dayForecastsForCurrentLocationJSON]);  
      	
      	document.getElementById('dayZeroDayString').innerHTML = dayNameForDayNumber(dayArray[0].dayOfWeek);
@@ -125,6 +122,7 @@
 	}
 	
 	function updateHourValues() {
+	     // Get all the available hourly forecasts from IS2.
      	var hourArray = JSON.parse("" + [IS2Weather hourlyForecastsForCurrentLocationJSON]); 
      	
      	document.getElementById('hourZeroTime').innerHTML = "" + hourArray[0].time;
@@ -156,24 +154,42 @@
 	}
 	
 	function didLoadPage() {
-	   // Grab default values
+	   // Register a callback for whenever weather data changes.
+        [IS2Weather registerForWeatherUpdatesWithIdentifier:widgetIdentifier andCallback:^ void () {
+            updateCurrentValues();
+            updateHourValues();
+            updateDayValues();
+        }];
+	
+	   // Grab current values
         updateCurrentValues();
         updateHourValues();
         updateDayValues();
         
-        // Request weather update, and begin weather timers
-        updateWeather();
+        // Setup auto-updating of weather.
+        // See http://incendo.ws/projects/InfoStats2/Classes/IS2Weather.html#//api/name/setWeatherUpdateTimeInterval:forRequester: for all
+        // the available values that can be set here.
+        // Defaulting to updating weather every 30 minutes.
+        [IS2Weather setWeatherUpdateTimeInterval:30 forRequester:widgetIdentifier];
+        
+        // You can also have the weather update when the user moves to a different location via IS2Location.
+        // To set this up, just uncomment the lines below; they will update data once the user moves 1km or more, with an accuracy of within 1km.
+        // Please note, this will lead to increased battery drainage.
+        // [IS2Location setLocationUpdateDistanceInterval:4 forRequester:widgetIdentifier];
+        // [IS2Location setLocationUpdateAccuracy:3 forRequester:widgetIdentifier];
 	}
 
-	window.onunload = function(){ [IS2Weather unregisterForUpdatesWithIdentifier:"com.matchstic.weathertest"]; return null; };
-
-    function updateWeather() {
-        // Begin weather updating
-        [IS2Weather updateWeather];
-        
-        // Setup timer to refresh data
-        setTimeout(updateWeather, refreshTimerLength);
-    }
+    // Make sure to de-register ourselves when removed from the user's screen.
+	window.onunload = function(){ 
+     	[IS2Weather unregisterForUpdatesWithIdentifier:widgetIdentifier]; 
+     	[IS2Weather removeRequesterForWeatherTimeInterval:widgetIdentifier];
+     	
+     	// Uncomment these lines if using the location-based updating as mentioned above.
+     	// [IS2Location removeRequesterForLocationDistanceInterval:widgetIdentifier];
+     	// [IS2Location removeRequesterForLocationAccuracy:widgetIdentifier];
+     	
+       	return null; 
+    };
   </script>
 </head>
 

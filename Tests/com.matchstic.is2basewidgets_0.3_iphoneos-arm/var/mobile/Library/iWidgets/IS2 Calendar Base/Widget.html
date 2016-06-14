@@ -124,6 +124,10 @@
 
   <script type="text/cycript">
   
+  // Used by InfoStats 2 to uniquely identify your widget. 
+  // *** You MUST change this! ***
+  var widgetIdentifier = "com.matchstic.calendartest";
+  
   function hideAllAvailableEvents() {
     for (i = 0; i < 5; i++) {
       document.getElementById(elementIdForNumber(i) + 'Title').innerHTML = "";
@@ -267,12 +271,19 @@
   
       // Also, ensure we refresh when the first end time is reached of events.
       // Setting timeout is in milliseconds, and both timeNow and firstEndTime are too.
+      
+      if (firstEndTime == 0) {
+        // Setup a time for the next midnight instead.
+         timeNow.setDate(timeNow.getDate()+1);
+         firstEndTime = timeNow.getTime();
+      }
+      
       setTimeout(timerFiredEventDidEnd, firstEndTime - timeNow);
   }
   
   window.onload = function(){
     // Code to run after calendar data updates.
-    [IS2Calendar registerForCalendarNotificationsWithIdentifier:"com.matchstic.calendartest" andCallback:^ void () {
+    [IS2Calendar registerForCalendarNotificationsWithIdentifier:widgetIdentifier andCallback:^ void () {
       // Update onscreen elements
       updateCalendarData();
     }];
@@ -281,8 +292,9 @@
     updateCalendarData();
   }
 
+  // Make sure to de-register ourselves.
   window.onunload = function() { 
-   [IS2Calendar unregisterForNotificationsWithIdentifier:"com.matchstic.calendartest"]; 
+   [IS2Calendar unregisterForNotificationsWithIdentifier:widgetIdentifier]; 
    return null; 
   };
 

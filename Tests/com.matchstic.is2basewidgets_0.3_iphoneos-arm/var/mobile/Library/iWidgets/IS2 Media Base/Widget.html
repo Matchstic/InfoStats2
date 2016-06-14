@@ -9,15 +9,13 @@
 	#wrap{
 		color: white;
 		background-color: black;
-		height:480;
-		width:360;
 	}
 	</style>
 </head>
 
 <body>
   <div id="wrap">
-    <div style="width:250; margin: 50 auto 0 auto;"><img id="artwork" width=250 height=250 src="" alt="artwork_img" /></div>
+    <div><img id="artwork" width=250 height=250 src="" alt="artwork_img" /></div>
     <div style="width:160; margin: 0 auto;">
       <img id="previous" width=50 height=50 src="previous.png" alt="previous_img" ontouchend="previousTrack()"/>
       <img id="playpause" width=50 height=50 src="play.png" alt="playpause_img" ontouchend="togglePlayPause()"/>
@@ -35,14 +33,26 @@
   </div>
 
   <script type="text/cycript">
-  	// Setup being notified of media changes
-  	[IS2Media registerForNowPlayingNotificationsWithIdentifier:"com.matchstic.mediatestls" andCallback:^ void () {
-		updateMedia();
-	}];
+  
+    // Used by InfoStats 2 to uniquely identify your widget. 
+    // *** You MUST change this! ***
+    var widgetIdentifier = "com.matchstic.mediatest";
+    
+    window.onload = function() { 
+        // Setup being notified of media changes
+        [IS2Media registerForNowPlayingNotificationsWithIdentifier:widgetIdentifier andCallback:^ void () {
+		   updateMedia();
+	    }];
+	    
+	    // Run code to update our UI for first run
+         updateMedia();
+    };
 
-	window.onunload = function(){ [IS2Media unregisterForNotificationsWithIdentifier:"com.matchstic.mediatestls"]; return null; };
-
-	// Finished setup
+    // Make sure to de-register ourselves when removed from the user's screen.
+	window.onunload = function() { 
+     	[IS2Media unregisterForNotificationsWithIdentifier:widgetIdentifier]; 
+     	return null; 
+     };
 
     function updateMedia() {
 		document.getElementById("title").innerHTML = "" + [IS2Media currentTrackTitle];
@@ -69,9 +79,6 @@
 	function togglePlayPause() {
 		[IS2Media togglePlayPause];
 	}
-
-	// Run code to update our UI for first run
-	updateMedia();
 
   </script>
 </body>

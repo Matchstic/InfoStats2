@@ -28,6 +28,10 @@
 
   <script type="text/cycript">
   
+  // Used by InfoStats 2 to uniquely identify your widget. 
+  // *** You MUST change this! ***
+  var widgetIdentifier = "com.matchstic.locationtest";
+  
   function updateLocationData() {
     document.getElementById("lat").innerHTML = "Lat: " + [IS2Location currentLatitude];
     document.getElementById("long").innerHTML = "Long: " + [IS2Location currentLongitude];
@@ -42,24 +46,30 @@
     document.getElementById("houseNum").innerHTML = "House #: " + [IS2Location houseNumberForCurrentLocation];
   }
   
-  window.onload = function(){
+  window.onload = function() {
     // Code to run after location data updates.
-    [IS2Location registerForLocationNotificationsWithIdentifier:"com.matchstic.locationtest" andCallback:^ void () {
-      // Update onscreen elements
-      updateLocationData();
+    [IS2Location registerForLocationNotificationsWithIdentifier:widgetIdentifier andCallback:^ void () {
+        // Update onscreen elements
+        updateLocationData();
     }];
     
     // Configure how often location data updates, and how accurate it is.
-    [IS2Location setLocationUpdateDistanceInterval:2 forRequester:"com.matchstic.locationtest"];
-    [IS2Location setLocationUpdateAccuracy:4 forRequester:"com.matchstic.locationtest"];
+    // This is currently set to update when the user moves over 100 metres, within an accuracy of within 100 meters.
+    // See http://incendo.ws/projects/InfoStats2/Classes/IS2Location.html#//api/name/setLocationUpdateAccuracy:forRequester:
+    // and http://incendo.ws/projects/InfoStats2/Classes/IS2Location.html#//api/name/setLocationUpdateDistanceInterval:forRequester:
+    // for more information.
+    [IS2Location setLocationUpdateDistanceInterval:2 forRequester:widgetIdentifier];
+    [IS2Location setLocationUpdateAccuracy:4 forRequester:widgetIdentifier];
   
+    // Get current values.
     updateLocationData();
   }
 
+  // Make sure to de-register ourselves.
   window.onunload = function() { 
-   [IS2Location unregisterForNotificationsWithIdentifier:"com.matchstic.locationtest"]; 
-   [IS2Location removeRequesterForLocationDistanceInterval:"com.matchstic.locationtest"];
-   [IS2Location removeRequesterForLocationAccuracy:"com.matchstic.locationtest"];
+   [IS2Location unregisterForNotificationsWithIdentifier:widgetIdentifier]; 
+   [IS2Location removeRequesterForLocationDistanceInterval:widgetIdentifier];
+   [IS2Location removeRequesterForLocationAccuracy:widgetIdentifier];
    return null; 
   };
 
