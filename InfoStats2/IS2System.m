@@ -26,6 +26,25 @@
 - (void)saveScreenshot:(BOOL)arg1;
 @end
 
+@interface FBSystemService : NSObject
++ (id)sharedInstance;
+- (void)exitAndRelaunch:(bool)arg1;
+- (void)shutdownAndReboot:(bool)arg1;
+@end
+
+@interface SBMainSwitcherViewController : NSObject
++ (id)sharedInstance;
+- (_Bool)toggleSwitcherNoninteractively;
+@end
+
+@interface SBScreenshotManager : NSObject
+- (void)saveScreenshotsWithCompletion:(id)arg1;
+@end
+
+@interface SpringBoard (Screenshots)
+@property(readonly, nonatomic) SBScreenshotManager *screenshotManager;
+@end
+
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
 
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -193,7 +212,16 @@ static NSLock *CPUUsageLock;
 #pragma mark System functions
 
 +(void)takeScreenshot {
-    [[objc_getClass("SBScreenShotter") sharedInstance] saveScreenshot:YES];
+    if (objc_getClass("SBScreenShotter") && [[objc_getClass("SBScreenShotter") sharedInstance] respondsToSelector:@selector(saveScreenshot:)]) {
+       [[objc_getClass("SBScreenShotter") sharedInstance] saveScreenshot:YES];
+    }
+    
+    // Handle for iOS 9.3+.
+    else if (objc_getClass("SBScreenshotManager")) {
+        SBScreenshotManager *manager = [(SpringBoard*)[UIApplication sharedApplication] screenshotManager];
+        
+        [manager saveScreenshotsWithCompletion:nil];
+    }
 }
 
 +(void)lockDevice {
@@ -201,7 +229,13 @@ static NSLock *CPUUsageLock;
 }
 
 +(void)openSwitcher {
-    [[objc_getClass("SBUIController") sharedInstance] _toggleSwitcher];
+    if ([[objc_getClass("SBUIController")sharedInstance] respondsToSelector:@selector(_toggleSwitcher)]) {
+        [[objc_getClass("SBUIController") sharedInstance] _toggleSwitcher];
+        
+    // Handle for iOS 9.3+.
+    } else if (objc_getClass("SBMainSwitcherViewController") && [[objc_getClass("SBMainSwitcherViewController") sharedInstance] respondsToSelector:@selector(toggleSwitcherNoninteractively)]) {
+        [[objc_getClass("SBMainSwitcherViewController") sharedInstance] toggleSwitcherNoninteractively];
+    }
 }
 
 +(void)openApplication:(NSString*)bundleIdentifier {
@@ -218,11 +252,21 @@ static NSLock *CPUUsageLock;
 }
 
 +(void)respring {
-    [(SpringBoard*)[UIApplication sharedApplication] _relaunchSpringBoardNow];
+    // Handle 9.3+ for FrontBoard.
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(_relaunchSpringBoardNow)]) {
+        [(SpringBoard*)[UIApplication sharedApplication] _relaunchSpringBoardNow];
+    } else if (objc_getClass("FBSystemService") && [[objc_getClass("FBSystemService") sharedInstance] respondsToSelector:@selector(exitAndRelaunch:)]) {
+        [[objc_getClass("FBSystemService") sharedInstance] exitAndRelaunch:YES];
+    }
 }
 
 +(void)reboot {
-    [(SpringBoard*)[UIApplication sharedApplication] reboot];
+    // Handle 9.3+ for FrontBoard.
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(reboot)]) {
+        [(SpringBoard*)[UIApplication sharedApplication] reboot];
+    } else if (objc_getClass("FBSystemService") && [[objc_getClass("FBSystemService") sharedInstance] respondsToSelector:@selector(shutdownAndReboot:)]) {
+        [[objc_getClass("FBSystemService") sharedInstance] shutdownAndReboot:YES];
+    }
 }
 
 +(void)vibrateDevice {
@@ -337,12 +381,13 @@ static NSLock *CPUUsageLock;
     }
 }
 
+// TODO: Implement these somehow.
 +(double)networkSpeedUp {
-    
+    return 0.0;
 }
 
 +(double)networkSpeedDown {
-    
+    return 0.0;
 }
 
 @end

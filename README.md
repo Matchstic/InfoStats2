@@ -9,7 +9,7 @@ HTML
 
 For the HTML side of things, Cycript is injected into all instances of UIWebView within SpringBoard (hence the dependency on Saurik's WebCycript). As a result, any function provided by InfoStats2 is accessed via Cycript, which is completely native alongside JavaScript code.
 
-To make things even easier, <b>examples</b> for using each of the many parts of the provided API can be found here: <a href="downloads/Example widgets.zip">examples.zip</a>.
+To make things even easier, <b>examples</b> for using each of the many parts of the provided API can be found here: <a href="downloads/ExampleWidgets.zip">examples.zip</a>.
 
 Also, a quick, no-nonsense guide to Cycript and this API (<b>recommended reading</b>) can be found <a href="api_intro_html.html">here</a>.
 

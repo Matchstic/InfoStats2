@@ -11,6 +11,8 @@
 #import "IS2WorkaroundDictionary.h"
 #include "MediaRemote.h"
 
+#warning Media keys might break on iOS version changes.
+
 static NSDictionary *data;
 static IS2WorkaroundDictionary *mediaUpdateBlockQueue;
 

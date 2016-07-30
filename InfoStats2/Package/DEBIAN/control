@@ -1,6 +1,6 @@
 Package: com.matchstic.InfoStats2
 Name: InfoStats 2
-Version: 0.4.6-RC4
+Version: 1.0-9.3
 Description: An API for JavaScript, and Objective-C
 Section: System
 Depends: firmware (>= 6.0), mobilesubstrate, com.saurik.webcycript, com.rpetrich.rocketbootstrap (>= 1.0.2) | firmware (<< 7.0)

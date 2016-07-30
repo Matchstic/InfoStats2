@@ -20,8 +20,13 @@
 @end
 
 @interface SBIconViewMap : NSObject
-+(instancetype)homescreenMap;
++(instancetype)homescreenMap; // Not in 9.3!
 -(SBIconModel*)iconModel;
+@end
+
+@interface SBIconController : NSObject
++(instancetype)sharedInstance;
+@property(readonly, nonatomic) SBIconViewMap *homescreenIconViewMap;
 @end
 
 @interface SBApplicationIcon : NSObject
@@ -109,7 +114,16 @@ inline int bestCountForApp(NSString *identifier) {
 +(void)setupAfterSpringBoardLaunched {
     // Setup badge counts for first run
     
-    NSArray *appIcons = [[[objc_getClass("SBIconViewMap") homescreenMap] iconModel] visibleIconIdentifiers];
+    SBIconViewMap *map = nil;
+    if ([objc_getClass("SBIconViewMap") respondsToSelector:@selector(homescreenMap)]) {
+        map = [objc_getClass("SBIconViewMap") homescreenMap];
+    } else if ([[objc_getClass("SBIconController") sharedInstance] respondsToSelector:@selector(homescreenIconViewMap)]) {
+        map = [[objc_getClass("SBIconController") sharedInstance] homescreenIconViewMap];
+    }
+    
+    NSLog(@"*** [InfoStats 2 | Notifications] :: GOT HOMESCREEN VIEW MAP: %@, AND IDENTIFIERS:\n%@", map, [[map iconModel] visibleIconIdentifiers]);
+    
+    NSArray *appIcons = [[map iconModel] visibleIconIdentifiers];
     for (NSString *identifier in appIcons) {
         id cls = [objc_getClass("SBApplicationController") sharedInstance];
         SBApplication *app = nil;

@@ -55,12 +55,12 @@
  */
 +(double)freeDiskSpaceInFormat:(int)format;
 
-/** Gives the current up speed of the user's network connection.
+/** Gives the current up speed of the user's network connection.<br/><i>Please note this is currently non-functional.</i>
  @return Up speed in kb/s
  */
 +(double)networkSpeedUp;
 
-/** Gives the current down speed of the user's network connection.
+/** Gives the current down speed of the user's network connection.<br/><i>Please note this is currently non-functional.</i>
  @return Down speed in kb/s
  */
 +(double)networkSpeedDown;
