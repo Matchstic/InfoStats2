@@ -474,5 +474,13 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
         MSHookFunction(CYCallAsFunction_sym, $CYCallAsFunction, &ori_CYCallAsFunction);
     }
     
+    // Next step, see if we need WebCycript supplied by us, or by the user's installed packages.
+    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/Frameworks/WebCycript.framework/WebCycript"]) {
+        // Use the installed WebCycript
+        dlopen("//Library/Frameworks/WebCycript.framework/WebCycript", RTLD_NOW);
+    } else {
+        // Provide our own - this will be assumed to be default from IS2 1.0.2 onwards.
+    }
+    
     [IS2Private setupForTweakLoaded];
 }
