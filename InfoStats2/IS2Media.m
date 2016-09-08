@@ -267,7 +267,7 @@ static char encodingTable[64] = {
 }
 
 +(BOOL)isPlaying {
-    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoPlaybackRate"] boolValue];
+    return [[[objc_getClass("SBMediaController") sharedInstance] hasTrack] boolValue];
 }
 
 +(void)skipToNextTrack {
