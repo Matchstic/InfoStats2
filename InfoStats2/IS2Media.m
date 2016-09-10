@@ -267,7 +267,17 @@ static char encodingTable[64] = {
 }
 
 +(BOOL)isPlaying {
-    return [[[objc_getClass("SBMediaController") sharedInstance] hasTrack] boolValue];
+    if ([[objc_getClass("MPMusicPlayerController") systemMusicPlayer] playbackState] ==1)
+        return true;
+    else
+        return false;
+}
+
++(BOOL)hasMedia {
+    if ([[objc_getClass("MPMusicPlayerController") systemMusicPlayer] playbackState] !=0)
+        return true;
+    else
+        return false;
 }
 
 +(void)skipToNextTrack {
