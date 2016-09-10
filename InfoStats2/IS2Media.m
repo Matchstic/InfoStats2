@@ -267,17 +267,11 @@ static char encodingTable[64] = {
 }
 
 +(BOOL)isPlaying {
-    if ([[objc_getClass("MPMusicPlayerController") systemMusicPlayer] playbackState] ==1)
-        return true;
-    else
-        return false;
+        return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoPlaybackRate"] boolValue];
 }
 
 +(BOOL)hasMedia {
-    if ([[objc_getClass("MPMusicPlayerController") systemMusicPlayer] playbackState] !=0)
-        return true;
-    else
-        return false;
+        return [[objc_getClass("SBMediaController") sharedInstance] hasTrack];
 }
 
 +(void)skipToNextTrack {
