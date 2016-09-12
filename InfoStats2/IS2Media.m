@@ -282,6 +282,14 @@ static char encodingTable[64] = {
     MRMediaRemoteSendCommand(kMRPreviousTrack, 0);
 }
 
++(void)play {
+    MRMediaRemoteSendCommand(kMRPlay, 0);
+}
+
++(void)pause {
+    MRMediaRemoteSendCommand(kMRPause, 0);
+}
+
 +(void)togglePlayPause {
     MRMediaRemoteSendCommand(kMRTogglePlayPause, 0);
 }
