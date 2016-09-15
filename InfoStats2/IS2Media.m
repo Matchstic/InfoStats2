@@ -298,4 +298,12 @@ static char encodingTable[64] = {
     return [data objectForKey:key];
 }
 
++(int)getVolume {
+    return [[[objc_getClass("SBMediaController") sharedInstance] volume] intValue];
+}
+
++(void)setVolume:(unsigned int) level {
+    [[objc_getClass("SBMediaController") sharedInstance] setVolume:level];
+}
+
 @end
