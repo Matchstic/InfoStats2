@@ -17,6 +17,7 @@
 #include <sys/types.h>
 #include <mach/processor_info.h>
 #import <dlfcn.h>
+#import <Foundation/NSProcessInfo.h>
 
 @interface SBScreenShotter : NSObject
 + (id)sharedInstance;
@@ -63,7 +64,32 @@
 -(void)activateIgnoringTouches;
 @end
 
+@interface NSProcessInfo (IOS9)
+@property(readonly, getter=isLowPowerModeEnabled) BOOL lowPowerModeEnabled;
+@end
+
+@interface _CDBatterySaver : NSObject
++ (id)batterySaver;
+- (long long)getPowerMode;
+- (long long)setMode:(long long)arg1;
+- (bool)setPowerMode:(long long)arg1 error:(id*)arg2;
+@end
+
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
+
+#if __cplusplus
+extern "C" {
+#endif
+void BKSHIDServicesSetBacklightFactorWithFadeDuration(float factor, int duration);
+float BKSDisplayBrightnessGetCurrent();
+void BKSDisplayBrightnessSet(float level, int __unknown0);
+typedef struct BKSDisplayBrightnessTransaction *BKSDisplayBrightnessTransactionRef;
+    
+/* Follows the 'Create' rule. */
+BKSDisplayBrightnessTransactionRef BKSDisplayBrightnessTransactionCreate(CFAllocatorRef allocator);
+#if __cplusplus
+}
+#endif
 
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
@@ -411,21 +437,31 @@ static NSLock *CPUUsageLock;
 #pragma mark Toggles and such like
 
 +(CGFloat)getBrightness {
-    //return [[UIScreen mainScreen] brightness];
-    
-    void *bbs = dlopen("/System/Library/PrivateFrameworks/BackBoardServices.framework/BackBoardServices", RTLD_NOW);
-    
-    float (*BKSHIDServicesGetBacklightFactor)() = (float(*)())dlsym(bbs, "_BKSHIDServicesGetBacklightFactor");
-    
-    return (CGFloat)BKSHIDServicesGetBacklightFactor();
+    return (CGFloat)BKSDisplayBrightnessGetCurrent();
 }
 
 +(void)setBrightness:(CGFloat)level {
-    void *bbs = dlopen("/System/Library/PrivateFrameworks/BackBoardServices.framework/BackBoardServices", RTLD_NOW);
+    // This function now utilises code from https://github.com/k3a/AutoBrightness/blob/master/main.m
     
-    void (*BKSHIDServicesSetBacklightFactorWithFadeDuration)(float factor, int duration) = (void(*)(float, int))dlsym(bbs, "_BKSHIDServicesSetBacklightFactorWithFadeDuration");
+    BOOL useBackBoardServices = (kCFCoreFoundationVersionNumber >= 1140.10);
     
-    BKSHIDServicesSetBacklightFactorWithFadeDuration((float)level, 0.0);
+    if (useBackBoardServices) {
+        BKSDisplayBrightnessTransactionRef transaction = BKSDisplayBrightnessTransactionCreate(kCFAllocatorDefault);
+        BKSDisplayBrightnessSet((float)level, 1);
+        CFRelease(transaction);
+    } else {
+        static int (*SBSSpringBoardServerPort)() = 0;
+        static void (*SBSetCurrentBacklightLevel)(int _port, float level) = 0;
+        
+        if (SBSSpringBoardServerPort == NULL) {
+            void *uikit = dlopen("/System/Library/Framework/UIKit.framework/UIKit", RTLD_LAZY);
+            SBSSpringBoardServerPort = (int (*)())dlsym(uikit, "SBSSpringBoardServerPort");
+            SBSetCurrentBacklightLevel = (void (*)(int,float))dlsym(uikit, "SBSetCurrentBacklightLevel");
+        }
+        
+        int port = SBSSpringBoardServerPort();
+        SBSetCurrentBacklightLevel(port, (float)level);
+    }
     
     /*if (level >= 0 && level <= 1) {
         [[UIScreen mainScreen] setBrightness:level];
@@ -434,6 +470,35 @@ static NSLock *CPUUsageLock;
         level = level / 100
         [[UIScreen mainScreen] setBrightness:level];
     }*/
+}
+
++(BOOL)getLowPowerMode {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0) {
+        return [[NSProcessInfo processInfo] isLowPowerModeEnabled];
+    } else {
+        return NO;
+    }
+}
+
++(void)setLowPowerMode:(BOOL)mode {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0) {
+        // Cannot apply this on less than iOS 9.
+        return;
+    }
+    
+    _CDBatterySaver *batterySaver = [objc_getClass("_CDBatterySaver") batterySaver];
+    int newMode;
+    if (mode) {
+        newMode = 1;
+        [batterySaver setMode:1];
+    } else {
+        newMode = 0;
+        [batterySaver setMode:0];
+    }
+    NSError *error = nil;
+    if (![batterySaver setPowerMode:newMode error:&error]) {
+        NSLog(@"[InfoStats 2 | System] :: Failed to set low power mode: %@", error);
+    }
 }
 
 @end

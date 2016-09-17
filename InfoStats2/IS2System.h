@@ -144,4 +144,14 @@
  */
 +(void)setBrightness:(CGFloat)level;
 
+/** Gives the current state of the Low Power mode.<br/><br/>This will return NO for versions of iOS less than iOS 9.
+ @return Current Low Power mode state
+ */
++(BOOL)getLowPowerMode;
+
+/** Sets the current Low Power mode state.<br/><br/>This will do nothing for versions of iOS less than iOS 9.
+ @param The new mode; YES for on, NO for off.
+ */
++(void)setLowPowerMode:(BOOL)mode;
+
 @end

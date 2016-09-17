@@ -14,6 +14,7 @@
 		C909FAF91C8E49A3000B48CD /* AppSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF01C8DEAFA000B48CD /* AppSupport.framework */; };
 		C9162D5D1D00C5C90042027C /* IS2Pedometer.h in Headers */ = {isa = PBXBuildFile; fileRef = C9162D5B1D00C5C90042027C /* IS2Pedometer.h */; };
 		C9162D5E1D00C5C90042027C /* IS2Pedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = C9162D5C1D00C5C90042027C /* IS2Pedometer.m */; };
+		C91FE0691D8DF87300C69709 /* BackBoardServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91FE0681D8DF87300C69709 /* BackBoardServices.framework */; };
 		C92838A31C4E88F00019ABEC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C92838A21C4E88F00019ABEC /* AudioToolbox.framework */; };
 		C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9372A1B1B557D1600592CCF /* MediaRemote.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C9372A201B557DC000592CCF /* IS2Weather.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A1E1B557DC000592CCF /* IS2Weather.h */; };
@@ -69,6 +70,7 @@
 		C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = librocketbootstrap.dylib; path = ../../../../../opt/iOSOpenDev/lib/librocketbootstrap.dylib; sourceTree = "<group>"; };
 		C9162D5B1D00C5C90042027C /* IS2Pedometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Pedometer.h; sourceTree = "<group>"; };
 		C9162D5C1D00C5C90042027C /* IS2Pedometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Pedometer.m; sourceTree = "<group>"; };
+		C91FE0681D8DF87300C69709 /* BackBoardServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BackBoardServices.framework; path = ../../../../../opt/iOSOpenDev/frameworks/BackBoardServices.framework; sourceTree = "<group>"; };
 		C92838A21C4E88F00019ABEC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C9372A1B1B557D1600592CCF /* MediaRemote.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaRemote.framework; path = System/Library/PrivateFrameworks/MediaRemote.framework; sourceTree = SDKROOT; };
 		C9372A1E1B557DC000592CCF /* IS2Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Weather.h; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C91FE0691D8DF87300C69709 /* BackBoardServices.framework in Frameworks */,
 				C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */,
 				C9CF50A71D6FB40E0000666B /* CoreFoundation.framework in Frameworks */,
 				C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */,
@@ -345,6 +348,7 @@
 		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C91FE0681D8DF87300C69709 /* BackBoardServices.framework */,
 				C9CF50A61D6FB40E0000666B /* CoreFoundation.framework */,
 				C9CF50A41D6FAB9C0000666B /* WebCore.framework */,
 				C98A1EB81D6E4A610067D3F3 /* JavaScriptCore.framework */,

@@ -156,12 +156,20 @@ inline int bestCountForApp(NSString *identifier) {
 }
 
 +(void)updateNCCountWithIdentifier:(NSString*)identifier andValue:(int)value {
-    [ncNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
+    @try {
+        [ncNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
+    } @catch (NSException *e) {
+        NSLog(@"[InfoStats 2 | Notifications] :: Holy Batman and Joker. Crashed when updating values.");
+    }
     [IS2Notifications notifyCallbacksOfDataChange];
 }
 
 +(void)updateBadgeCountWithIdentifier:(NSString*)identifier andValue:(int)value {
-    [badgeNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
+    @try {
+        [badgeNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
+    } @catch (NSException *e) {
+        NSLog(@"[InfoStats 2 | Notifications] :: Holy Batman and Joker. Crashed when updating values.");
+    }
     [IS2Notifications notifyCallbacksOfDataChange];
 }
 

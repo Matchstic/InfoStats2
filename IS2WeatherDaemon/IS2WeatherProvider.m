@@ -264,18 +264,15 @@ static int notifyToken;
     
     BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
     
-    BOOL allowSave = NO;
-    
-    if ([currentCity isLocalWeatherCity] && self.locationManager.currentAuthorisationStatus == 3) {
-        allowSave = YES;
-    } else if (![currentCity isLocalWeatherCity] && self.locationManager.currentAuthorisationStatus != 3) {
-        allowSave = YES;
-    }
+    BOOL allowSave = YES;
     
     if (allowSave) {
         NSMutableArray *cities = [[[WeatherPreferences sharedPreferences] loadSavedCities] mutableCopy];
-        [cities removeObjectAtIndex:0];
-        [cities insertObject:city atIndex:0];
+        if (cities.count > 0) {
+            [cities replaceObjectAtIndex:0 withObject:city];
+        } else {
+            [cities addObject:city];
+        }
         
         [[WeatherPreferences sharedPreferences] saveToDiskWithCities:cities activeCity:0];
     }
