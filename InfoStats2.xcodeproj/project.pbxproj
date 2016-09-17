@@ -44,7 +44,7 @@
 		C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9D72A871B1DC99300C44076 /* InfoStats2.mm */; };
 		C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */; };
-		C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9E1B1DCE5F00C44076 /* libWebCycript */; settings = {ATTRIBUTES = (Weak, ); }; };
+		C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9E1B1DCE5F00C44076 /* libWebCycript */; settings = {ATTRIBUTES = (Required, ); }; };
 		C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72AA01B1DCE8600C44076 /* UIKit.framework */; };
 		C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A51B1F7D97006E70BE /* CoreLocation.framework */; };
 		C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A71B1F7DD8006E70BE /* Weather.framework */; };
@@ -81,7 +81,6 @@
 		C9372A2B1B557DEA00592CCF /* IS2System.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2System.m; sourceTree = "<group>"; };
 		C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WorkaroundDictionary.h; sourceTree = "<group>"; };
 		C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WorkaroundDictionary.m; sourceTree = "<group>"; };
-		C98A1EB41D6E33350067D3F3 /* WebCycript.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebCycript.mm; sourceTree = "<group>"; };
 		C98A1EB61D6E4A5C0067D3F3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		C98A1EB81D6E4A610067D3F3 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		C9AA288B1B24BAE8005846FE /* infostats2d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = infostats2d; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -245,7 +244,6 @@
 		C97813401BD0022100A8CEC4 /* Third-party Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				C98A1EB41D6E33350067D3F3 /* WebCycript.mm */,
 				C9EA1D7B1B5FF13C00DCEF75 /* Reachability */,
 			);
 			name = "Third-party Libraries";

@@ -10,6 +10,18 @@
 #import "IS2Extensions.h"
 #import "IS2WorkaroundDictionary.h"
 #include "MediaRemote.h"
+#import <objc/runtime.h>
+
+@interface SBMediaController : NSObject
++ (id)sharedInstance;
+- (_Bool)hasTrack;
+@end
+
+@interface AVSystemController : NSObject
++ (id)sharedAVSystemController;
+- (bool)getVolume:(float*)arg1 forCategory:(id)arg2;
+- (bool)setVolumeTo:(float)arg1 forCategory:(id)arg2;
+@end
 
 #warning Media keys might break on iOS version changes.
 
@@ -300,12 +312,22 @@ static char encodingTable[64] = {
     return [data objectForKey:key];
 }
 
-+(int)getVolume {
-    return [[[objc_getClass("SBMediaController") sharedInstance] volume] intValue];
++(CGFloat)getVolume {
+    // return [[[objc_getClass("SBMediaController") sharedInstance] volume] intValue];
+    
+    // XXX: I'm changing this to be a float, since iOS will expect that values coming in be
+    // between 0.0 and 1.0, for 0% and 100% respectively.
+    
+    float vol;
+    [[objc_getClass("AVSystemController") sharedAVSystemController] getVolume:&vol forCategory:@"Audio/Video"];
+    
+    CGFloat cgVol = (CGFloat)vol;
+    return cgVol;
 }
 
-+(void)setVolume:(unsigned int) level {
-    [[objc_getClass("SBMediaController") sharedInstance] setVolume:level];
++(void)setVolume:(CGFloat)level {
+    // Note that I'm NOT using CGFloat here.
+    [[objc_getClass("AVSystemController") sharedAVSystemController] setVolumeTo:(float)level forCategory:@"Audio/Video"];
 }
 
 @end

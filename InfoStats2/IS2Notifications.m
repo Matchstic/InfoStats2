@@ -83,6 +83,15 @@
 -(void)observer:(id)arg1 addBulletin:(BBBulletin*)arg2 forFeed:(int)arg3 playLightsAndSirens:(BOOL)arg4 withReply:(id)arg5;
 @end
 
+@interface SBLockScreenViewController : NSObject
+- (_Bool)lockScreenIsShowingBulletins;
+@end
+
+@interface SBLockScreenManager : NSObject
++(id)sharedInstance;
+@property(readonly, nonatomic) SBLockScreenViewController *lockScreenViewController;
+@end
+
 static NSMutableDictionary *ncNotificationCounts;
 static NSMutableDictionary *badgeNotificationCounts;
 static NSMutableDictionary *lockscreenBulletins;
@@ -239,7 +248,7 @@ inline int bestCountForApp(NSString *identifier) {
 }
 
 +(bool)lockScreenIsShowingBulletins {
-    return [[[SBLockScreenManager sharedInstance] lockScreenViewController] lockScreenIsShowingBulletins];
+    return [[[objc_getClass("SBLockScreenManager") sharedInstance] lockScreenViewController] lockScreenIsShowingBulletins];
 }
 
 +(int)totalNotificationCountOnLockScreenOnly:(BOOL)onLockscreenOnly {

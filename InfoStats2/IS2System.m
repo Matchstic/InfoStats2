@@ -20,6 +20,7 @@
 #import <sys/utsname.h>
 #include <sys/types.h>
 #include <mach/processor_info.h>
+#import <dlfcn.h>
 
 @interface SBScreenShotter : NSObject
 + (id)sharedInstance;
@@ -390,18 +391,32 @@ static NSLock *CPUUsageLock;
     return 0.0;
 }
 
+#pragma mark Toggles and such like
+
 +(CGFloat)getBrightness {
-    return [[UIScreen mainScreen] brightness];
+    //return [[UIScreen mainScreen] brightness];
+    
+    void *bbs = dlopen("/System/Library/PrivateFrameworks/BackBoardServices.framework/BackBoardServices", RTLD_NOW);
+    
+    float (*BKSHIDServicesGetBacklightFactor)() = (float(*)())dlsym(bbs, "_BKSHIDServicesGetBacklightFactor");
+    
+    return (CGFloat)BKSHIDServicesGetBacklightFactor();
 }
 
-+(void)setBrightness:(CGFloat) level {
-    if (level >= 0 && level <= 1) {
++(void)setBrightness:(CGFloat)level {
+    void *bbs = dlopen("/System/Library/PrivateFrameworks/BackBoardServices.framework/BackBoardServices", RTLD_NOW);
+    
+    void (*BKSHIDServicesSetBacklightFactorWithFadeDuration)(float factor, int duration) = (void(*)(float, int))dlsym(bbs, "_BKSHIDServicesSetBacklightFactorWithFadeDuration");
+    
+    BKSHIDServicesSetBacklightFactorWithFadeDuration((float)level, 0.0);
+    
+    /*if (level >= 0 && level <= 1) {
         [[UIScreen mainScreen] setBrightness:level];
     }
     else if (level > 1 && level <= 100) {
         level = level / 100
         [[UIScreen mainScreen] setBrightness:level];
-    }
+    }*/
 }
 
 @end

@@ -50,7 +50,17 @@
  */
 +(void)togglePlayPause;
 
+/** Changes the currently media state to playing. If already playing, this does nothing.
+ */
++(void)play;
 
+/** Changes the currently media state to paused. If already paused, this does nothing.
+ */
++(void)pause;
+
+/** Changes the current volume for media audio, not for other audio sources like the Ringer.
+ */
++(void)setVolume:(CGFloat)level;
 
 /** @name Data Retrieval */
 
@@ -89,6 +99,12 @@
  */
 +(int)currentTrackLength;
 
+/** Gives the position in the current track that has been played to, which measured in seconds.
+ @return The current track's elapsed time
+ @warning This function will return 0 if no media has played since SpringBoard was last launched.
+ */
++(int)elapsedTrackLength;
+
 /** Gives the current track number for the currently playing music track. For videos, this value is likely to be 0.
  @return The current track's number in its album
  @warning This function will return 0 if no media has played since SpringBoard was last launched.
@@ -115,5 +131,10 @@
  @return Whether media is playing or not
  */
 +(BOOL)isPlaying;
+
+/** The current volume for media. Note that this will not return volume for the Ringer, or for anything else other than media audio.
+ @return Current media volume
+ */
++(CGFloat)getVolume;
 
 @end

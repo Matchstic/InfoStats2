@@ -131,4 +131,17 @@
  */
 +(void)vibrateDeviceForTimeLength:(CGFloat)timeLength;
 
+/** @name Toggles, and other data setting
+ */
+
+/** Gives the current backlight level, which will be between 0.0 and 1.0.
+ @return Current backlight level
+ */
++(CGFloat)getBrightness;
+
+/** Sets the current backlight level, and expects values between 0.0 and 1.0
+ @param The new backlight level
+ */
++(void)setBrightness:(CGFloat)level;
+
 @end
