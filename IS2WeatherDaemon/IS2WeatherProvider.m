@@ -50,6 +50,10 @@
 @property (assign, nonatomic) BOOL isRequestedByFrameworkClient;
 @end
 
+@interface City (iOS8)
+@property (nonatomic, retain) CLLocation *location;
+@end
+
 @interface City (IOS9)
 - (void)addUpdateObserver:(id)arg1;
 - (int)lastUpdateStatus;
@@ -193,7 +197,7 @@ static int notifyToken;
         
         // Force finding of new location, and then update from there.
         [self.locationManager.locationManager startUpdatingLocation];
-    } else if ([self.locationManager currentAuthorisationStatus] == kCLAuthorizationStatusDenied) {
+    } else if ([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized) {
         NSLog(@"[InfoStats2d | Weather] :: Updating first city in Weather.app");
         
         // Update to whichever city the user may have set.
@@ -225,10 +229,19 @@ static int notifyToken;
 }
 
 -(void)updateCurrentCityWithoutLocation {
-    if (deviceVersion >= 8.0)
+    // For whatever reason, this DOES NOT update weather as expected. So, we'll proceed to borrow the CLLocation from
+    // currentCity, and cross our fingers.
+    
+    // Since only iOS 8 and above has _location, we need to produce the needed CLLocation by utilising the lat/long.
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:currentCity.latitude longitude:currentCity.longitude];
+    
+    [self updateLocalCityWithLocation:location];
+    
+    // XXX: Old code, will keep in place for archival reasons.
+    /*if (deviceVersion >= 8.0)
         [[objc_getClass("TWCCityUpdater") sharedCityUpdater] updateWeatherForCity:currentCity];
     else
-        [[objc_getClass("WeatherIdentifierUpdater") sharedWeatherIdentifierUpdater] updateWeatherForCity:currentCity];
+        [[objc_getClass("WeatherIdentifierUpdater") sharedWeatherIdentifierUpdater] updateWeatherForCity:currentCity];*/
 }
 
 #pragma mark Delegates
@@ -278,9 +291,6 @@ static int notifyToken;
     NSDictionary *updated = [[WeatherPreferences sharedPreferences] preferencesDictionaryForCity:currentCity];
     
     [c sendMessageName:@"weatherData" userInfo:updated]; //send an NSDictionary here to pass data
-    
-    // Return a message back to SpringBoard that updating is now done.
-    //notify_post("com.matchstic.infostats2/weatherUpdateCompleted");
 }
 
 @end
