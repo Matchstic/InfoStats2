@@ -121,8 +121,6 @@ inline int bestCountForApp(NSString *identifier) {
         map = [[objc_getClass("SBIconController") sharedInstance] homescreenIconViewMap];
     }
     
-    NSLog(@"*** [InfoStats 2 | Notifications] :: GOT HOMESCREEN VIEW MAP: %@, AND IDENTIFIERS:\n%@", map, [[map iconModel] visibleIconIdentifiers]);
-    
     NSArray *appIcons = [[map iconModel] visibleIconIdentifiers];
     for (NSString *identifier in appIcons) {
         id cls = [objc_getClass("SBApplicationController") sharedInstance];
@@ -172,6 +170,8 @@ inline int bestCountForApp(NSString *identifier) {
     else if (!isMod) oldCount += 1;
     
     [countDict setObject:[NSNumber numberWithInt:oldCount] forKey:bulletin.sectionID];
+    
+    [IS2Notifications notifyCallbacksOfDataChange];
 }
 
 +(void)removeLockscreenCountsForUnlock {

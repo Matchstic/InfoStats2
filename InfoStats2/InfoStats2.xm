@@ -15,11 +15,13 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 @interface WebFrame : NSObject
 -(id)dataSource;
+- (OpaqueJSContext*)globalContext;
 @end
 
 @interface WebView : NSObject
 -(void)setPreferencesIdentifier:(id)arg1;
 -(void)_setAllowsMessaging:(BOOL)arg1;
+-(WebFrame*)mainFrame;
 @end
 
 @interface UIWebView (Apple)
@@ -453,6 +455,16 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
 #pragma mark Constructor
 
 %ctor {
+    // First step, see if we need WebCycript supplied by us, or by the user's installed packages.
+    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/Frameworks/WebCycript.framework/WebCycript"]) {
+        // Use the installed WebCycript
+        dlopen("/Library/Frameworks/WebCycript.framework/WebCycript", RTLD_NOW);
+    } else {
+        // Provide our own - this will be assumed to be default from IS2 1.0.2 onwards.
+        NSLog(@"********* [InfoStats 2] :: INITIALISING INTERNAL WEBCYCRIPT");
+        initialiseInternalWebCycript();
+    }
+    
     // Load up iWidgets dylib to hook it
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     
@@ -472,14 +484,6 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
     
     if (CYCallAsFunction_sym != NULL) {
         MSHookFunction(CYCallAsFunction_sym, $CYCallAsFunction, &ori_CYCallAsFunction);
-    }
-    
-    // Next step, see if we need WebCycript supplied by us, or by the user's installed packages.
-    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/Frameworks/WebCycript.framework/WebCycript"]) {
-        // Use the installed WebCycript
-        dlopen("//Library/Frameworks/WebCycript.framework/WebCycript", RTLD_NOW);
-    } else {
-        // Provide our own - this will be assumed to be default from IS2 1.0.2 onwards.
     }
     
     [IS2Private setupForTweakLoaded];
