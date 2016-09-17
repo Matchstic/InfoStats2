@@ -8,14 +8,10 @@
 
 #import "IS2System.h"
 #include <mach/mach.h>
-#import <SpringBoard7.0/SBUIController.h>
 #import <mach/mach_host.h>
 #include <sys/sysctl.h>
 #import <objc/runtime.h>
 #import "IS2Extensions.h"
-#import <SpringBoard8.1/SBUserAgent.h>
-#import <SpringBoard6.0/SpringBoard.h>
-#import <SpringBoard7.0/SBAssistantController.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <sys/utsname.h>
 #include <sys/types.h>
@@ -42,8 +38,29 @@
 - (void)saveScreenshotsWithCompletion:(id)arg1;
 @end
 
-@interface SpringBoard (Screenshots)
+@interface SpringBoard : UIApplication
 @property(readonly, nonatomic) SBScreenshotManager *screenshotManager;
+-(void)_relaunchSpringBoardNow;
+-(void)reboot;
+@end
+
+@interface SBUserAgent : NSObject
++(id)sharedUserAgent;
+- (void)lockAndDimDevice;
+- (_Bool)launchApplicationFromSource:(int)arg1 withDisplayID:(id)arg2 options:(id)arg3;
+@end
+
+@interface SBUIController : NSObject
++(id)sharedInstance;
+-(int)batteryCapacityAsPercentage;
+-(int)displayBatteryCapacityAsPercentage; // Older API.
+-(void)_toggleSwitcher;
+@end
+
+@interface SBAssistantController : NSObject
++(id)sharedInstance;
+-(void)_activateSiriForPPT;
+-(void)activateIgnoringTouches;
 @end
 
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
