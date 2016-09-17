@@ -238,6 +238,10 @@ inline int bestCountForApp(NSString *identifier) {
     return [countDict[bundleIdentifier] intValue];
 }
 
++(bool)lockScreenIsShowingBulletins {
+    return [[[SBLockScreenManager sharedInstance] lockScreenViewController] lockScreenIsShowingBulletins];
+}
+
 +(int)totalNotificationCountOnLockScreenOnly:(BOOL)onLockscreenOnly {
     if (onLockscreenOnly) {
         return (int)lockscreenBulletins.count - 1; // -1 to remove count dictionary

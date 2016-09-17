@@ -390,4 +390,18 @@ static NSLock *CPUUsageLock;
     return 0.0;
 }
 
++(CGFloat)getBrightness {
+    return [[UIScreen mainScreen] brightness];
+}
+
++(void)setBrightness:(CGFloat) level {
+    if (level >= 0 && level <= 1) {
+        [[UIScreen mainScreen] setBrightness:level];
+    }
+    else if (level > 1 && level <= 100) {
+        level = level / 100
+        [[UIScreen mainScreen] setBrightness:level];
+    }
+}
+
 @end

@@ -269,7 +269,11 @@ static char encodingTable[64] = {
 }
 
 +(BOOL)isPlaying {
-    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoPlaybackRate"] boolValue];
+        return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoPlaybackRate"] boolValue];
+}
+
++(BOOL)hasMedia {
+        return [[objc_getClass("SBMediaController") sharedInstance] hasTrack];
 }
 
 +(void)skipToNextTrack {
@@ -280,12 +284,28 @@ static char encodingTable[64] = {
     MRMediaRemoteSendCommand(kMRPreviousTrack, 0);
 }
 
++(void)play {
+    MRMediaRemoteSendCommand(kMRPlay, 0);
+}
+
++(void)pause {
+    MRMediaRemoteSendCommand(kMRPause, 0);
+}
+
 +(void)togglePlayPause {
     MRMediaRemoteSendCommand(kMRTogglePlayPause, 0);
 }
 
 +(id)getValueForKey:(NSString*)key {
     return [data objectForKey:key];
+}
+
++(int)getVolume {
+    return [[[objc_getClass("SBMediaController") sharedInstance] volume] intValue];
+}
+
++(void)setVolume:(unsigned int) level {
+    [[objc_getClass("SBMediaController") sharedInstance] setVolume:level];
 }
 
 @end
