@@ -44,6 +44,10 @@ NSDate *startOfTodayDate() {
 }
 
 +(void)significantTimeChange {
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        return;
+    }
+    
     if ([pedUpdateBlockQueue allKeys].count > 0) {
         [pedometer startPedometerUpdatesFromDate:[NSDate date] withHandler:^(CMPedometerData *data, NSError *error) {
             [self handleNewPedometerData:data withError:error];
@@ -55,6 +59,10 @@ NSDate *startOfTodayDate() {
 }
 
 +(void)handleNewPedometerData:(CMPedometerData*)data withError:(NSError*)error {
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        return;
+    }
+    
     if (!error) {
         currentData = data;
         
@@ -71,7 +79,7 @@ NSDate *startOfTodayDate() {
             }
         });
     } else {
-        NSLog(@"*** [InfoStats2 | Pedometer] :: Failed to update steps data: %@", error);
+        NSLog(@"[InfoStats2 | Pedometer] :: Failed to update steps data: %@", error);
     }
 }
 
@@ -85,6 +93,10 @@ NSDate *startOfTodayDate() {
 #pragma mark Public methods
 
 +(void)registerForPedometerNotificationsWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock {
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        return;
+    }
+    
     if (!pedUpdateBlockQueue) {
         pedUpdateBlockQueue = [IS2WorkaroundDictionary dictionary];
     }
@@ -101,6 +113,10 @@ NSDate *startOfTodayDate() {
 }
 
 +(void)unregisterForNotificationsWithIdentifier:(NSString*)identifier {
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        return;
+    }
+    
     [pedUpdateBlockQueue removeObjectForKey:identifier];
     
     if ([pedUpdateBlockQueue allKeys].count == 0) {
@@ -110,41 +126,57 @@ NSDate *startOfTodayDate() {
 
 // Data access.
 
-+(NSNumber*)numberOfSteps {
-    return currentData.numberOfSteps;
++(int)numberOfSteps {
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        return 0;
+    }
+    
+    return [currentData.numberOfSteps intValue];
 }
 
 // May be nil if current device doesn't support this
-+(NSNumber*)distanceTravelled {
++(CGFloat)distanceTravelled {
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        return 0;
+    }
+    
     NSNumber *num = currentData.distance;
     
     if (!num) num = [NSNumber numberWithInt:0];
     
-    return num;
+    return [num floatValue];
 }
 
-+(NSNumber*)userCurrentPace {
++(CGFloat)userCurrentPace {
     if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-        return [NSNumber numberWithInt:0];
+        return 0.0;
     }
     
-    return currentData.currentPace;
+    return [currentData.currentPace floatValue];
 }
 
-+(NSNumber*)userCurrentCadence {
++(CGFloat)userCurrentCadence {
     if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-        return [NSNumber numberWithInt:0];
+        return 0.0;
     }
     
-    return currentData.currentCadence;
+    return [currentData.currentCadence floatValue];
 }
 
-+(NSNumber*)floorsAscended {
-    return currentData.floorsAscended;
++(int)floorsAscended {
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        return 0;
+    }
+    
+    return [currentData.floorsAscended intValue];
 }
 
-+(NSNumber*)floorsDescended {
-    return currentData.floorsDescended;
++(int)floorsDescended {
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        return 0;
+    }
+    
+    return [currentData.floorsDescended intValue];
 }
 
 // Past output (JSON, and object form)

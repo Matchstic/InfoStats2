@@ -26,6 +26,7 @@
 #warning Media keys might break on iOS version changes.
 
 static NSDictionary *data;
+static NSString *nowPlayingBundleID;
 static IS2WorkaroundDictionary *mediaUpdateBlockQueue;
 
 @interface NSData (Base64)
@@ -183,7 +184,11 @@ static char encodingTable[64] = {
         data = (__bridge NSDictionary*)information;
         
         if (data) { // Seems to lead to crashes if data does not exist!
-            //dispatch_async(dispatch_get_main_queue(), ^(void){
+            // We also need to pull the now playing bundle ID.
+            MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFStringRef info) {
+                nowPlayingBundleID = (__bridge NSString*)info;
+                
+                //dispatch_async(dispatch_get_main_queue(), ^(void){
                 // Let all our callbacks know we've got new data available.
                 for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
                     @try {
@@ -194,9 +199,17 @@ static char encodingTable[64] = {
                         NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with unknown exception");
                     }
                 }
-           // });
+                // });
+            });
         }
     });
+}
+
++(void)setupAfterSpringBoardLaunched {
+    // We need to register for elapsed time updates.
+    // And also for media remote updates, as honestly, they're more reliable.
+    
+    
 }
 
 #pragma mark Public methods
@@ -262,6 +275,14 @@ static char encodingTable[64] = {
 
 +(int)elapsedTrackLength {
     return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoElapsedTime"] intValue];
+}
+
++(NSString*)currentPlayingAppIdentifier {
+    if (!nowPlayingBundleID) {
+        return @"";
+    }
+    
+    return nowPlayingBundleID;
 }
 
 +(BOOL)shuffleEnabled {
