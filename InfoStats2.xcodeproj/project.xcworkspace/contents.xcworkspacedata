@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../InfoStats2/IS2Pedometer.h">
-   </FileRef>
-   <FileRef
-      location = "group:../InfoStats2/IS2Pedometer.m">
-   </FileRef>
-   <FileRef
       location = "self:InfoStats2.xcodeproj">
    </FileRef>
 </Workspace>

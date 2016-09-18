@@ -59,14 +59,19 @@ static int displayToken;
     [IS2Notifications setupAfterTweakLoaded];
     [IS2Location setupAfterTweakLoaded];
     [IS2System setupAfterTweakLoaded];
-    //[IS2Pedometer setupAfterTweakLoaded];
+    
+    // Add pedometer support for iOS 9+
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0) {
+        [IS2Pedometer setupAfterTweakLoaded];
+    }
 }
 
 +(void)setupAfterSpringBoardLoaded {
     [IS2Notifications setupAfterSpringBoardLaunched];
     
-    //if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0)
-    //    [IS2Pedometer setupAfterSpringBoardLaunched];
+    // Add pedometer support for iOS 9+
+    if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0)
+        [IS2Pedometer setupAfterSpringBoardLaunched];
     
 #if (LEGACY)
     // Force IS1 support to begin running.

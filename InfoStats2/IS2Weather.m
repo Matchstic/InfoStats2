@@ -194,7 +194,7 @@ static inline void buildRequestersDictionary() {
         buildRequestersDictionary();
     }
     
-    NSLog(@"[InfoStats2 | Weather] :: DEBUG :: Adding update requester %@ for interval %d", requester, interval);
+    NSLog(@"[InfoStats2 | Weather] :: Adding update requester %@ for interval %d", requester, interval);
     
     NSString *key = [NSString stringWithFormat:@"k%d", interval];
     
@@ -203,6 +203,8 @@ static inline void buildRequestersDictionary() {
         [av show];
         return;
     }
+    
+    int previousRequester = [self currentlyMostAccurateRequester];
     
     // if requester is already present, remove it from it's existing thing.
     if ([self arrayForRequester:requester]) {
@@ -217,7 +219,13 @@ static inline void buildRequestersDictionary() {
     int currentRequester = [self currentlyMostAccurateRequester];
     if (currentRequester != -1) {
         // Do an update now, and reset the timer.
-        [self updateWeather];
+        
+        // Hold up a second. We only need to do the weather update if the previous requester was -1.
+        // Else, we end up chowing down on battery usage.
+        if (previousRequester == -1) {
+            [self updateWeather];
+        }
+        
         [autoUpdateTimer invalidate];
         autoUpdateTimer = nil;
         
@@ -315,7 +323,9 @@ static inline void buildRequestersDictionary() {
     int currentRequester = [self currentlyMostAccurateRequester];
     if (currentRequester != -1) {
         // Do an update now, and reset the timer.
-        [self updateWeather];
+        // Wait, no. Don't do this. There is absolutely no need to update the weather at this point, and it serves
+        // to cause battery drainage. Ya moose.
+        // [self updateWeather];
         
         [autoUpdateTimer invalidate];
         autoUpdateTimer = nil;

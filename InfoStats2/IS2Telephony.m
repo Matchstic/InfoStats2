@@ -7,10 +7,24 @@
 //
 
 #import "IS2Telephony.h"
-#import <SpringBoard7.0/SBTelephonyManager.h> // TODO: Fix for iOS 5
-#import <SpringBoard/SBWiFiManager.h>
 #import <objc/runtime.h>
 #import "Reachability.h"
+
+@interface SBTelephonyManager : NSObject
++ (id)sharedTelephonyManager;
+- (int)signalStrengthBars;
+- (int)signalStrength;
+- (id)operatorName;
+- (_Bool)isInAirplaneMode;
+@end
+
+@interface SBWiFiManager : NSObject
++ (id)sharedInstance;
+- (int)signalStrengthRSSI;
+- (int)signalStrengthBars;
+- (_Bool)isPowered;
+- (id)currentNetworkName;
+@end
 
 @implementation IS2Telephony
 

@@ -8,25 +8,88 @@
 
 #import "IS2System.h"
 #include <mach/mach.h>
-#import <SpringBoard7.0/SBUIController.h>
 #import <mach/mach_host.h>
 #include <sys/sysctl.h>
 #import <objc/runtime.h>
 #import "IS2Extensions.h"
-#import <SpringBoard8.1/SBUserAgent.h>
-#import <SpringBoard6.0/SpringBoard.h>
-#import <SpringBoard7.0/SBAssistantController.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <sys/utsname.h>
 #include <sys/types.h>
 #include <mach/processor_info.h>
+#import <dlfcn.h>
+#import <Foundation/NSProcessInfo.h>
 
 @interface SBScreenShotter : NSObject
 + (id)sharedInstance;
 - (void)saveScreenshot:(BOOL)arg1;
 @end
 
+@interface FBSystemService : NSObject
++ (id)sharedInstance;
+- (void)exitAndRelaunch:(bool)arg1;
+- (void)shutdownAndReboot:(bool)arg1;
+@end
+
+@interface SBMainSwitcherViewController : NSObject
++ (id)sharedInstance;
+- (_Bool)toggleSwitcherNoninteractively;
+@end
+
+@interface SBScreenshotManager : NSObject
+- (void)saveScreenshotsWithCompletion:(id)arg1;
+@end
+
+@interface SpringBoard : UIApplication
+@property(readonly, nonatomic) SBScreenshotManager *screenshotManager;
+-(void)_relaunchSpringBoardNow;
+-(void)reboot;
+@end
+
+@interface SBUserAgent : NSObject
++(id)sharedUserAgent;
+- (void)lockAndDimDevice;
+- (_Bool)launchApplicationFromSource:(int)arg1 withDisplayID:(id)arg2 options:(id)arg3;
+@end
+
+@interface SBUIController : NSObject
++(id)sharedInstance;
+-(int)batteryCapacityAsPercentage;
+-(int)displayBatteryCapacityAsPercentage; // Older API.
+-(void)_toggleSwitcher;
+@end
+
+@interface SBAssistantController : NSObject
++(id)sharedInstance;
+-(void)_activateSiriForPPT;
+-(void)activateIgnoringTouches;
+@end
+
+@interface NSProcessInfo (IOS9)
+@property(readonly, getter=isLowPowerModeEnabled) BOOL lowPowerModeEnabled;
+@end
+
+@interface _CDBatterySaver : NSObject
++ (id)batterySaver;
+- (long long)getPowerMode;
+- (long long)setMode:(long long)arg1;
+- (bool)setPowerMode:(long long)arg1 error:(id*)arg2;
+@end
+
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
+
+#if __cplusplus
+extern "C" {
+#endif
+void BKSHIDServicesSetBacklightFactorWithFadeDuration(float factor, int duration);
+float BKSDisplayBrightnessGetCurrent();
+void BKSDisplayBrightnessSet(float level, int __unknown0);
+typedef struct BKSDisplayBrightnessTransaction *BKSDisplayBrightnessTransactionRef;
+    
+/* Follows the 'Create' rule. */
+BKSDisplayBrightnessTransactionRef BKSDisplayBrightnessTransactionCreate(CFAllocatorRef allocator);
+#if __cplusplus
+}
+#endif
 
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
@@ -193,7 +256,16 @@ static NSLock *CPUUsageLock;
 #pragma mark System functions
 
 +(void)takeScreenshot {
-    [[objc_getClass("SBScreenShotter") sharedInstance] saveScreenshot:YES];
+    if (objc_getClass("SBScreenShotter") && [[objc_getClass("SBScreenShotter") sharedInstance] respondsToSelector:@selector(saveScreenshot:)]) {
+       [[objc_getClass("SBScreenShotter") sharedInstance] saveScreenshot:YES];
+    }
+    
+    // Handle for iOS 9.3+.
+    else if (objc_getClass("SBScreenshotManager")) {
+        SBScreenshotManager *manager = [(SpringBoard*)[UIApplication sharedApplication] screenshotManager];
+        
+        [manager saveScreenshotsWithCompletion:nil];
+    }
 }
 
 +(void)lockDevice {
@@ -201,7 +273,13 @@ static NSLock *CPUUsageLock;
 }
 
 +(void)openSwitcher {
-    [[objc_getClass("SBUIController") sharedInstance] _toggleSwitcher];
+    if ([[objc_getClass("SBUIController")sharedInstance] respondsToSelector:@selector(_toggleSwitcher)]) {
+        [[objc_getClass("SBUIController") sharedInstance] _toggleSwitcher];
+        
+    // Handle for iOS 9.3+.
+    } else if (objc_getClass("SBMainSwitcherViewController") && [[objc_getClass("SBMainSwitcherViewController") sharedInstance] respondsToSelector:@selector(toggleSwitcherNoninteractively)]) {
+        [[objc_getClass("SBMainSwitcherViewController") sharedInstance] toggleSwitcherNoninteractively];
+    }
 }
 
 +(void)openApplication:(NSString*)bundleIdentifier {
@@ -218,11 +296,21 @@ static NSLock *CPUUsageLock;
 }
 
 +(void)respring {
-    [(SpringBoard*)[UIApplication sharedApplication] _relaunchSpringBoardNow];
+    // Handle 9.3+ for FrontBoard.
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(_relaunchSpringBoardNow)]) {
+        [(SpringBoard*)[UIApplication sharedApplication] _relaunchSpringBoardNow];
+    } else if (objc_getClass("FBSystemService") && [[objc_getClass("FBSystemService") sharedInstance] respondsToSelector:@selector(exitAndRelaunch:)]) {
+        [[objc_getClass("FBSystemService") sharedInstance] exitAndRelaunch:YES];
+    }
 }
 
 +(void)reboot {
-    [(SpringBoard*)[UIApplication sharedApplication] reboot];
+    // Handle 9.3+ for FrontBoard.
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(reboot)]) {
+        [(SpringBoard*)[UIApplication sharedApplication] reboot];
+    } else if (objc_getClass("FBSystemService") && [[objc_getClass("FBSystemService") sharedInstance] respondsToSelector:@selector(shutdownAndReboot:)]) {
+        [[objc_getClass("FBSystemService") sharedInstance] shutdownAndReboot:YES];
+    }
 }
 
 +(void)vibrateDevice {
@@ -337,25 +425,79 @@ static NSLock *CPUUsageLock;
     }
 }
 
+// TODO: Implement these somehow.
 +(double)networkSpeedUp {
-    
+    return 0.0;
 }
 
 +(double)networkSpeedDown {
-    
+    return 0.0;
 }
+
+#pragma mark Toggles and such like
 
 +(CGFloat)getBrightness {
-    return [[UIScreen mainScreen] brightness];
+    return (CGFloat)BKSDisplayBrightnessGetCurrent();
 }
 
-+(void)setBrightness:(CGFloat) level {
-    if (level >= 0 && level <= 1) {
++(void)setBrightness:(CGFloat)level {
+    // This function now utilises code from https://github.com/k3a/AutoBrightness/blob/master/main.m
+    
+    BOOL useBackBoardServices = (kCFCoreFoundationVersionNumber >= 1140.10);
+    
+    if (useBackBoardServices) {
+        BKSDisplayBrightnessTransactionRef transaction = BKSDisplayBrightnessTransactionCreate(kCFAllocatorDefault);
+        BKSDisplayBrightnessSet((float)level, 1);
+        CFRelease(transaction);
+    } else {
+        static int (*SBSSpringBoardServerPort)() = 0;
+        static void (*SBSetCurrentBacklightLevel)(int _port, float level) = 0;
+        
+        if (SBSSpringBoardServerPort == NULL) {
+            void *uikit = dlopen("/System/Library/Framework/UIKit.framework/UIKit", RTLD_LAZY);
+            SBSSpringBoardServerPort = (int (*)())dlsym(uikit, "SBSSpringBoardServerPort");
+            SBSetCurrentBacklightLevel = (void (*)(int,float))dlsym(uikit, "SBSetCurrentBacklightLevel");
+        }
+        
+        int port = SBSSpringBoardServerPort();
+        SBSetCurrentBacklightLevel(port, (float)level);
+    }
+    
+    /*if (level >= 0 && level <= 1) {
         [[UIScreen mainScreen] setBrightness:level];
     }
     else if (level > 1 && level <= 100) {
         level = level / 100
         [[UIScreen mainScreen] setBrightness:level];
+    }*/
+}
+
++(BOOL)getLowPowerMode {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0) {
+        return [[NSProcessInfo processInfo] isLowPowerModeEnabled];
+    } else {
+        return NO;
+    }
+}
+
++(void)setLowPowerMode:(BOOL)mode {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0) {
+        // Cannot apply this on less than iOS 9.
+        return;
+    }
+    
+    _CDBatterySaver *batterySaver = [objc_getClass("_CDBatterySaver") batterySaver];
+    int newMode;
+    if (mode) {
+        newMode = 1;
+        [batterySaver setMode:1];
+    } else {
+        newMode = 0;
+        [batterySaver setMode:0];
+    }
+    NSError *error = nil;
+    if (![batterySaver setPowerMode:newMode error:&error]) {
+        NSLog(@"[InfoStats 2 | System] :: Failed to set low power mode: %@", error);
     }
 }
 

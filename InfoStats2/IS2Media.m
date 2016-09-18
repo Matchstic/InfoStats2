@@ -10,8 +10,29 @@
 #import "IS2Extensions.h"
 #import "IS2WorkaroundDictionary.h"
 #include "MediaRemote.h"
+#import <objc/runtime.h>
+
+@interface SBMediaController : NSObject
++ (id)sharedInstance;
+- (_Bool)hasTrack;
+@end
+
+@interface AVSystemController : NSObject
++ (id)sharedAVSystemController;
+- (bool)getVolume:(float*)arg1 forCategory:(id)arg2;
+- (bool)setVolumeTo:(float)arg1 forCategory:(id)arg2;
+@end
+
+@interface MPUNowPlayingController : NSObject
++(double)_is2_elapsedTime;
++(double)_is2_currentDuration;
+@end
+
+#warning Media keys might break on iOS version changes.
 
 static NSDictionary *data;
+static NSString *nowPlayingBundleID;
+static double elapsedTime;
 static IS2WorkaroundDictionary *mediaUpdateBlockQueue;
 
 @interface NSData (Base64)
@@ -169,7 +190,11 @@ static char encodingTable[64] = {
         data = (__bridge NSDictionary*)information;
         
         if (data) { // Seems to lead to crashes if data does not exist!
-            //dispatch_async(dispatch_get_main_queue(), ^(void){
+            // We also need to pull the now playing bundle ID.
+            MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFStringRef info) {
+                nowPlayingBundleID = (__bridge NSString*)info;
+                
+                //dispatch_async(dispatch_get_main_queue(), ^(void){
                 // Let all our callbacks know we've got new data available.
                 for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
                     @try {
@@ -180,9 +205,14 @@ static char encodingTable[64] = {
                         NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with unknown exception");
                     }
                 }
-           // });
+                // });
+            });
         }
     });
+}
+
++(void)setElapsedTime:(double)elapsed {
+    elapsedTime = elapsedTime;
 }
 
 #pragma mark Public methods
@@ -242,12 +272,20 @@ static char encodingTable[64] = {
     }
 }
 
-+(int)currentTrackLength {
-    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoDuration"] intValue];
++(double)currentTrackLength {
+    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoDuration"] doubleValue];
 }
 
-+(int)elapsedTrackLength {
-    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoElapsedTime"] intValue];
++(double)elapsedTrackLength {
+    return [objc_getClass("MPUNowPlayingController") _is2_elapsedTime];
+}
+
++(NSString*)currentPlayingAppIdentifier {
+    if (!nowPlayingBundleID) {
+        return @"";
+    }
+    
+    return nowPlayingBundleID;
 }
 
 +(BOOL)shuffleEnabled {
@@ -298,12 +336,22 @@ static char encodingTable[64] = {
     return [data objectForKey:key];
 }
 
-+(int)getVolume {
-    return [[[objc_getClass("SBMediaController") sharedInstance] volume] intValue];
++(CGFloat)getVolume {
+    // return [[[objc_getClass("SBMediaController") sharedInstance] volume] intValue];
+    
+    // XXX: I'm changing this to be a float, since iOS will expect that values coming in be
+    // between 0.0 and 1.0, for 0% and 100% respectively.
+    
+    float vol;
+    [[objc_getClass("AVSystemController") sharedAVSystemController] getVolume:&vol forCategory:@"Audio/Video"];
+    
+    CGFloat cgVol = (CGFloat)vol;
+    return cgVol;
 }
 
-+(void)setVolume:(unsigned int) level {
-    [[objc_getClass("SBMediaController") sharedInstance] setVolume:level];
++(void)setVolume:(CGFloat)level {
+    // Note that I'm NOT using CGFloat here.
+    [[objc_getClass("AVSystemController") sharedAVSystemController] setVolumeTo:(float)level forCategory:@"Audio/Video"];
 }
 
 @end

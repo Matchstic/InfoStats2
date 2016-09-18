@@ -41,6 +41,11 @@
  */
 +(int)lockscreenNotificationCountForApplication:(NSString*)bundleIdentifier;
 
+/** Allows for checking whether the lockscreen is currently displaying any notifications.
+ @return Whether any lockscreen bulletins are currently being displayed.
+ */
++(bool)lockScreenIsShowingBulletins;
+
 /** Provides the total count of notifications over all applications.
  @param onLockscreenOnly If true, this will only return the count of notifications displayed on the lockscreen. If the device is unlocked, this will always be 0.
  @return The total count of notifications

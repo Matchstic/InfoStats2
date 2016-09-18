@@ -15,11 +15,13 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 @interface WebFrame : NSObject
 -(id)dataSource;
+- (OpaqueJSContext*)globalContext;
 @end
 
 @interface WebView : NSObject
 -(void)setPreferencesIdentifier:(id)arg1;
 -(void)_setAllowsMessaging:(BOOL)arg1;
+-(WebFrame*)mainFrame;
 @end
 
 @interface UIWebView (Apple)
@@ -71,6 +73,15 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 @interface BBServer : NSObject
 - (id)allBulletinIDsForSectionID:(id)arg1;
+@end
+
+@interface MPUNowPlayingController : NSObject
+- (void)_updateCurrentNowPlaying;
+- (void)_updateNowPlayingAppDisplayID;
+- (void)_updatePlaybackState;
+- (void)_updateTimeInformationAndCallDelegate:(BOOL)arg1;
+- (double)currentDuration;
+- (double)currentElapsed;
 @end
 
 @interface IWWidget : UIView {
@@ -175,12 +186,6 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
     %orig;
     
     [IS2Private setupAfterSpringBoardLoaded];
-    
-    // Check if loaded from incorrect repository.
-    if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/com.matchstic.infostats2.list"]) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"InfoStats2" message:@"The official repo for InfoStats2 is\n\ninfostats2.incendo.ws\n\nNo support whatsoever will be given if you do not use the official version." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
-    }
 }
 
 %end
@@ -189,10 +194,44 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 %hook SBMediaController
 
+// Only needed for iOS 6.
 -(void)_nowPlayingInfoChanged {
     %orig;
     
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 7.0) {
+        [IS2Media nowPlayingDataDidUpdate];
+    }
+}
+
+%end
+
+static MPUNowPlayingController * __weak globalMPUNowPlaying;
+
+%hook MPUNowPlayingController
+// iOS 7 and onwards should use this, works nicer.
+
+- (id)init {
+    id orig = %orig;
+    
+    globalMPUNowPlaying = orig;
+    
+    return orig;
+}
+
+- (void)_updateCurrentNowPlaying {
+    %orig;
+    
     [IS2Media nowPlayingDataDidUpdate];
+}
+
+%new
++(double)_is2_elapsedTime {
+    return [globalMPUNowPlaying currentElapsed];
+}
+
+%new
++(double)_is2_currentDuration {
+    return [globalMPUNowPlaying currentElapsed];
 }
 
 %end

@@ -20,8 +20,13 @@
 @end
 
 @interface SBIconViewMap : NSObject
-+(instancetype)homescreenMap;
++(instancetype)homescreenMap; // Not in 9.3!
 -(SBIconModel*)iconModel;
+@end
+
+@interface SBIconController : NSObject
++(instancetype)sharedInstance;
+@property(readonly, nonatomic) SBIconViewMap *homescreenIconViewMap;
 @end
 
 @interface SBApplicationIcon : NSObject
@@ -78,6 +83,15 @@
 -(void)observer:(id)arg1 addBulletin:(BBBulletin*)arg2 forFeed:(int)arg3 playLightsAndSirens:(BOOL)arg4 withReply:(id)arg5;
 @end
 
+@interface SBLockScreenViewController : NSObject
+- (_Bool)lockScreenIsShowingBulletins;
+@end
+
+@interface SBLockScreenManager : NSObject
++(id)sharedInstance;
+@property(readonly, nonatomic) SBLockScreenViewController *lockScreenViewController;
+@end
+
 static NSMutableDictionary *ncNotificationCounts;
 static NSMutableDictionary *badgeNotificationCounts;
 static NSMutableDictionary *lockscreenBulletins;
@@ -109,7 +123,14 @@ inline int bestCountForApp(NSString *identifier) {
 +(void)setupAfterSpringBoardLaunched {
     // Setup badge counts for first run
     
-    NSArray *appIcons = [[[objc_getClass("SBIconViewMap") homescreenMap] iconModel] visibleIconIdentifiers];
+    SBIconViewMap *map = nil;
+    if ([objc_getClass("SBIconViewMap") respondsToSelector:@selector(homescreenMap)]) {
+        map = [objc_getClass("SBIconViewMap") homescreenMap];
+    } else if ([[objc_getClass("SBIconController") sharedInstance] respondsToSelector:@selector(homescreenIconViewMap)]) {
+        map = [[objc_getClass("SBIconController") sharedInstance] homescreenIconViewMap];
+    }
+    
+    NSArray *appIcons = [[map iconModel] visibleIconIdentifiers];
     for (NSString *identifier in appIcons) {
         id cls = [objc_getClass("SBApplicationController") sharedInstance];
         SBApplication *app = nil;
@@ -135,12 +156,20 @@ inline int bestCountForApp(NSString *identifier) {
 }
 
 +(void)updateNCCountWithIdentifier:(NSString*)identifier andValue:(int)value {
-    [ncNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
+    @try {
+        [ncNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
+    } @catch (NSException *e) {
+        NSLog(@"[InfoStats 2 | Notifications] :: Holy Batman and Joker. Crashed when updating values.");
+    }
     [IS2Notifications notifyCallbacksOfDataChange];
 }
 
 +(void)updateBadgeCountWithIdentifier:(NSString*)identifier andValue:(int)value {
-    [badgeNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
+    @try {
+        [badgeNotificationCounts setObject:[NSNumber numberWithInt:value] forKey:identifier];
+    } @catch (NSException *e) {
+        NSLog(@"[InfoStats 2 | Notifications] :: Holy Batman and Joker. Crashed when updating values.");
+    }
     [IS2Notifications notifyCallbacksOfDataChange];
 }
 
@@ -158,6 +187,8 @@ inline int bestCountForApp(NSString *identifier) {
     else if (!isMod) oldCount += 1;
     
     [countDict setObject:[NSNumber numberWithInt:oldCount] forKey:bulletin.sectionID];
+    
+    [IS2Notifications notifyCallbacksOfDataChange];
 }
 
 +(void)removeLockscreenCountsForUnlock {
@@ -225,7 +256,7 @@ inline int bestCountForApp(NSString *identifier) {
 }
 
 +(bool)lockScreenIsShowingBulletins {
-    return [[[SBLockScreenManager sharedInstance] lockScreenViewController] lockScreenIsShowingBulletins];
+    return [[[objc_getClass("SBLockScreenManager") sharedInstance] lockScreenViewController] lockScreenIsShowingBulletins];
 }
 
 +(int)totalNotificationCountOnLockScreenOnly:(BOOL)onLockscreenOnly {

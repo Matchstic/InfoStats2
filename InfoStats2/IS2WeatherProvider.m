@@ -7,7 +7,6 @@
 //
 
 #import "IS2WeatherProvider.h"
-#import <Weather/TWCCityUpdater.h>
 #import <objc/runtime.h>
 #import <Weather/Weather.h>
 #import <notify.h>

@@ -14,6 +14,7 @@
 		C909FAF91C8E49A3000B48CD /* AppSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C909FAF01C8DEAFA000B48CD /* AppSupport.framework */; };
 		C9162D5D1D00C5C90042027C /* IS2Pedometer.h in Headers */ = {isa = PBXBuildFile; fileRef = C9162D5B1D00C5C90042027C /* IS2Pedometer.h */; };
 		C9162D5E1D00C5C90042027C /* IS2Pedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = C9162D5C1D00C5C90042027C /* IS2Pedometer.m */; };
+		C91FE0691D8DF87300C69709 /* BackBoardServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91FE0681D8DF87300C69709 /* BackBoardServices.framework */; };
 		C92838A31C4E88F00019ABEC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C92838A21C4E88F00019ABEC /* AudioToolbox.framework */; };
 		C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9372A1B1B557D1600592CCF /* MediaRemote.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C9372A201B557DC000592CCF /* IS2Weather.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A1E1B557DC000592CCF /* IS2Weather.h */; };
@@ -26,6 +27,8 @@
 		C9372A2D1B557DEA00592CCF /* IS2System.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A2B1B557DEA00592CCF /* IS2System.m */; };
 		C97B8CC51C31A40200525449 /* IS2WorkaroundDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */; };
 		C97B8CC61C31A40200525449 /* IS2WorkaroundDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */; };
+		C98A1EB71D6E4A5C0067D3F3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98A1EB61D6E4A5C0067D3F3 /* WebKit.framework */; };
+		C98A1EB91D6E4A610067D3F3 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98A1EB81D6E4A610067D3F3 /* JavaScriptCore.framework */; };
 		C9AA288C1B24BAE8005846FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9AA289E1B24BDF1005846FE /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9AA289D1B24BDF1005846FE /* main.mm */; };
 		C9AA28A31B24BE13005846FE /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AA28A01B24BE13005846FE /* IS2WeatherProvider.m */; };
@@ -38,10 +41,11 @@
 		C9B048AE1B1E19BA0000CEBD /* IS2WeatherProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */; };
 		C9B048AF1B1E19BA0000CEBD /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */; };
 		C9C70E0D1C348F7C00546F68 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C70E0C1C348F7C00546F68 /* EventKit.framework */; };
+		C9CF50A71D6FB40E0000666B /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9CF50A61D6FB40E0000666B /* CoreFoundation.framework */; };
 		C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9D72A871B1DC99300C44076 /* InfoStats2.mm */; };
 		C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */; };
-		C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9E1B1DCE5F00C44076 /* libWebCycript */; };
+		C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9E1B1DCE5F00C44076 /* libWebCycript */; settings = {ATTRIBUTES = (Required, ); }; };
 		C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72AA01B1DCE8600C44076 /* UIKit.framework */; };
 		C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A51B1F7D97006E70BE /* CoreLocation.framework */; };
 		C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A71B1F7DD8006E70BE /* Weather.framework */; };
@@ -66,6 +70,7 @@
 		C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = librocketbootstrap.dylib; path = ../../../../../opt/iOSOpenDev/lib/librocketbootstrap.dylib; sourceTree = "<group>"; };
 		C9162D5B1D00C5C90042027C /* IS2Pedometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Pedometer.h; sourceTree = "<group>"; };
 		C9162D5C1D00C5C90042027C /* IS2Pedometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Pedometer.m; sourceTree = "<group>"; };
+		C91FE0681D8DF87300C69709 /* BackBoardServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BackBoardServices.framework; path = ../../../../../opt/iOSOpenDev/frameworks/BackBoardServices.framework; sourceTree = "<group>"; };
 		C92838A21C4E88F00019ABEC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C9372A1B1B557D1600592CCF /* MediaRemote.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaRemote.framework; path = System/Library/PrivateFrameworks/MediaRemote.framework; sourceTree = SDKROOT; };
 		C9372A1E1B557DC000592CCF /* IS2Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2Weather.h; sourceTree = "<group>"; };
@@ -78,6 +83,8 @@
 		C9372A2B1B557DEA00592CCF /* IS2System.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2System.m; sourceTree = "<group>"; };
 		C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WorkaroundDictionary.h; sourceTree = "<group>"; };
 		C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WorkaroundDictionary.m; sourceTree = "<group>"; };
+		C98A1EB61D6E4A5C0067D3F3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		C98A1EB81D6E4A610067D3F3 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		C9AA288B1B24BAE8005846FE /* infostats2d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = infostats2d; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AA28991B24BAE8005846FE /* IS2WeatherDaemon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IS2WeatherDaemon-Prefix.pch"; sourceTree = "<group>"; };
 		C9AA289D1B24BDF1005846FE /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -92,6 +99,8 @@
 		C9B048AC1B1E19BA0000CEBD /* IS2WeatherProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WeatherProvider.h; sourceTree = "<group>"; };
 		C9B048AD1B1E19BA0000CEBD /* IS2WeatherProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WeatherProvider.m; sourceTree = "<group>"; };
 		C9C70E0C1C348F7C00546F68 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		C9CF50A41D6FAB9C0000666B /* WebCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebCore.framework; path = System/Library/PrivateFrameworks/WebCore.framework; sourceTree = SDKROOT; };
+		C9CF50A61D6FB40E0000666B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		C9D72A791B1DC99300C44076 /* InfoStats2.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = InfoStats2.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9D72A7C1B1DC99300C44076 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9D72A821B1DC99300C44076 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
@@ -140,6 +149,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C91FE0691D8DF87300C69709 /* BackBoardServices.framework in Frameworks */,
+				C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */,
+				C9CF50A71D6FB40E0000666B /* CoreFoundation.framework in Frameworks */,
+				C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */,
+				C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */,
+				C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */,
+				C98A1EB91D6E4A610067D3F3 /* JavaScriptCore.framework in Frameworks */,
+				C98A1EB71D6E4A5C0067D3F3 /* WebKit.framework in Frameworks */,
 				C909FAF91C8E49A3000B48CD /* AppSupport.framework in Frameworks */,
 				C909FAF81C8E4993000B48CD /* librocketbootstrap.dylib in Frameworks */,
 				C92838A31C4E88F00019ABEC /* AudioToolbox.framework in Frameworks */,
@@ -147,10 +164,6 @@
 				C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */,
 				C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */,
 				C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */,
-				C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */,
-				C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */,
-				C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */,
-				C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +348,11 @@
 		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C91FE0681D8DF87300C69709 /* BackBoardServices.framework */,
+				C9CF50A61D6FB40E0000666B /* CoreFoundation.framework */,
+				C9CF50A41D6FAB9C0000666B /* WebCore.framework */,
+				C98A1EB81D6E4A610067D3F3 /* JavaScriptCore.framework */,
+				C98A1EB61D6E4A5C0067D3F3 /* WebKit.framework */,
 				C9F5C6811CF677C10066AEB7 /* libcycript.dylib */,
 				C909FAF61C8E4951000B48CD /* librocketbootstrap.dylib */,
 				C909FAF01C8DEAFA000B48CD /* AppSupport.framework */,
