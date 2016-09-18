@@ -23,10 +23,16 @@
 - (bool)setVolumeTo:(float)arg1 forCategory:(id)arg2;
 @end
 
+@interface MPUNowPlayingController : NSObject
++(double)_is2_elapsedTime;
++(double)_is2_currentDuration;
+@end
+
 #warning Media keys might break on iOS version changes.
 
 static NSDictionary *data;
 static NSString *nowPlayingBundleID;
+static double elapsedTime;
 static IS2WorkaroundDictionary *mediaUpdateBlockQueue;
 
 @interface NSData (Base64)
@@ -205,11 +211,8 @@ static char encodingTable[64] = {
     });
 }
 
-+(void)setupAfterSpringBoardLaunched {
-    // We need to register for elapsed time updates.
-    // And also for media remote updates, as honestly, they're more reliable.
-    
-    
++(void)setElapsedTime:(double)elapsed {
+    elapsedTime = elapsedTime;
 }
 
 #pragma mark Public methods
@@ -269,12 +272,12 @@ static char encodingTable[64] = {
     }
 }
 
-+(int)currentTrackLength {
-    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoDuration"] intValue];
++(double)currentTrackLength {
+    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoDuration"] doubleValue];
 }
 
-+(int)elapsedTrackLength {
-    return [[IS2Media getValueForKey:@"kMRMediaRemoteNowPlayingInfoElapsedTime"] intValue];
++(double)elapsedTrackLength {
+    return [objc_getClass("MPUNowPlayingController") _is2_elapsedTime];
 }
 
 +(NSString*)currentPlayingAppIdentifier {

@@ -75,6 +75,15 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 - (id)allBulletinIDsForSectionID:(id)arg1;
 @end
 
+@interface MPUNowPlayingController : NSObject
+- (void)_updateCurrentNowPlaying;
+- (void)_updateNowPlayingAppDisplayID;
+- (void)_updatePlaybackState;
+- (void)_updateTimeInformationAndCallDelegate:(BOOL)arg1;
+- (double)currentDuration;
+- (double)currentElapsed;
+@end
+
 @interface IWWidget : UIView {
     UIWebView *_webView;
 }
@@ -185,10 +194,44 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 %hook SBMediaController
 
+// Only needed for iOS 6.
 -(void)_nowPlayingInfoChanged {
     %orig;
     
+    if ([[UIDevice currentDevice] systemVersion].floatValue < 7.0) {
+        [IS2Media nowPlayingDataDidUpdate];
+    }
+}
+
+%end
+
+static MPUNowPlayingController * __weak globalMPUNowPlaying;
+
+%hook MPUNowPlayingController
+// iOS 7 and onwards should use this, works nicer.
+
+- (id)init {
+    id orig = %orig;
+    
+    globalMPUNowPlaying = orig;
+    
+    return orig;
+}
+
+- (void)_updateCurrentNowPlaying {
+    %orig;
+    
     [IS2Media nowPlayingDataDidUpdate];
+}
+
+%new
++(double)_is2_elapsedTime {
+    return [globalMPUNowPlaying currentElapsed];
+}
+
+%new
++(double)_is2_currentDuration {
+    return [globalMPUNowPlaying currentElapsed];
 }
 
 %end

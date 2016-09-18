@@ -97,13 +97,13 @@
  @return The current track's length
  @warning This function will return 0 if no media has played since SpringBoard was last launched.
  */
-+(int)currentTrackLength;
++(double)currentTrackLength;
 
 /** Gives the position in the current track that has been played to, which measured in seconds.
  @return The current track's elapsed time
  @warning This function will return 0 if no media has played since SpringBoard was last launched.
  */
-+(int)elapsedTrackLength;
++(double)elapsedTrackLength;
 
 /** Gives the current track number for the currently playing music track. For videos, this value is likely to be 0.
  @return The current track's number in its album
