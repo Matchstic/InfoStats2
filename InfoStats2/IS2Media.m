@@ -26,6 +26,8 @@
 @interface MPUNowPlayingController : NSObject
 +(double)_is2_elapsedTime;
 +(double)_is2_currentDuration;
++(bool)_is2_currentNowPlayingAppIsRunning;
++(id)_is2_nowPlayingAppDisplayID;
 @end
 
 #warning Media keys might break on iOS version changes.
@@ -281,11 +283,7 @@ static char encodingTable[64] = {
 }
 
 +(NSString*)currentPlayingAppIdentifier {
-    if (!nowPlayingBundleID) {
-        return @"";
-    }
-    
-    return nowPlayingBundleID;
+    return [objc_getClass("MPUNowPlayingController") _is2_nowPlayingAppDisplayID];
 }
 
 +(BOOL)shuffleEnabled {
@@ -309,7 +307,7 @@ static char encodingTable[64] = {
 }
 
 +(BOOL)hasMedia {
-        return [[objc_getClass("SBMediaController") sharedInstance] hasTrack];
+    return [objc_getClass("MPUNowPlayingController") _is2_currentNowPlayingAppIsRunning];
 }
 
 +(void)skipToNextTrack {
