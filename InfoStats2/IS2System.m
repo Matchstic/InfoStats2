@@ -490,6 +490,48 @@ static NSLock *CPUUsageLock;
     }
 }
 
++(uint64_t)totalDiskSpaceinBytesForPath:(NSString*)path {
+    uint64_t totalSpace = 0;
+    uint64_t totalFreeSpace = 0;
+    
+    __autoreleasing NSError *error = nil;
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:&error];
+    
+    if (dictionary) {
+        NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
+        NSNumber *freeFileSystemSizeInBytes = [dictionary objectForKey:NSFileSystemFreeSize];
+        totalSpace = [fileSystemSizeInBytes unsignedLongLongValue];
+        totalFreeSpace = [freeFileSystemSizeInBytes unsignedLongLongValue];
+    } else {
+        NSLog(@"[InfoStats2 | System] :: Failed to read storage data: %@", [error localizedDescription]);
+    }
+    
+    return totalSpace;
+}
+
++(double)totalDiskSpaceInFormat:(int)format {
+    uint64_t bytes = [self totalDiskSpaceinBytesForPath:@"/"];
+    uint64_t mobile = [self totalDiskSpaceinBytesForPath:@"/var/mobile/"];
+    
+    bytes += mobile;
+    
+    switch (format) {
+        case 1: // kb
+            return (double)bytes / 1024.f;
+            break;
+        case 2: // MB
+            return (double)bytes / 1024.f / 1024.f;
+            break;
+        case 3: // GB
+            return (double)bytes / 1024.f / 1024.f / 1024.f;
+            break;
+        case 0: // Bytes
+        default:
+            return (double)bytes;
+            break;
+    }
+}
+
 // TODO: Implement these somehow.
 +(double)networkSpeedUp {
     return 0.0;
