@@ -229,7 +229,7 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
 - (void)_updateTimeInformationAndCallDelegate:(BOOL)arg1; {
     %orig;
     
-    [IS2Media nowPlayingDataDidUpdate];
+    [IS2Media timeInformationDidUpdate];
 }
 
 %new
