@@ -226,6 +226,10 @@ static inline void buildRequestersDictionary() {
             [self updateWeather];
         }
         
+        // Update callbaks to populare with data
+        // Bug fix for @JunesIphone
+        [self _updateCallbacks];
+        
         [autoUpdateTimer invalidate];
         autoUpdateTimer = nil;
         
@@ -344,22 +348,26 @@ static inline void buildRequestersDictionary() {
     [self updateWeather];
 }
 
++(void)_updateCallbacks {
+    NSLog(@"[InfoStats2 | Weather] :: Running through blocks");
+    
+    for (void (^block)() in [weatherUpdateBlockQueueTest allValues]) {
+        @try {
+            [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
+        } @catch (NSException *e) {
+            NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
+        } @catch (...) {
+            NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with unknown exception");
+        }
+    }
+}
+
 +(void)updateWeather {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         if (![[IS2WeatherProvider sharedInstance] isUpdating]) {
             // Update weather, and then call blocks for updated weather.
             [[IS2WeatherProvider sharedInstance] updateWeatherWithCallback:^{
-                NSLog(@"[InfoStats2 | Weather] :: Running through blocks");
-                
-                for (void (^block)() in [weatherUpdateBlockQueueTest allValues]) {
-                    @try {
-                        [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
-                    } @catch (NSException *e) {
-                        NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
-                    } @catch (...) {
-                        NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with unknown exception");
-                    }
-                }
+                [self _updateCallbacks];
             }];
         }
     });

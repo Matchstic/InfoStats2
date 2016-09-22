@@ -140,7 +140,7 @@
 +(CGFloat)getBrightness;
 
 /** Sets the current backlight level, and expects values between 0.0 and 1.0
- @param The new backlight level
+ @param level The new backlight level
  */
 +(void)setBrightness:(CGFloat)level;
 
@@ -150,7 +150,7 @@
 +(BOOL)getLowPowerMode;
 
 /** Sets the current Low Power mode state.<br/><br/>This will do nothing for versions of iOS less than iOS 9.
- @param The new mode; YES for on, NO for off.
+ @param mode The new mode; YES for on, NO for off.
  */
 +(void)setLowPowerMode:(BOOL)mode;
 

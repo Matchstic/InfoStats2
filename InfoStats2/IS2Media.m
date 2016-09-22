@@ -28,6 +28,11 @@
 +(double)_is2_currentDuration;
 @end
 
+@interface UIApplication (Private)
+- (void)setSystemVolumeHUDEnabled:(BOOL)enabled forAudioCategory:(NSString *)category;
+- (void)setSystemVolumeHUDEnabled:(BOOL)enabled;
+@end
+
 #warning Media keys might break on iOS version changes.
 
 static NSDictionary *data;
@@ -349,9 +354,17 @@ static char encodingTable[64] = {
     return cgVol;
 }
 
-+(void)setVolume:(CGFloat)level {
++(void)setVolume:(CGFloat)level withVolumeHUD:(BOOL)useHud {
+    if (!useHud) {
+        [[UIApplication sharedApplication] setSystemVolumeHUDEnabled:NO forAudioCategory:@"Audio/Video"];
+    }
+    
     // Note that I'm NOT using CGFloat here.
     [[objc_getClass("AVSystemController") sharedAVSystemController] setVolumeTo:(float)level forCategory:@"Audio/Video"];
+    
+    if (!useHud) {
+        [[UIApplication sharedApplication] setSystemVolumeHUDEnabled:YES forAudioCategory:@"Audio/Video"];
+    }
 }
 
 @end
