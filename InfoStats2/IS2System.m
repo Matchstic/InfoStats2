@@ -661,4 +661,40 @@ typedef NS_ENUM(NSUInteger, PLWallpaperMode) {
     [wallpaperViewController _savePhoto];
 }
 
++(UIImage)getStaticWallpaperForScreen:(NSString)screen {
+	if ([screen isEqualToString:@"lock"]) {
+		NSData *lockWallpaperData = [NSData dataWithContentsOfFile:@"/var/mobile/Library/SpringBoard/LockBackground.cpbitmap"];
+		CFDataRef lockWallpaperDataRef = (__bridge CFDataRef)lockWallpaperData;
+		NSArray *imageArray = (__bridge NSArray *)CPBitmapCreateImagesFromData(lockWallpaperDataRef, NULL, 1, NULL);
+		UIImage *lockWallpaper = [UIImage imageWithCGImage:(CGImageRef)imageArray[0]];
+		return lockWallpaper;
+	} else if ([screen isEqualToString:@"home"]) {
+		NSData *homeWallpaperData = [NSData dataWithContentsOfFile:@"/var/mobile/Library/SpringBoard/HomeBackground.cpbitmap"];
+		if (!homeWallpaperData) {
+			// the homescreen uses the lockscreen wallpaper if they're the same, this essentially checks if they're the same, and then uses the lockscreen
+			// wallpaper if they are
+			homeWallpaperData = [NSData dataWithContentsOfFile:@"/var/mobile/Library/SpringBoard/LockBackground.cpbitmap"];
+		}
+		// do a bunch of low level stuff that I don't even want to talk about
+		CFDataRef homeWallpaperDataRef = (__bridge CFDataRef)homeWallpaperData;
+		NSArray *imageArray = (__bridge NSArray *)CPBitmapCreateImagesFromData(homeWallpaperDataRef, NULL, 1, NULL);
+		UIImage *homeWallpaper = [UIImage imageWithCGImage:(CGImageRef)imageArray[0]];
+		return homeWallpaper;
+	}
+}
+
++(NSString)getStaticWallpaperForScreenBase64:(NSString)screen {
+	UIImage *img = [IS2System getStaticWallpaperForScreen:screen];
+	if (img) {
+		@try {
+			NSData *imageData = UIImageJPEGRepresentation(img, 1.0);
+			return [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]];
+		} @catch (NSException *e) {
+			return @"data:image/jpeg;base64,";
+	}
+	} else {
+		return @"data:image/jpeg;base64,";
+	}
+}
+
 @end
