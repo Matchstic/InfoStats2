@@ -75,6 +75,13 @@
 - (bool)setPowerMode:(long long)arg1 error:(id*)arg2;
 @end
 
+@interface PLStaticWallpaperImageViewController
+@property BOOL saveWallpaperData;
+- (void)_savePhoto;
+- (instancetype)initWithUIImage:(UIImage *)image;
++ (id)alloc;
+@end
+
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
 
 #if __cplusplus
@@ -98,6 +105,12 @@ static processor_info_array_t cpuInfo, prevCpuInfo;
 static mach_msg_type_number_t numCpuInfo, numPrevCpuInfo;
 static unsigned numCPUs;
 static NSLock *CPUUsageLock;
+
+typedef NS_ENUM(NSUInteger, PLWallpaperMode) {
+	PLWallpaperModeBoth,
+	PLWallpaperModeHomeScreen,
+	PLWallpaperModeLockScreen
+};
 
 @implementation IS2System
 
@@ -609,6 +622,43 @@ static NSLock *CPUUsageLock;
     if (![batterySaver setPowerMode:newMode error:&error]) {
         NSLog(@"[InfoStats 2 | System] :: Failed to set low power mode: %@", error);
     }
+}
+
++(BOOL)isOnPasscodeScreen {
+    return [[[SBLockScreenManager sharedInstance] lockScreenViewController] isPasscodeLockVisible];
+}
+
++(UIImage)getAppIconForBundleID:(NSString)bundleID {
+    return [UIImage _applicationIconImageForBundleIdentifier:bundleID format:2 scale:[UIScreen mainScreen].scale];
+}
+
++(NSString)getAppIconForBundleIDBase64:(NSString)bundleID {
+	UIImage *img = [IS2System getAppIconForBundleID:bundleID];
+    if (img) {
+        @try {
+            NSData *imageData = UIImagePNGRepresentation(img);
+            return [NSString stringWithFormat:@"data:image/png;base64,%@", [imageData base64Encoding]];
+        } @catch (NSException *e) {
+            return @"data:image/png;base64,";
+        }
+    } else {
+        return @"data:image/png;base64,";
+    }
+}
+
++(void)setWallpaperWithImage:(NSString)img forScreen:(NSString)screen {
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:img options:0];
+    UIImage *image = [UIImage imageWithData:data];
+    PLStaticWallpaperImageViewController *wallpaperViewController = [[[PLStaticWallpaperImageViewController alloc] initWithUIImage:image] autorelease];
+    if ([screen isEqualToString:@"both"]) {
+		wallpaperViewController->_wallpaperMode = PLWallpaperModeBoth;
+	} else if ([screen isEqualToString:@"home"]) {
+		wallpaperViewController->_wallpaperMode = PLWallpaperModeHomeScreen;
+	} else if ([screen isEqualToString:@"lock"]) {
+		wallpaperViewController->_wallpaperMode = PLWallpaperModeLockScreen;
+    }
+    wallpaperViewController.saveWallpaperData = YES;
+    [wallpaperViewController _savePhoto];
 }
 
 @end
