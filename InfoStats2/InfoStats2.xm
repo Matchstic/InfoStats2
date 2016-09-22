@@ -80,6 +80,8 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 - (void)_updateNowPlayingAppDisplayID;
 - (void)_updatePlaybackState;
 - (void)_updateTimeInformationAndCallDelegate:(BOOL)arg1;
+- (BOOL)currentNowPlayingAppIsRunning;
+- (id)nowPlayingAppDisplayID;
 - (double)currentDuration;
 - (double)currentElapsed;
 @end
@@ -224,6 +226,12 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
     [IS2Media nowPlayingDataDidUpdate];
 }
 
+- (void)_updateTimeInformationAndCallDelegate:(BOOL)arg1; {
+    %orig;
+    
+    [IS2Media timeInformationDidUpdate];
+}
+
 %new
 +(double)_is2_elapsedTime {
     return [globalMPUNowPlaying currentElapsed];
@@ -232,6 +240,16 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
 %new
 +(double)_is2_currentDuration {
     return [globalMPUNowPlaying currentElapsed];
+}
+
+%new
++(BOOL)_is2_currentNowPlayingAppIsRunning {
+    return [globalMPUNowPlaying currentNowPlayingAppIsRunning];
+}
+
+%new
++(id)_is2_nowPlayingAppDisplayID {
+    return [globalMPUNowPlaying nowPlayingAppDisplayID];
 }
 
 %end

@@ -26,6 +26,8 @@
 @interface MPUNowPlayingController : NSObject
 +(double)_is2_elapsedTime;
 +(double)_is2_currentDuration;
++(bool)_is2_currentNowPlayingAppIsRunning;
++(id)_is2_nowPlayingAppDisplayID;
 @end
 
 @interface UIApplication (Private)
@@ -39,6 +41,7 @@ static NSDictionary *data;
 static NSString *nowPlayingBundleID;
 static double elapsedTime;
 static IS2WorkaroundDictionary *mediaUpdateBlockQueue;
+static IS2WorkaroundDictionary *timeInformationUpdateBlockQueue;
 
 @interface NSData (Base64)
 + (NSData *)dataWithBase64EncodedString:(NSString *) string;
@@ -216,6 +219,18 @@ static char encodingTable[64] = {
     });
 }
 
++(void)timeInformationDidUpdate {
+    for (void (^block)() in [timeInformationUpdateBlockQueue allValues]) {
+        @try {
+            [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:YES];
+        } @catch (NSException *e) {
+            NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with exception: %@", e);
+        } @catch (...) {
+            NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with unknown exception");
+        }
+    }
+}
+
 +(void)setElapsedTime:(double)elapsed {
     elapsedTime = elapsedTime;
 }
@@ -234,6 +249,20 @@ static char encodingTable[64] = {
 
 +(void)unregisterForNotificationsWithIdentifier:(NSString*)identifier {
     [mediaUpdateBlockQueue removeObjectForKey:identifier];
+}
+
++(void)registerForTimeInformationWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock {
+    if (!timeInformationUpdateBlockQueue) {
+        timeInformationUpdateBlockQueue = [IS2WorkaroundDictionary dictionary];
+    }
+    
+    if (callbackBlock && identifier) {
+        [timeInformationUpdateBlockQueue addObject:callbackBlock forKey:identifier];
+    }
+}
+
++(void)unregisterForTimeInformationWithIdentifier:(NSString*)identifier {
+    [timeInformationUpdateBlockQueue removeObjectForKey:identifier];
 }
 
 +(NSString*)currentTrackTitle {
@@ -286,11 +315,7 @@ static char encodingTable[64] = {
 }
 
 +(NSString*)currentPlayingAppIdentifier {
-    if (!nowPlayingBundleID) {
-        return @"";
-    }
-    
-    return nowPlayingBundleID;
+    return [objc_getClass("MPUNowPlayingController") _is2_nowPlayingAppDisplayID];
 }
 
 +(BOOL)shuffleEnabled {
@@ -314,7 +339,7 @@ static char encodingTable[64] = {
 }
 
 +(BOOL)hasMedia {
-        return [[objc_getClass("SBMediaController") sharedInstance] hasTrack];
+    return [objc_getClass("MPUNowPlayingController") _is2_currentNowPlayingAppIsRunning];
 }
 
 +(void)skipToNextTrack {
