@@ -199,8 +199,8 @@ static char encodingTable[64] = {
         
         if (data) { // Seems to lead to crashes if data does not exist!
             // We also need to pull the now playing bundle ID.
-            MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFStringRef info) {
-                nowPlayingBundleID = (__bridge NSString*)info;
+            //MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFStringRef info) {
+             //   nowPlayingBundleID = (__bridge NSString*)info;
                 
                 //dispatch_async(dispatch_get_main_queue(), ^(void){
                 // Let all our callbacks know we've got new data available.
@@ -214,7 +214,7 @@ static char encodingTable[64] = {
                     }
                 }
                 // });
-            });
+            //});
         }
     });
 }
