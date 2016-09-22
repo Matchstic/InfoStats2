@@ -55,6 +55,11 @@
  */
 +(double)freeDiskSpaceInFormat:(int)format;
 
+/** Gives the amount of space available on the device.
+ @param format Adjusts the output of the function to be in bytes, kb, MB or GB:<br/>0 - Bytes<br/>1 - kb<br/>2 - MB<br/>3 - GB
+ */
++(double)totalDiskSpaceInFormat:(int)format;
+
 /** Gives the current up speed of the user's network connection.<br/><i>Please note this is currently non-functional.</i>
  @return Up speed in kb/s
  */
@@ -65,6 +70,11 @@
  */
 +(double)networkSpeedDown;
 
+/** Gives the user-assigned name of the device.
+ @return Device name as set by user (eg, "Matt's iPhone")
+ */
++(NSString*)deviceName;
+
 /** Gives the device type, eg iPhone, iPad or iPod
  @return Device type
  */
@@ -74,6 +84,11 @@
  @return Device model
  */
 +(NSString*)deviceModel;
+
+/** Gives a more human-friendly version of +deviceModel. Eg, iPhone7,2 becomes iPhone 6.<br/><br/>Note that this function will need to be updated each time a new device is released by Apple. 
+ @return Device model in a more understandable format
+ */
++(NSString*)deviceModelHumanReadable;
 
 /** Gives the height of the device's display in points. This does not change if the device is rotated.
  @return The height of the display
@@ -140,7 +155,7 @@
 +(CGFloat)getBrightness;
 
 /** Sets the current backlight level, and expects values between 0.0 and 1.0
- @param The new backlight level
+ @param level The new backlight level
  */
 +(void)setBrightness:(CGFloat)level;
 
@@ -150,7 +165,7 @@
 +(BOOL)getLowPowerMode;
 
 /** Sets the current Low Power mode state.<br/><br/>This will do nothing for versions of iOS less than iOS 9.
- @param The new mode; YES for on, NO for off.
+ @param mode The new mode; YES for on, NO for off.
  */
 +(void)setLowPowerMode:(BOOL)mode;
 

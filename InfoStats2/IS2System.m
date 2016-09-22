@@ -228,8 +228,7 @@ static NSLock *CPUUsageLock;
     return machineName;
 }
 
-//Please rename this function.
-+(NSString*)deviceModelTranslated {
++(NSString*)deviceModelHumanReadable {
     NSString* code = [IS2System deviceModel];
     
     static NSDictionary* deviceNamesByCode = nil;
@@ -244,8 +243,8 @@ static NSLock *CPUUsageLock;
                               @"iPod4,1"   :@"iPod Touch",        // (Fourth Generation)
                               @"iPod7,1"   :@"iPod Touch",        // (6th Generation)       
                               @"iPhone1,1" :@"iPhone",            // (Original)
-                              @"iPhone1,2" :@"iPhone",            // (3G)
-                              @"iPhone2,1" :@"iPhone",            // (3GS)
+                              @"iPhone1,2" :@"iPhone 3G",            // (3G)
+                              @"iPhone2,1" :@"iPhone 3GS",            // (3GS)
                               @"iPad1,1"   :@"iPad",              // (Original)
                               @"iPad2,1"   :@"iPad 2",            //
                               @"iPad3,1"   :@"iPad",              // (3rd Generation)
@@ -265,6 +264,10 @@ static NSLock *CPUUsageLock;
                               @"iPhone8,1" :@"iPhone 6S",         //
                               @"iPhone8,2" :@"iPhone 6S Plus",    //
                               @"iPhone8,4" :@"iPhone SE",         //
+                              @"iPhone9,1" :@"iPhone 7",          //
+                              @"iPhone9,2" :@"iPhone 7 Plus",     //
+                              @"iPhone9,3" :@"iPhone 7",          //
+                              @"iPhone9,4" :@"iPhone 7 Plus",     //
                               @"iPad4,1"   :@"iPad Air",          // 5th Generation iPad (iPad Air) - Wifi
                               @"iPad4,2"   :@"iPad Air",          // 5th Generation iPad (iPad Air) - Cellular
                               @"iPad4,4"   :@"iPad Mini",         // (2nd Generation iPad Mini - Wifi)

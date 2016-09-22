@@ -59,8 +59,10 @@
 +(void)pause;
 
 /** Changes the current volume for media audio, not for other audio sources like the Ringer.
+ @param level The volume level, between 0.0 and 1.0
+ @param useHud Whether to display the volume HUD when adjusting the level
  */
-+(void)setVolume:(CGFloat)level;
++(void)setVolume:(CGFloat)level withVolumeHUD:(BOOL)useHud;
 
 /** @name Data Retrieval */
 
@@ -117,6 +119,11 @@
  */
 +(int)totalTrackCount;
 
+/** Retrieves the bundle indentifier of the currently playing application.
+ @return Current now playing app's bundle ID (eg, com.apple.Music)
+ */
++(NSString*)currentPlayingAppIdentifier;
+
 /** A boolean specifying whether shuffle mode is currently enabled.
  @return The state of shuffle mode
  */
@@ -131,6 +138,11 @@
  @return Whether media is playing or not
  */
 +(BOOL)isPlaying;
+
+/** A boolean specifying whether there is a currently a track available to play.<br/><br/>For example, this will be NO if music has stopped playing, such as after an album finishes.
+ @return Whether a track is available
+ */
++(BOOL)hasMedia;
 
 /** The current volume for media. Note that this will not return volume for the Ringer, or for anything else other than media audio.
  @return Current media volume

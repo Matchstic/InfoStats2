@@ -30,6 +30,11 @@
 +(id)_is2_nowPlayingAppDisplayID;
 @end
 
+@interface UIApplication (Private)
+- (void)setSystemVolumeHUDEnabled:(BOOL)enabled forAudioCategory:(NSString *)category;
+- (void)setSystemVolumeHUDEnabled:(BOOL)enabled;
+@end
+
 #warning Media keys might break on iOS version changes.
 
 static NSDictionary *data;
@@ -194,8 +199,8 @@ static char encodingTable[64] = {
         
         if (data) { // Seems to lead to crashes if data does not exist!
             // We also need to pull the now playing bundle ID.
-            MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFStringRef info) {
-                nowPlayingBundleID = (__bridge NSString*)info;
+            //MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFStringRef info) {
+             //   nowPlayingBundleID = (__bridge NSString*)info;
                 
                 //dispatch_async(dispatch_get_main_queue(), ^(void){
                 // Let all our callbacks know we've got new data available.
@@ -209,7 +214,7 @@ static char encodingTable[64] = {
                     }
                 }
                 // });
-            });
+            //});
         }
     });
 }
@@ -374,9 +379,17 @@ static char encodingTable[64] = {
     return cgVol;
 }
 
-+(void)setVolume:(CGFloat)level {
++(void)setVolume:(CGFloat)level withVolumeHUD:(BOOL)useHud {
+    if (!useHud) {
+        [[UIApplication sharedApplication] setSystemVolumeHUDEnabled:NO forAudioCategory:@"Audio/Video"];
+    }
+    
     // Note that I'm NOT using CGFloat here.
     [[objc_getClass("AVSystemController") sharedAVSystemController] setVolumeTo:(float)level forCategory:@"Audio/Video"];
+    
+    if (!useHud) {
+        [[UIApplication sharedApplication] setSystemVolumeHUDEnabled:YES forAudioCategory:@"Audio/Video"];
+    }
 }
 
 @end

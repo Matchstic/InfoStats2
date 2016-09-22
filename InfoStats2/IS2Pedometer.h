@@ -12,6 +12,9 @@
  */
 @interface IS2Pedometer : NSObject
 
+/** @name Setup
+ */
+
 /** Sets a block to be called whenever the user's pedometer data changes. The identifier must be unique string; it is recommended to use reverse DNS notation, such as "com.foo.bar".
  @param identifier The identifier associated with your callback
  @param callbackBlock The block to call once data changes
