@@ -492,7 +492,7 @@ static double upload;
         totalSpace = [fileSystemSizeInBytes unsignedLongLongValue];
         totalFreeSpace = [freeFileSystemSizeInBytes unsignedLongLongValue];
     } else {
-        NSLog(@"[InfoStats2 | System] :: Failed to read storage data: %@", [error localizedDescription]);
+        NSLog(@"[InfoStats 2 | System] :: Failed to read storage data: %@", [error localizedDescription]);
     }
     
     return totalFreeSpace;
@@ -534,7 +534,7 @@ static double upload;
         totalSpace = [fileSystemSizeInBytes unsignedLongLongValue];
         totalFreeSpace = [freeFileSystemSizeInBytes unsignedLongLongValue];
     } else {
-        NSLog(@"[InfoStats2 | System] :: Failed to read storage data: %@", [error localizedDescription]);
+        NSLog(@"[InfoStats 2 | System] :: Failed to read storage data: %@", [error localizedDescription]);
     }
     
     return totalSpace;

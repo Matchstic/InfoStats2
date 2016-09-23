@@ -39,7 +39,8 @@
 
 static NSDictionary *data;
 static NSString *nowPlayingBundleID;
-static double elapsedTime;
+static NSTimer *timeInfoUpdater;
+static BOOL cachedIsPlaying;
 static IS2WorkaroundDictionary *mediaUpdateBlockQueue;
 static IS2WorkaroundDictionary *timeInformationUpdateBlockQueue;
 
@@ -198,28 +199,32 @@ static char encodingTable[64] = {
         data = (__bridge NSDictionary*)information;
         
         if (data) { // Seems to lead to crashes if data does not exist!
-            // We also need to pull the now playing bundle ID.
-            //MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(CFStringRef info) {
-             //   nowPlayingBundleID = (__bridge NSString*)info;
-                
-                //dispatch_async(dispatch_get_main_queue(), ^(void){
-                // Let all our callbacks know we've got new data available.
-                for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
-                    @try {
-                        [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:YES];
-                    } @catch (NSException *e) {
-                        NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with exception: %@", e);
-                    } @catch (...) {
-                        NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with unknown exception");
-                    }
+           for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
+               @try {
+                    [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:YES];
+                } @catch (NSException *e) {
+                    NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with exception: %@", e);
+                } @catch (...) {
+                    NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with unknown exception");
                 }
-                // });
-            //});
+            }
+            
+            // Next, we check if the state of playing has changed, and handle as appropriate for updating elapsed time callbacks.
+            BOOL isPlaying = [self isPlaying];
+            if (isPlaying != cachedIsPlaying) {
+                cachedIsPlaying = isPlaying;
+                
+                if (isPlaying) {
+                    [self _startUpdatingElapsed];
+                } else {
+                    [self _stopUpdatingElapsed];
+                }
+            }
         }
     });
 }
 
-+(void)timeInformationDidUpdate {
++(void)timeInformationDidUpdate:(id)sender {
     for (void (^block)() in [timeInformationUpdateBlockQueue allValues]) {
         @try {
             [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:YES];
@@ -231,8 +236,15 @@ static char encodingTable[64] = {
     }
 }
 
-+(void)setElapsedTime:(double)elapsed {
-    elapsedTime = elapsedTime;
++(void)_stopUpdatingElapsed {
+    [timeInfoUpdater invalidate];
+    timeInfoUpdater = nil;
+}
+
++(void)_startUpdatingElapsed {
+    if (![timeInfoUpdater isValid]) {
+        timeInfoUpdater = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(timeInformationDidUpdate:) userInfo:nil repeats:YES];
+    }
 }
 
 #pragma mark Public methods
