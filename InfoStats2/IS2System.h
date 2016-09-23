@@ -60,15 +60,25 @@
  */
 +(double)totalDiskSpaceInFormat:(int)format;
 
-/** Gives the current up speed of the user's network connection.<br/><i>Please note this is currently non-functional.</i>
+/** Gives the current upload speed of the user's network connection.
  @return Up speed in kb/s
  */
 +(double)networkSpeedUp;
 
-/** Gives the current down speed of the user's network connection.<br/><i>Please note this is currently non-functional.</i>
+/** Gives the current download speed of the user's network connection.
  @return Down speed in kb/s
  */
 +(double)networkSpeedDown;
+
+/** Gives the current upload speed of the user's network connection, which is automatically formatted between b/s to GB/s dependant on the value.
+ @return Up speed, auto formatted
+ */
++(NSString*)networkSpeedUpAutoConverted;
+
+/** Gives the current download speed of the user's network connection, which is automatically formatted between b/s to GB/s dependant on the value.
+ @return Download speed, auto formatted
+ */
++(NSString*)networkSpeedDownAutoConverted;
 
 /** Gives the user-assigned name of the device.
  @return Device name as set by user (eg, "Matt's iPhone")

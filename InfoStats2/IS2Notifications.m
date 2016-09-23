@@ -186,7 +186,15 @@ inline int bestCountForApp(NSString *identifier) {
     if (isRemoval) oldCount -= 1;
     else if (!isMod) oldCount += 1;
     
+    @try {
     [countDict setObject:[NSNumber numberWithInt:oldCount] forKey:bulletin.sectionID];
+    } @catch (NSException *e) {
+        // XXX: For some obscure reason, calling -hash on a NSNumber fails whenever Reminders for Lockscreen is installed
+        // by the user. This also why I do the same try-catch over in the other updating functions.
+        // Seriously, wtf. Plus, right now I'm too tired to look into it further. So...
+        
+        // TODO: Work out why the hell calling -hash on an NSNumber can fail here.
+    }
     
     [IS2Notifications notifyCallbacksOfDataChange];
 }

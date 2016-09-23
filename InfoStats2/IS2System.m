@@ -19,6 +19,26 @@
 #import <dlfcn.h>
 #import <Foundation/NSProcessInfo.h>
 
+
+//////////////////////////////////////////////////////////////
+// For network speeds
+
+#import <sys/socket.h>
+#import <sys/types.h>
+#import <mach/mach_time.h>
+#import <net/if.h>
+#import <net/if_var.h>
+#import <net/if_dl.h>
+
+typedef struct {
+    uint64_t timestamp;
+    uint64_t totalDownloadBytes;
+    uint64_t totalUploadBytes;
+} NetSample;
+
+#define	RTM_IFINFO2 		0x12 /* route.h */
+/////////////////////////////////////////////////////////////
+
 @interface SBScreenShotter : NSObject
 + (id)sharedInstance;
 - (void)saveScreenshot:(BOOL)arg1;
@@ -99,6 +119,12 @@ static mach_msg_type_number_t numCpuInfo, numPrevCpuInfo;
 static unsigned numCPUs;
 static NSLock *CPUUsageLock;
 
+// For network data.
+static NetSample lastNetSample;
+static NSTimer *netUpdater;
+static double download;
+static double upload;
+
 @implementation IS2System
 
 +(void)setupAfterTweakLoaded {
@@ -109,6 +135,8 @@ static NSLock *CPUUsageLock;
         numCPUs = 1;
     
     CPUUsageLock = [[NSLock alloc] init];
+    
+    [self _startUpdatingNetwork];
 }
 
 #pragma mark Battery
@@ -535,13 +563,154 @@ static NSLock *CPUUsageLock;
     }
 }
 
-// TODO: Implement these somehow.
+// These following network functions are making use of CCMeters; need to check with Sticktron this is okay to use.
+// Source: https://github.com/cRazEYgUy/CCMeters
 +(double)networkSpeedUp {
-    return 0.0;
+    return upload/1024.0f;
 }
 
 +(double)networkSpeedDown {
-    return 0.0;
+    return download/1024.0f;
+}
+
++(NSString*)networkSpeedUpAutoConverted {
+    return [self _formatBytes:upload];
+}
+
++(NSString*)networkSpeedDownAutoConverted {
+    return [self _formatBytes:download];
+}
+
++(NSString *)_formatBytes:(double)bytes {
+    NSString *result;
+    
+    if (bytes > (1024*1024*1024)) { // G
+        result = [NSString stringWithFormat:@"%.1f GB/s", bytes/1024/1024/1024];
+    } else if (bytes > (1024*1024)) { // M
+        result = [NSString stringWithFormat:@"%.1f MB/s", bytes/1024/1024];
+    } else if (bytes > 1024) { // K
+        result = [NSString stringWithFormat:@"%.1f KB/s", bytes/1024];
+    } else if (bytes > 0 ) {
+        result = [NSString stringWithFormat:@"%.0f B/s", bytes];
+    } else {
+        result = @"0";
+    }
+    
+    return result;
+}
+
++(void)_startUpdatingNetwork {
+    lastNetSample = [self _retrieveNetworkStatistics];
+    netUpdater = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(_updateNetwork:) userInfo:nil repeats:YES];
+}
+
++(void)_stopUpdatingNetwork {
+    [netUpdater invalidate];
+    netUpdater = nil;
+}
+
++(void)_updateNetwork:(id)sender {
+    NetSample net_delta;
+    NetSample net_sample = [self _retrieveNetworkStatistics];
+    
+    // calculate period length
+    net_delta.timestamp = (net_sample.timestamp - lastNetSample.timestamp);
+    double interval = net_delta.timestamp / 1000.0 / 1000.0 / 1000.0; // ns-to-s
+    
+    // get bytes transferred since last sample was taken
+    net_delta.totalUploadBytes = net_sample.totalUploadBytes - lastNetSample.totalUploadBytes;
+    net_delta.totalDownloadBytes = net_sample.totalDownloadBytes - lastNetSample.totalDownloadBytes;
+    
+    upload = (double)net_delta.totalUploadBytes / interval;
+    download = net_delta.totalDownloadBytes / interval;
+    
+    // save this sample for next time
+    lastNetSample = net_sample;
+}
+
++(NetSample)_retrieveNetworkStatistics {
+    /*
+     NetSample: { timestamp, totalUploadBytes, totalDownloadBytes }
+     */
+    NetSample sample = {0, 0, 0};
+    
+    int mib[] = {
+        CTL_NET,
+        PF_ROUTE,
+        0,
+        0,
+        NET_RT_IFLIST2,
+        0
+    };
+    
+    size_t len = 0;
+    
+    if (sysctl(mib, 6, NULL, &len, NULL, 0) >= 0) {
+        char *buf = (char *)malloc(len);
+        
+        if (sysctl(mib, 6, buf, &len, NULL, 0) >= 0) {
+            
+            // read interface stats ...
+            
+            char *lim = buf + len;
+            char *next = NULL;
+            u_int64_t totalibytes = 0;
+            u_int64_t totalobytes = 0;
+            char name[32];
+            
+            for (next = buf; next < lim; ) {
+                struct if_msghdr *ifm = (struct if_msghdr *)next;
+                next += ifm->ifm_msglen;
+                
+                if (ifm->ifm_type == RTM_IFINFO2) {
+                    struct if_msghdr2 *if2m = (struct if_msghdr2 *)ifm;
+                    struct sockaddr_dl *sdl = (struct sockaddr_dl *)(if2m + 1);
+                    
+                    strncpy(name, sdl->sdl_data, sdl->sdl_nlen);
+                    name[sdl->sdl_nlen] = 0;
+                    
+                    NSString *interface = [NSString stringWithUTF8String:name];
+                    //DebugLog(@"interface (%u) name=%@", if2m->ifm_index, interface);
+                    
+                    // skip local interface (lo0)
+                    if (![interface isEqualToString:@"lo0"]) {
+                        totalibytes += if2m->ifm_data.ifi_ibytes;
+                        totalobytes += if2m->ifm_data.ifi_obytes;
+                    }
+                }
+            }
+            
+            sample.timestamp = [self _timestamp];
+            sample.totalUploadBytes = totalobytes;
+            sample.totalDownloadBytes = totalibytes;
+            
+        } else {
+            NSLog(@"[InfoStats 2 | System] :: Error in sysctl");
+        }
+        
+        free(buf);
+        
+    } else {
+        NSLog(@"[InfoStats 2 | System] :: Error in sysctl");
+    }
+    
+    return sample;
+}
+
++(uint64_t)_timestamp {
+    
+    // get timer units
+    mach_timebase_info_data_t info;
+    mach_timebase_info(&info);
+    
+    // get timer value
+    uint64_t timestamp = mach_absolute_time();
+    
+    // convert to nanoseconds
+    timestamp *= info.numer;
+    timestamp /= info.denom;
+    
+    return timestamp;
 }
 
 #pragma mark Toggles and such like
