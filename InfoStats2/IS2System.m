@@ -95,6 +95,42 @@ typedef struct {
 - (bool)setPowerMode:(long long)arg1 error:(id*)arg2;
 @end
 
+@interface SBLockScreenViewController : NSObject
+- (_Bool)isPasscodeLockVisible;
+@end
+
+@interface SBLockScreenManager : NSObject
++(id)sharedInstance;
+@property(readonly, nonatomic) SBLockScreenViewController *lockScreenViewController;
+@end
+
+@interface UIImage (Private)
++(id)_applicationIconImageForBundleIdentifier:(NSString*)displayIdentifier format:(int)form scale:(CGFloat)scale;
+@end
+
+/*@interface PLStaticWallpaperImageViewController
+@property BOOL saveWallpaperData;
+- (void)_savePhoto;
+- (instancetype)initWithUIImage:(UIImage *)image;
++ (id)alloc;
+@end*/
+
+typedef NS_ENUM(NSUInteger, PLWallpaperMode) {
+    PLWallpaperModeBoth,
+    PLWallpaperModeHomeScreen,
+    PLWallpaperModeLockScreen
+};
+
+typedef NS_ENUM(NSUInteger, IS2WallpaperVariant) {
+    IS2WallpaperVariantLockScreen,
+    IS2WallpaperVariantHomeScreen
+};
+
+@interface PLWallpaperImageViewController : UIViewController
+- (instancetype)initWithWallpaperVariant:(int)arg1;
+- (instancetype)initWithUIImage:(UIImage*)arg1;
+@end
+
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
 
 #if __cplusplus
@@ -125,6 +161,10 @@ static NSTimer *netUpdater;
 static double download;
 static double upload;
 
+// For wallpaper access.
+static PLWallpaperImageViewController *cachedHomescreenWallpaper;
+static PLWallpaperImageViewController *cachedLockscreenWallpaper;
+
 @implementation IS2System
 
 +(void)setupAfterTweakLoaded {
@@ -137,6 +177,48 @@ static double upload;
     CPUUsageLock = [[NSLock alloc] init];
     
     [self _startUpdatingNetwork];
+}
+
++(void)setupAfterSpringBoardLoaded {
+    cachedHomescreenWallpaper = [self _wallpaperWithVariant:1];
+    cachedLockscreenWallpaper = [self _wallpaperWithVariant:0];
+}
+
++(PLWallpaperImageViewController*)_wallpaperWithVariant:(int)variant {
+    PLWallpaperImageViewController *cont = [[objc_getClass("PLWallpaperImageViewController") alloc] initWithWallpaperVariant:variant];
+    cont.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    
+    UIView *cropView = [self traverseHierarchyForClass:objc_getClass("PLCropOverlay") andView:cont.view];
+    UIView *dateView = [self traverseHierarchyForClass:objc_getClass("SBFLockScreenDateView") andView:cont.view];
+    UIView *segmentControl = [self traverseHierarchyForClass:objc_getClass("SBSUIEffectsSegmentedControl") andView:cont.view];
+    
+    [cropView removeFromSuperview];
+    [segmentControl removeFromSuperview];
+    [dateView removeFromSuperview];
+    
+    cont.view.clipsToBounds = YES;
+    cont.view.userInteractionEnabled = NO;
+    
+    return cont;
+}
+
++(UIView*)traverseHierarchyForClass:(Class)cl andView:(UIView*)toTraverse {
+    UIView *found = nil;
+    
+    for (UIView *view in toTraverse.subviews) {
+        if (!found) {
+            if ([view.class isEqual:cl]) {
+                found = view;
+                break;
+            } else {
+                found = [self traverseHierarchyForClass:cl andView:view];
+            }
+        } else {
+            break;
+        }
+    }
+    
+    return found;
 }
 
 #pragma mark Battery
@@ -778,6 +860,91 @@ static double upload;
     if (![batterySaver setPowerMode:newMode error:&error]) {
         NSLog(@"[InfoStats 2 | System] :: Failed to set low power mode: %@", error);
     }
+}
+
+#warning This *will not* work on iOS 6
+#warning Add docs
++(BOOL)isLockscreenPasscodeVisible {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
+        // TODO: Add correct function for iOS 6.
+        return NO;
+    } else {
+        return [[[objc_getClass("SBLockScreenManager") sharedInstance] lockScreenViewController] isPasscodeLockVisible];
+    }
+}
+
+#warning Add docs
++(UIImage*)getApplicationIconForBundleIdentifier:(NSString*)bundleIdentifier {
+    return [UIImage _applicationIconImageForBundleIdentifier:bundleIdentifier format:2 scale:[UIScreen mainScreen].scale];
+}
+
+#warning Add docs
++(NSString*)getApplicationIconForBundleIdentifierBase64:(NSString*)bundleIdentifier {
+	UIImage *img = [IS2System getApplicationIconForBundleIdentifier:bundleIdentifier];
+    if (img) {
+        @try {
+            NSData *imageData = UIImagePNGRepresentation(img);
+            return [NSString stringWithFormat:@"data:image/png;base64,%@", [imageData base64Encoding]];
+        } @catch (NSException *e) {
+            return @"data:image/png;base64,";
+        }
+    } else {
+        return @"data:image/png;base64,";
+    }
+}
+
+#warning Add docs
+/*+(void)setWallpaperWithImage:(NSString)img forScreen:(NSString)screen {
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:img options:0];
+    UIImage *image = [UIImage imageWithData:data];
+    PLStaticWallpaperImageViewController *wallpaperViewController = [[[PLStaticWallpaperImageViewController alloc] initWithUIImage:image] autorelease];
+    if ([screen isEqualToString:@"both"]) {
+		wallpaperViewController->_wallpaperMode = PLWallpaperModeBoth;
+	} else if ([screen isEqualToString:@"home"]) {
+		wallpaperViewController->_wallpaperMode = PLWallpaperModeHomeScreen;
+	} else if ([screen isEqualToString:@"lock"]) {
+		wallpaperViewController->_wallpaperMode = PLWallpaperModeLockScreen;
+    }
+    wallpaperViewController.saveWallpaperData = YES;
+    [wallpaperViewController _savePhoto];
+}*/
+
+#warning Add docs
++(UIImage*)getWallpaperForVariant:(int)variant {
+    UIView *view = nil;
+    
+    if (variant) {
+        view = cachedHomescreenWallpaper.view;
+    } else {
+        view = cachedLockscreenWallpaper.view;
+    }
+    
+    view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    
+    [view setNeedsDisplay];
+    UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, YES, [UIScreen mainScreen].scale);
+    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
+    
+    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return img;
+}
+ 
+#warning Add docs
++(NSString*)getWallpaperForVariantBase64:(int)variant {
+	UIImage *img = [IS2System getWallpaperForVariant:variant];
+	if (img) {
+		@try {
+			NSData *imageData = UIImageJPEGRepresentation(img, 1.0);
+			return [NSString stringWithFormat:@"data:image/jpeg;base64,%@", [imageData base64Encoding]];
+		} @catch (NSException *e) {
+			return @"data:image/jpeg;base64,";
+        }
+	} else {
+		return @"data:image/jpeg;base64,";
+	}
 }
 
 @end
