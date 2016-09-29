@@ -20,6 +20,7 @@
 @interface IS2System (additions)
 +(void)setupAfterTweakLoaded;
 +(int)ramPhysical;
++(void)setupAfterSpringBoardLoaded;
 @end
 
 @interface IS2Notifications : NSObject
@@ -68,6 +69,7 @@ static int displayToken;
 
 +(void)setupAfterSpringBoardLoaded {
     [IS2Notifications setupAfterSpringBoardLaunched];
+    [IS2System setupAfterSpringBoardLoaded];
     
     // Add pedometer support for iOS 9+
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0)
@@ -124,6 +126,12 @@ static int displayToken;
 
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [_ramtimer invalidate];
+    _ramtimer = nil;
+    
+    [_batterytimer invalidate];
+    _batterytimer = nil;
 }
 
 -(void)performBlockOnMainThread:(void (^)(void))callbackBlock {

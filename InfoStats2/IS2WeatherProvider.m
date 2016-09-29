@@ -270,7 +270,7 @@ int firstUpdate = 0;
 }*/
 
 // Thanks to Andrew Wiik for this function.
-// Need to verify it back to iOS 6.
+// TODO: Need to verify it back to iOS 6.
 -(NSString*)nameForCondition:(int)condition {
     return [self.weatherFrameworkBundle localizedStringForKey:(__bridge id)*((CFStringRef*)MSFindSymbol(NULL, "_WeatherDescription") + condition) value:@"" table:@"WeatherFrameworkLocalizableStrings"];
 }

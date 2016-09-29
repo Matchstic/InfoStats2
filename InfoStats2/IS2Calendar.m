@@ -119,6 +119,8 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
         dispatch_release(_source);
         _source = NULL;
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark Public methods
