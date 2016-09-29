@@ -43,7 +43,6 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 @interface IS2Media : NSObject
 +(void)nowPlayingDataDidUpdate;
-+(void)timeInformationDidUpdate;
 @end
 
 @interface BBBulletin : NSObject
@@ -225,14 +224,6 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
     %orig;
     
     [IS2Media nowPlayingDataDidUpdate];
-}
-
-- (void)_updateTimeInformationAndCallDelegate:(BOOL)arg1 {
-    %orig;
-    
-    // XXX: Unfortunately, testing shows that this hook is rarely, if at all, called.
-    // Might be better suited to instead run an NSTimer internally in IS2Media whenever media is playing.
-    [IS2Media timeInformationDidUpdate];
 }
 
 %new

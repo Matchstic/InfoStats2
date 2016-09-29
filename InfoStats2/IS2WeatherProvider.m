@@ -12,6 +12,7 @@
 #import <notify.h>
 #import "IS2Extensions.h"
 #include <dlfcn.h>
+#import <substrate.h>
 
 //extern float ChanceOfRainWithHourlyForecasts(NSArray *forecasts);
 
@@ -166,7 +167,7 @@ int firstUpdate = 0;
 
 #pragma mark Translations
 
--(NSString*)nameForCondition:(int)condition {
+/*-(NSString*)nameForCondition:(int)condition {
     switch (condition) {
         case 0:
             return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionTornado" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
@@ -266,6 +267,12 @@ int firstUpdate = 0;
         default:
         return @"";
     }
+}*/
+
+// Thanks to Andrew Wiik for this function.
+// Need to verify it back to iOS 6.
+-(NSString*)nameForCondition:(int)condition {
+    return [self.weatherFrameworkBundle localizedStringForKey:(__bridge id)*((CFStringRef*)MSFindSymbol(NULL, "_WeatherDescription") + condition) value:@"" table:@"WeatherFrameworkLocalizableStrings"];
 }
 
 -(NSString*)translatedWindSpeedUnits {
