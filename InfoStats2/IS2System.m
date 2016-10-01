@@ -108,13 +108,6 @@ typedef struct {
 +(id)_applicationIconImageForBundleIdentifier:(NSString*)displayIdentifier format:(int)form scale:(CGFloat)scale;
 @end
 
-/*@interface PLStaticWallpaperImageViewController
-@property BOOL saveWallpaperData;
-- (void)_savePhoto;
-- (instancetype)initWithUIImage:(UIImage *)image;
-+ (id)alloc;
-@end*/
-
 typedef NS_ENUM(NSUInteger, PLWallpaperMode) {
     PLWallpaperModeBoth,
     PLWallpaperModeHomeScreen,
@@ -129,6 +122,10 @@ typedef NS_ENUM(NSUInteger, IS2WallpaperVariant) {
 @interface PLWallpaperImageViewController : UIViewController
 - (instancetype)initWithWallpaperVariant:(int)arg1;
 - (instancetype)initWithUIImage:(UIImage*)arg1;
+@end
+
+@interface PLStaticWallpaperImageViewController : PLWallpaperImageViewController
+- (void)setWallpaperForLocations:(long long)arg1;
 @end
 
 void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID,id arg,NSDictionary* vibratePattern);
@@ -894,20 +891,19 @@ static PLWallpaperImageViewController *cachedLockscreenWallpaper;
 }
 
 #warning Add docs
-/*+(void)setWallpaperWithImage:(NSString)img forScreen:(NSString)screen {
++(void)setWallpaperWithBase64Image:(NSString*)img forMode:(int)mode {
     NSData *data = [[NSData alloc] initWithBase64EncodedString:img options:0];
     UIImage *image = [UIImage imageWithData:data];
-    PLStaticWallpaperImageViewController *wallpaperViewController = [[[PLStaticWallpaperImageViewController alloc] initWithUIImage:image] autorelease];
-    if ([screen isEqualToString:@"both"]) {
-		wallpaperViewController->_wallpaperMode = PLWallpaperModeBoth;
-	} else if ([screen isEqualToString:@"home"]) {
-		wallpaperViewController->_wallpaperMode = PLWallpaperModeHomeScreen;
-	} else if ([screen isEqualToString:@"lock"]) {
-		wallpaperViewController->_wallpaperMode = PLWallpaperModeLockScreen;
-    }
-    wallpaperViewController.saveWallpaperData = YES;
-    [wallpaperViewController _savePhoto];
-}*/
+    PLStaticWallpaperImageViewController *wallpaperViewController = [[objc_getClass("PLStaticWallpaperImageViewController") alloc] initWithUIImage:image];
+    
+    [wallpaperViewController setWallpaperForLocations:(long long)mode];
+}
+
++(void)setWallpaperWithImage:(UIImage*)img forMode:(int)mode {
+    PLStaticWallpaperImageViewController *wallpaperViewController = [[objc_getClass("PLStaticWallpaperImageViewController") alloc] initWithUIImage:img];
+    
+    [wallpaperViewController setWallpaperForLocations:(long long)mode];
+}
 
 #warning Add docs
 +(UIImage*)getWallpaperForVariant:(int)variant {

@@ -201,7 +201,9 @@ static char encodingTable[64] = {
         if (data) { // Seems to lead to crashes if data does not exist!
            for (void (^block)() in [mediaUpdateBlockQueue allValues]) {
                @try {
-                    [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:YES];
+                   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                       [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
+                   });
                 } @catch (NSException *e) {
                     NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with exception: %@", e);
                 } @catch (...) {
@@ -225,9 +227,16 @@ static char encodingTable[64] = {
 }
 
 +(void)timeInformationDidUpdate:(id)sender {
+    // XXX: The usage of GCD and perform...MainThread is to avoid a deadlocking bug introduced in iOS 5, which
+    // affects UIWebView.
+    //
+    // More info: http://stackoverflow.com/questions/19531701/deadlock-with-gcd-and-webview
+    
     for (void (^block)() in [timeInformationUpdateBlockQueue allValues]) {
         @try {
-            [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:YES];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
+            });
         } @catch (NSException *e) {
             NSLog(@"[InfoStats2 | Media] :: Failed to update callback, with exception: %@", e);
         } @catch (...) {

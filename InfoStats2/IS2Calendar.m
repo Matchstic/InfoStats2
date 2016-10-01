@@ -72,16 +72,23 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
         store = [[EKEventStore alloc] init];
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^(void){
-        // Let all our callbacks know we've got new data available.
-        for (void (^block)() in [calendarUpdateBlockQueue allValues]) {
-            @try {
-                block();
-            } @catch (NSException *e) {
-                NSLog(@"*** [InfoStats2 | Calendar] :: Failed to update a callback, with exception: %@", e);
-            }
+    // XXX: The usage of GCD and perform...MainThread is to avoid a deadlocking bug introduced in iOS 5, which
+    // affects UIWebView.
+    //
+    // More info: http://stackoverflow.com/questions/19531701/deadlock-with-gcd-and-webview
+    
+    // Let all our callbacks know we've got new data available.
+    for (void (^block)() in [calendarUpdateBlockQueue allValues]) {
+        @try {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
+            });
+        } @catch (NSException *e) {
+            NSLog(@"*** [InfoStats2 | Calendar] :: Failed to update a callback, with exception: %@", e);
+        } @catch (...) {
+            NSLog(@"*** [InfoStats2 | Calendar] :: Failed to update a callback, with unknown exception");
         }
-    });
+    }
 }
 
 // This allows us to fire off a callback when the user changes which calendars to display in-app.

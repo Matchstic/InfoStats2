@@ -115,6 +115,11 @@
  */
 +(BOOL)isDeviceIn24Time;
 
+/** Gives whether the user has the passcode UI visible on their lockscreen at the time of calling.<br/><br/>Please note that this will return NO when the device:<br/>- Is unlocked<br/>- Has not got a passcode set
+ @return Whether passocde UI is currently shown on the lockscreen
+ */
++(BOOL)isLockscreenPasscodeVisible;
+
 /** @name System functions 
  */
 
@@ -156,7 +161,7 @@
  */
 +(void)vibrateDeviceForTimeLength:(CGFloat)timeLength;
 
-/** @name Toggles, and other data setting
+/** @name Miscellaneous Settings
  */
 
 /** Gives the current backlight level, which will be between 0.0 and 1.0.
@@ -178,5 +183,37 @@
  @param mode The new mode; YES for on, NO for off.
  */
 +(void)setLowPowerMode:(BOOL)mode;
+
+/** @name Application Icons
+ */
+
+/** Finds the application icon for a given bundle identifier.<br/><br/>Please note this function respects the user's current theme.
+ @return Application icon for provided bundle identifier
+ */
++(UIImage*)getApplicationIconForBundleIdentifier:(NSString*)bundleIdentifier;
+
+/** Finds the application icon for a given bundle identifier, in the form of a base64 string for usage within a HTML <i>img</i> tag.<br/><br/>Please note this function respects the user's current theme.
+ @return Application icon (in base64 format) for provided bundle identifier
+ */
++(NSString*)getApplicationIconForBundleIdentifierBase64:(NSString*)bundleIdentifier;
+
+/** @name Device Wallpaper
+ */
+
+/** Gives a snapshot of the user's current wallpaper. For Dynamic wallpapers, and tweaks that override the wallpaper, this function will return a still snapshot of what is displayed at the time of calling.
+ @param variant The wallpaper variant to retrieve. Pass 0 for the lockscreen wallpaper, or 1 for the homescreen
+ @return The wallpaper snapshot
+ */
++(UIImage*)getWallpaperForVariant:(int)variant;
+
+/** Gives a snapshot of the user's current wallpaper, in the form of a base64 string for usage within a HTML <i>img</i> tag. For Dynamic wallpapers, and tweaks that override the wallpaper, this function will return a still snapshot of what is displayed at the time of calling.
+ @param variant The wallpaper variant to retrieve. Pass 0 for the lockscreen wallpaper, or 1 for the homescreen
+ @return The wallpaper snapshot
+ */
++(NSString*)getWallpaperForVariantBase64:(int)variant;
+
+
++(void)setWallpaperWithImage:(UIImage*)img forMode:(int)mode;
++(void)setWallpaperWithBase64Image:(NSString*)img forMode:(int)mode;
 
 @end

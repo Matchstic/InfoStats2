@@ -174,6 +174,11 @@ inline int bestCountForApp(NSString *identifier) {
 }
 
 +(void)updateLockscreenCountWithBulletin:(BBBulletin*)bulletin isRemoval:(BOOL)isRemoval isModification:(BOOL)isMod {
+    if (!bulletin.sectionID || !bulletin.bulletinID) {
+        NSLog(@"[InfoStats 2 | Notifications] :: Whiskey. Tango. Foxtrot. Bulletin is a weird 'un.");
+        return;
+    }
+    
     if (!isRemoval) {
         [lockscreenBulletins setObject:bulletin forKey:bulletin.bulletinID];
     } else {
@@ -187,7 +192,7 @@ inline int bestCountForApp(NSString *identifier) {
     else if (!isMod) oldCount += 1;
     
     @try {
-    [countDict setObject:[NSNumber numberWithInt:oldCount] forKey:bulletin.sectionID];
+        [countDict setObject:[NSNumber numberWithInt:oldCount] forKey:bulletin.sectionID];
     } @catch (NSException *e) {
         // XXX: For some obscure reason, calling -hash on a NSNumber fails whenever Reminders for Lockscreen is installed
         // by the user. This also why I do the same try-catch over in the other updating functions.
@@ -205,10 +210,21 @@ inline int bestCountForApp(NSString *identifier) {
 }
 
 +(void)notifyCallbacksOfDataChange {
+    // XXX: The usage of GCD and perform...MainThread is to avoid a deadlocking bug introduced in iOS 5, which
+    // affects UIWebView.
+    //
+    // More info: http://stackoverflow.com/questions/19531701/deadlock-with-gcd-and-webview
+    
     for (void (^block)() in [notificationUpdateQueue allValues]) {
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            block(); // Runs all the callbacks.
-        });
+        @try {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
+            });
+        } @catch (NSException *e) {
+            NSLog(@"[InfoStats2 | Notifications] :: Failed to update callback, with exception: %@", e);
+        } @catch (...) {
+            NSLog(@"[InfoStats2 | Notifications] :: Failed to update callback, with unknown exception");
+        }
     }
 }
 

@@ -69,7 +69,7 @@ static int displayToken;
 
 +(void)setupAfterSpringBoardLoaded {
     [IS2Notifications setupAfterSpringBoardLaunched];
-    [IS2System setupAfterSpringBoardLoaded];
+    //[IS2System setupAfterSpringBoardLoaded];
     
     // Add pedometer support for iOS 9+
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0)

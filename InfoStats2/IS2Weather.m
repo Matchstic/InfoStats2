@@ -351,9 +351,16 @@ static inline void buildRequestersDictionary() {
 +(void)_updateCallbacks {
     NSLog(@"[InfoStats2 | Weather] :: Running through blocks");
     
+    // XXX: The usage of GCD and perform...MainThread is to avoid a deadlocking bug introduced in iOS 5, which
+    // affects UIWebView.
+    //
+    // More info: http://stackoverflow.com/questions/19531701/deadlock-with-gcd-and-webview
+    
     for (void (^block)() in [weatherUpdateBlockQueueTest allValues]) {
         @try {
-            [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
+            });
         } @catch (NSException *e) {
             NSLog(@"[InfoStats2 | Weather] :: Failed to update callback, with exception: %@", e);
         } @catch (...) {

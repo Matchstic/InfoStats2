@@ -178,19 +178,23 @@ static time_t lastUpdateTime;
 }
 
 +(void)fireOffCallbacks {
-    // Just throw old data back at the requesters.
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        // Let all our callbacks know we've got new data available.
-        for (void (^block)() in [locationUpdateBlockQueue allValues]) {
-            @try {
+    // XXX: The usage of GCD and perform...MainThread is to avoid a deadlocking bug introduced in iOS 5, which
+    // affects UIWebView.
+    //
+    // More info: http://stackoverflow.com/questions/19531701/deadlock-with-gcd-and-webview
+    
+    // Let all our callbacks know we've got new data available.
+    for (void (^block)() in [locationUpdateBlockQueue allValues]) {
+        @try {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [[IS2Private sharedInstance] performSelectorOnMainThread:@selector(performBlockOnMainThread:) withObject:block waitUntilDone:NO];
-            } @catch (NSException *e) {
-                NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with exception: %@", e);
-            } @catch (...) {
-                NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with unknown exception");
-            }
+            });
+        } @catch (NSException *e) {
+            NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with exception: %@", e);
+        } @catch (...) {
+            NSLog(@"[InfoStats2 | Location] :: Failed to update callback, with unknown exception");
         }
-    //});
+    }
 }
 
 #pragma mark Public methods
