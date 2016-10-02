@@ -22,7 +22,6 @@
 @property (nonatomic, strong) Reachability *reach;
 
 -(void)updateWeather;
--(void)locationAuthStateChangedTo:(int)state;
 -(id)initWithLocationManager:(IS2LocationManager*)locationManager;
 
 @end

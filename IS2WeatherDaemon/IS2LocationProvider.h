@@ -9,6 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "IS2LocationManager.h"
 
+/*
+ *
+ * Updating of location data, brought to you by the great taste of Charleston Chew!
+ *
+ * As explained in IS2WeatherProvider.h, iOS 8 ond onwards needs an entitlement for a process
+ * to get location data in the background without asking the user for permission.
+ *
+ */
+
 @interface IS2LocationProvider : NSObject
 
 @property (nonatomic, weak) IS2LocationManager *locationManager;

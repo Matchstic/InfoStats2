@@ -32,12 +32,12 @@ static NSMutableDictionary *savedState;
         int isDisplayOff = [[savedState objectForKey:@"isDisplayOff"] intValue];
         
         if (updateInterval != 7) {
-            [self.locationProvider setLocationUpdateInterval:incoming];
+            [self.locationProvider setLocationUpdateInterval:updateInterval];
         }
         
         [self.locationProvider setLocationUpdateAccuracy:updateAccuracy];
         
-        self.locationProvider.locationManager.isDisplayOff = (BOOL)incoming;
+        self.locationProvider.locationManager.isDisplayOff = (BOOL)isDisplayOff;
     } else {
         savedState = [NSMutableDictionary dictionary];
     }
@@ -106,7 +106,7 @@ static NSMutableDictionary *savedState;
             }
         });
         
-        [self updateStateWithKey:@"locationUpdateInterval" andValue:[NSNumber numberWithInt:incoming]];
+        [self updateStateWithKey:@"locationUpdateInterval" andValue:[NSNumber numberWithInt:(int)incoming]];
     }
     
     status = notify_check(locationAccuracyToken, &check);
@@ -120,7 +120,7 @@ static NSMutableDictionary *savedState;
             [self.locationProvider setLocationUpdateAccuracy:incoming];
         });
         
-        [self updateStateWithKey:@"locationUpdateAccuracy" andValue:[NSNumber numberWithInt:incoming]];
+        [self updateStateWithKey:@"locationUpdateAccuracy" andValue:[NSNumber numberWithInt:(int)incoming]];
     }
     
     status = notify_check(displayToken, &check);
@@ -132,7 +132,7 @@ static NSMutableDictionary *savedState;
         
         self.locationProvider.locationManager.isDisplayOff = (BOOL)incoming;
         
-        [self updateStateWithKey:@"isDisplayOff" andValue:[NSNumber numberWithInt:incoming]];
+        [self updateStateWithKey:@"isDisplayOff" andValue:[NSNumber numberWithInt:(int)incoming]];
     }
 }
 

@@ -5,6 +5,12 @@
 #include <JavaScriptCore/JSContextRef.h> // For libcycript hooks
 #include <JavaScriptCore/JSObjectRef.h> // For libcycript hooks
 
+////////////////////////////////////////////////////////////////////////////////
+// Function definitions
+
+// XXX: In an ideal world, these should be in a seperate file for readability and to avoid duplication.
+// However, in an ideal world, I'm not lazy.
+
 static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSString(JSContextRef, JSObjectRef, JSStringRef);
 
 @class WebScriptObject;
@@ -92,14 +98,26 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 - (void)webView:(id)arg1 didClearWindowObject:(id)arg2 forFrame:(id)arg3;
 @end
 
-#pragma mark Begin actual code
+////////////////////////////////////////////////////////////////////////////////
+// Begin actual code
 
 #pragma mark Injection of Cycript into WebViews
 
 // Supports LockHTML, and anything else hopefully
-// XenHTML will defer to this tweak for injecting into UIWebView and WKWebView as appropriate
+// Xen HTML will defer to this tweak for injecting into UIWebView and WKWebView as appropriate
 // GroovyLock is supported by itself, just needs the hooks from WebCycript to function
 // Convergance is the same as GroovyLock
+// Cydget is handled again the same way
+
+/*
+ * Apple also provides WKWebView, which is a far better way of doing web stuff than UIWebView.
+ * However, the issue with that and Cycript is that WkWebView actually runs the webview in another process,
+ * and as such, we can't easily provide InfoStats 2 and Cycript injection into that.
+ *
+ * Perhaps a good solution to this will be to "bridge" the classes in the web process to SrpingBoard, and 
+ * inject Cycript somehow in the webprocess. This has the unfortunate side effect of C functions from 
+ * SprngBoard or a framework not loaded into the webprocess failing horribly.
+ */
 
 %hook UIWebView
 
@@ -120,6 +138,7 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
     return original;
 }
 
+// Remind me again why this is needed?
 -(void)webView:(WebView *)view addMessageToConsole:(NSDictionary *)message {
     NSLog(@"[InfoStats2] :: addMessageToConsole: %@", message);
     
@@ -127,6 +146,7 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
         %orig;
 }
 
+// Utilise the WebFrameLoadDelegate to do our magic.
 - (void)webView:(WebView *)webview didClearWindowObject:(WebScriptObject *)window forFrame:(WebFrame *)frame {
     
     
@@ -196,7 +216,7 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 %hook SBMediaController
 
-// Only needed for iOS 6.
+// Only needed for iOS 6 to update when media data changes.
 -(void)_nowPlayingInfoChanged {
     %orig;
     
@@ -317,7 +337,7 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
 
 %end
 
-%hook SBLockScreenNotificationListController
+%hook SBLockScreenNotificationListController // iOS 7
 
 -(void)_updateModelAndViewForAdditionOfItem:(SBAwayBulletinListItem *)listItem {
     // Update IS2Notifications
@@ -373,6 +393,10 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
 %end
 
 static BBServer *sharedServer;
+
+/*
+ * We turn BBServer into a "semi-singleton" to be able to access it easier.
+ */
 
 %hook BBServer
 
@@ -457,6 +481,12 @@ static BBServer *sharedServer;
 
 #pragma mark Hooks into libcycript ( :( )
 
+/*
+ * Here, we add further error checking to Cycript's functions to ensure better stability.
+ *
+ * Of course, this won't catch everything, only exceptions.
+ */
+
 // First up, crash on bad_cast in All_hasProperty (http://gitweb.saurik.com/cycript.git/blob/HEAD:/Execute.cpp#l1399)
 static bool (*ori_All_hasProperty)(JSContextRef, JSObjectRef, JSStringRef);
 
@@ -467,6 +497,7 @@ MSHook(bool, All_hasProperty, JSContextRef context, JSObjectRef object, JSString
         NSLog(@"*** [InfoStats2 | Warning] :: Caught bad_cast in All_hasProperty");
         return false;
     } catch (...) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught unknown exception in All_hasProperty");
         return false;
     }
 }
@@ -493,6 +524,7 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
         
         return CYJSNull(context);
     } catch (...) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught unknown exception in CYCallAsFunction");
         
         // Load up CYJSNull.
         JSValueRef (*CYJSNull)(JSContextRef) = (JSValueRef(*)(JSContextRef))MSFindSymbol(NULL, "__Z8CYJSNullPK15OpaqueJSContext");
@@ -509,6 +541,7 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
     
     %init;
     
+    // Load up Cycript's binary image so we can hook into it
     dlopen("/usr/lib/libcycript.dylib", RTLD_NOW);
     MSImageRef Cycript(MSGetImageByName("/usr/lib/libcycript.dylib"));
     
@@ -525,5 +558,6 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
         MSHookFunction(CYCallAsFunction_sym, $CYCallAsFunction, &ori_CYCallAsFunction);
     }
     
+    // And finally, setup the API for whatever can load *before* applicationDidFinishLaunching:
     [IS2Private setupForTweakLoaded];
 }

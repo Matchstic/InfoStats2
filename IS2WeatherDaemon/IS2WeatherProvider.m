@@ -83,7 +83,7 @@ void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCent
 static CPDistributedMessagingCenter *c;
 
 static City *currentCity;
-static int notifyToken;
+//static int notifyToken;
 
 @implementation IS2WeatherUpdater
 
