@@ -859,23 +859,20 @@ static PLWallpaperImageViewController *cachedLockscreenWallpaper;
     }
 }
 
-#warning This *will not* work on iOS 6
-#warning Add docs
 +(BOOL)isLockscreenPasscodeVisible {
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
         // TODO: Add correct function for iOS 6.
+        
         return NO;
     } else {
         return [[[objc_getClass("SBLockScreenManager") sharedInstance] lockScreenViewController] isPasscodeLockVisible];
     }
 }
 
-#warning Add docs
 +(UIImage*)getApplicationIconForBundleIdentifier:(NSString*)bundleIdentifier {
     return [UIImage _applicationIconImageForBundleIdentifier:bundleIdentifier format:2 scale:[UIScreen mainScreen].scale];
 }
 
-#warning Add docs
 +(NSString*)getApplicationIconForBundleIdentifierBase64:(NSString*)bundleIdentifier {
 	UIImage *img = [IS2System getApplicationIconForBundleIdentifier:bundleIdentifier];
     if (img) {
@@ -905,7 +902,6 @@ static PLWallpaperImageViewController *cachedLockscreenWallpaper;
     [wallpaperViewController setWallpaperForLocations:(long long)mode];
 }
 
-#warning Add docs
 +(UIImage*)getWallpaperForVariant:(int)variant {
     UIView *view = nil;
     
@@ -927,8 +923,7 @@ static PLWallpaperImageViewController *cachedLockscreenWallpaper;
     
     return img;
 }
- 
-#warning Add docs
+
 +(NSString*)getWallpaperForVariantBase64:(int)variant {
 	UIImage *img = [IS2System getWallpaperForVariant:variant];
 	if (img) {

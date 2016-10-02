@@ -16,6 +16,9 @@ int main(int argc, char **argv, char **envp) {
     listener.weatherProvider = provider;
     listener.locationProvider = locationProvider;
     
+    // Restore any state we previously had, assuming we crashed.
+    [listener loadFromSavedState];
+    
 	// start a timer so that the process does not exit.
 	NSTimer *timer = [[NSTimer alloc] initWithFireDate:[NSDate date]
                                               interval:1 // Slight delay for battery life improvements

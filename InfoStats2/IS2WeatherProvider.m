@@ -272,7 +272,13 @@ int firstUpdate = 0;
 // Thanks to Andrew Wiik for this function.
 // TODO: Need to verify it back to iOS 6.
 -(NSString*)nameForCondition:(int)condition {
-    return [self.weatherFrameworkBundle localizedStringForKey:(__bridge id)*((CFStringRef*)MSFindSymbol(NULL, "_WeatherDescription") + condition) value:@"" table:@"WeatherFrameworkLocalizableStrings"];
+    // Get image for the weather framework to speed up searching.
+    MSImageRef weather = MSGetImageByName("/System/Library/PrivateFrameworks/Weather.framework/Weather");
+    
+    CFStringRef *_weatherDescription = (CFStringRef*)MSFindSymbol(weather, "_WeatherDescription") + condition;
+    NSString *cond = (__bridge id)*_weatherDescription;
+    
+    return [self.weatherFrameworkBundle localizedStringForKey:cond value:@"" table:@"WeatherFrameworkLocalizableStrings"];
 }
 
 -(NSString*)translatedWindSpeedUnits {

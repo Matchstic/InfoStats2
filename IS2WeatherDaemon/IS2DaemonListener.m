@@ -13,8 +13,40 @@ static int weatherToken;
 static int locationToken;
 static int locationAccuracyToken;
 static int displayToken;
+static NSMutableDictionary *savedState;
 
 @implementation IS2DaemonListener
+
+-(void)loadFromSavedState {
+    savedState = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Caches/infostats2d/savedState.plist"];
+    
+    if (savedState) {
+        // Update our states from what we loaded in.
+        
+        // locationUpdateInterval
+        // locationUpdateAccuracy
+        // isDisplayOff
+        
+        int updateInterval = [[savedState objectForKey:@"locationUpdateInterval"] intValue];
+        int updateAccuracy = [[savedState objectForKey:@"locationUpdateAccuracy"] intValue];
+        int isDisplayOff = [[savedState objectForKey:@"isDisplayOff"] intValue];
+        
+        if (updateInterval != 7) {
+            [self.locationProvider setLocationUpdateInterval:incoming];
+        }
+        
+        [self.locationProvider setLocationUpdateAccuracy:updateAccuracy];
+        
+        self.locationProvider.locationManager.isDisplayOff = (BOOL)incoming;
+    } else {
+        savedState = [NSMutableDictionary dictionary];
+    }
+}
+
+-(void)updateStateWithKey:(NSString*)key andValue:(id)value {
+    [savedState setObject:value forKey:key];
+    [savedState writeToFile:@"/var/mobile/Library/Caches/infostats2d/savedState.plist" atomically:YES];
+}
 
 - (void)timerFireMethod:(NSTimer *)timer {
     int status, check;
@@ -73,6 +105,8 @@ static int displayToken;
                 [self.locationProvider setLocationUpdateInterval:incoming];
             }
         });
+        
+        [self updateStateWithKey:@"locationUpdateInterval" andValue:[NSNumber numberWithInt:incoming]];
     }
     
     status = notify_check(locationAccuracyToken, &check);
@@ -85,6 +119,8 @@ static int displayToken;
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [self.locationProvider setLocationUpdateAccuracy:incoming];
         });
+        
+        [self updateStateWithKey:@"locationUpdateAccuracy" andValue:[NSNumber numberWithInt:incoming]];
     }
     
     status = notify_check(displayToken, &check);
@@ -95,6 +131,8 @@ static int displayToken;
         notify_get_state(displayToken, &incoming);
         
         self.locationProvider.locationManager.isDisplayOff = (BOOL)incoming;
+        
+        [self updateStateWithKey:@"isDisplayOff" andValue:[NSNumber numberWithInt:incoming]];
     }
 }
 

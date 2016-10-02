@@ -15,4 +15,6 @@
 @property (nonatomic, strong) IS2WeatherUpdater *weatherProvider;
 @property (nonatomic, strong) IS2LocationProvider *locationProvider;
 
+-(void)loadFromSavedState;
+
 @end
