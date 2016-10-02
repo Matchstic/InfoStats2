@@ -204,16 +204,16 @@
  @param variant The wallpaper variant to retrieve. Pass 0 for the lockscreen wallpaper, or 1 for the homescreen
  @return The wallpaper snapshot
  */
-+(UIImage*)getWallpaperForVariant:(int)variant;
+//+(UIImage*)getWallpaperForVariant:(int)variant;
 
 /** Gives a snapshot of the user's current wallpaper, in the form of a base64 string for usage within a HTML <i>img</i> tag. For Dynamic wallpapers, and tweaks that override the wallpaper, this function will return a still snapshot of what is displayed at the time of calling.
  @param variant The wallpaper variant to retrieve. Pass 0 for the lockscreen wallpaper, or 1 for the homescreen
  @return The wallpaper snapshot
  */
-+(NSString*)getWallpaperForVariantBase64:(int)variant;
+//+(NSString*)getWallpaperForVariantBase64:(int)variant;
 
 
-+(void)setWallpaperWithImage:(UIImage*)img forMode:(int)mode;
-+(void)setWallpaperWithBase64Image:(NSString*)img forMode:(int)mode;
+//+(void)setWallpaperWithImage:(UIImage*)img forMode:(int)mode;
+//+(void)setWallpaperWithBase64Image:(NSString*)img forMode:(int)mode;
 
 @end
