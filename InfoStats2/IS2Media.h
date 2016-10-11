@@ -30,11 +30,16 @@
  */
 +(void)unregisterForNotificationsWithIdentifier:(NSString*)identifier;
 
-/*/** Requests new music data; data is updated a few milliseconds after any media state changes, so the callback block is called once updating completes.
-    @param callbackBlock The block to call once refreshing completes
-*/
-//+(void)refreshMusicDataWithCallback:(void (^)(void))callbackBlock;*/
+/** Sets a block to be called whenever the current position in the track changes. The identifier must be unique string; it is recommended to use reverse DNS notation, such as "com.foo.bar".
+ @param identifier The identifier associated with your callback
+ @param callbackBlock The block to call once data changes
+ */
++(void)registerForTimeInformationWithIdentifier:(NSString*)identifier andCallback:(void (^)(void))callbackBlock;
 
+/** The inverse of registering for notifications. This must be called when your code is unloaded.
+ @param identifier The identifier associated with your callback
+ */
++(void)unregisterForTimeInformationWithIdentifier:(NSString*)identifier;
 
 /** @name Functions */
 

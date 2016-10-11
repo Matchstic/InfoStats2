@@ -197,8 +197,8 @@
  */
 +(NSString*)getApplicationIconForBundleIdentifierBase64:(NSString*)bundleIdentifier;
 
-/** @name Device Wallpaper
- */
+///** @name Device Wallpaper
+// */
 
 /** Gives a snapshot of the user's current wallpaper. For Dynamic wallpapers, and tweaks that override the wallpaper, this function will return a still snapshot of what is displayed at the time of calling.
  @param variant The wallpaper variant to retrieve. Pass 0 for the lockscreen wallpaper, or 1 for the homescreen
