@@ -385,7 +385,12 @@ int firstUpdate = 0;
 }
 
 -(int)currentDewPoint {
-    return (int)currentCity.dewPoint;
+    int temp = (int)currentCity.dewPoint;
+    
+    if (![[WeatherPreferences sharedPreferences] isCelsius])
+        temp = ((temp*9)/5) + 32;
+    
+    return temp;
 }
 
 -(int)currentHumidity {
@@ -463,11 +468,11 @@ int firstUpdate = 0;
     return currentCity.updateTime;
 }
 
--(CGFloat)currentLatitude {
+-(double)currentLatitude {
     return currentCity.latitude;
 }
 
--(CGFloat)currentLongitude {
+-(double)currentLongitude {
     return currentCity.longitude;
 }
 

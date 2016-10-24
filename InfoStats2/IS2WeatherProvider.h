@@ -43,8 +43,8 @@
 -(NSString*)sunriseTime;
 -(NSDate*)lastUpdateTime;
 
--(CGFloat)currentLatitude;
--(CGFloat)currentLongitude;
+-(double)currentLatitude;
+-(double)currentLongitude;
 -(float)currentPressure;
 -(int)windDirection;
 

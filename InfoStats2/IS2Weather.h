@@ -162,12 +162,12 @@
 /** The current latitude of the location used for weather data; either the local area if Location Services are enabled, or the first city in Apple's Weather app if not.
  @return Current latitude
  */
-+(CGFloat)currentLatitude;
++(double)currentLatitude;
 
 /** The current longitude of the location used for weather data; either the local area if Location Services are enabled, or the first city in Apple's Weather app if not.
  @return Current longitude
  */
-+(CGFloat)currentLongitude;
++(double)currentLongitude;
 
 /** @name Forecasts */
 

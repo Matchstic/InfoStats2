@@ -136,11 +136,11 @@ static inline void buildRequestersDictionary() {
     return dateString;
 }
 
-+(CGFloat)currentLatitude {
++(double)currentLatitude {
     return [[IS2WeatherProvider sharedInstance] currentLatitude];
 }
 
-+(CGFloat)currentLongitude {
++(double)currentLongitude {
     return [[IS2WeatherProvider sharedInstance] currentLongitude];
 }
 

@@ -6,6 +6,12 @@
 #include <JavaScriptCore/JSContextRef.h> 
 #include <JavaScriptCore/JSObjectRef.h> 
 
+
+
+
+
+
+
 static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSString(JSContextRef, JSObjectRef, JSStringRef);
 
 @class WebScriptObject;
@@ -93,7 +99,8 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 - (void)webView:(id)arg1 didClearWindowObject:(id)arg2 forFrame:(id)arg3;
 @end
 
-#pragma mark Begin actual code
+
+
 
 #pragma mark Injection of Cycript into WebViews
 
@@ -102,12 +109,23 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #include <logos/logos.h>
 #include <substrate.h>
-@class SBAwayController; @class SBApplicationIcon; @class SBLockScreenNotificationListController; @class UIView; @class SBApplication; @class SpringBoard; @class SBAwayBulletinListController; @class MPUNowPlayingController; @class UIWebView; @class SBLockScreenViewController; @class IWWidget; @class BBServer; @class SBMediaController; 
+@class MPUNowPlayingController; @class UIWebView; @class SpringBoard; @class IWWidget; @class SBApplicationIcon; @class UIView; @class SBAwayBulletinListController; @class SBMediaController; @class SBAwayController; @class SBApplication; @class BBServer; @class SBLockScreenViewController; @class SBLockScreenNotificationListController; 
 static id (*_logos_orig$_ungrouped$UIWebView$initWithFrame$)(UIWebView*, SEL, CGRect); static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView*, SEL, CGRect); static void (*_logos_orig$_ungrouped$UIWebView$webView$addMessageToConsole$)(UIWebView*, SEL, WebView *, NSDictionary *); static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWebView*, SEL, WebView *, NSDictionary *); static void (*_logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$)(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView*, SEL, WebView *, WebScriptObject *, WebFrame *); static void (*_logos_orig$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$)(IWWidget*, SEL, id, id, id); static void _logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$(IWWidget*, SEL, id, id, id); static id _logos_method$_ungrouped$UIView$_newCloseBoxOfType$(UIView*, SEL, int); static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(SpringBoard*, SEL, id); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard*, SEL, id); static void (*_logos_orig$_ungrouped$SBMediaController$_nowPlayingInfoChanged)(SBMediaController*, SEL); static void _logos_method$_ungrouped$SBMediaController$_nowPlayingInfoChanged(SBMediaController*, SEL); static id (*_logos_orig$_ungrouped$MPUNowPlayingController$init)(MPUNowPlayingController*, SEL); static id _logos_method$_ungrouped$MPUNowPlayingController$init(MPUNowPlayingController*, SEL); static void (*_logos_orig$_ungrouped$MPUNowPlayingController$_updateCurrentNowPlaying)(MPUNowPlayingController*, SEL); static void _logos_method$_ungrouped$MPUNowPlayingController$_updateCurrentNowPlaying(MPUNowPlayingController*, SEL); static double _logos_meta_method$_ungrouped$MPUNowPlayingController$_is2_elapsedTime(Class, SEL); static double _logos_meta_method$_ungrouped$MPUNowPlayingController$_is2_currentDuration(Class, SEL); static BOOL _logos_meta_method$_ungrouped$MPUNowPlayingController$_is2_currentNowPlayingAppIsRunning(Class, SEL); static id _logos_meta_method$_ungrouped$MPUNowPlayingController$_is2_nowPlayingAppDisplayID(Class, SEL); static void (*_logos_orig$_ungrouped$SBApplication$setBadge$)(SBApplication*, SEL, id); static void _logos_method$_ungrouped$SBApplication$setBadge$(SBApplication*, SEL, id); static void (*_logos_orig$_ungrouped$SBApplicationIcon$setBadge$)(SBApplicationIcon*, SEL, id); static void _logos_method$_ungrouped$SBApplicationIcon$setBadge$(SBApplicationIcon*, SEL, id); static void (*_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForAddition$)(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *); static void _logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForAddition$(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *); static void (*_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForModification$originalHeight$)(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *, float); static void _logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForModification$originalHeight$(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *, float); static void (*_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForRemoval$originalHeight$)(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *, float); static void _logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForRemoval$originalHeight$(SBAwayBulletinListController*, SEL, SBAwayBulletinListItem *, float); static void (*_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForAdditionOfItem$)(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *); static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForAdditionOfItem$(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *); static void (*_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForReplacingItem$withNewItem$)(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *, SBAwayBulletinListItem *); static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForReplacingItem$withNewItem$(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *, SBAwayBulletinListItem *); static void (*_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForModificationOfItem$)(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *); static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForModificationOfItem$(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *); static void (*_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelForRemovalOfItem$updateView$)(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *, BOOL); static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelForRemovalOfItem$updateView$(SBLockScreenNotificationListController*, SEL, SBAwayBulletinListItem *, BOOL); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_releaseLockScreenView)(SBLockScreenViewController*, SEL); static void _logos_method$_ungrouped$SBLockScreenViewController$_releaseLockScreenView(SBLockScreenViewController*, SEL); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOnWhileUILocked$)(SBLockScreenViewController*, SEL, id); static void _logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOnWhileUILocked$(SBLockScreenViewController*, SEL, id); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOn)(SBLockScreenViewController*, SEL); static void _logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOn(SBLockScreenViewController*, SEL); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff)(SBLockScreenViewController*, SEL); static void _logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff(SBLockScreenViewController*, SEL); static void (*_logos_orig$_ungrouped$SBAwayController$_releaseAwayView)(SBAwayController*, SEL); static void _logos_method$_ungrouped$SBAwayController$_releaseAwayView(SBAwayController*, SEL); static void (*_logos_orig$_ungrouped$SBAwayController$undimScreen)(SBAwayController*, SEL); static void _logos_method$_ungrouped$SBAwayController$undimScreen(SBAwayController*, SEL); static void (*_logos_orig$_ungrouped$SBAwayController$undimScreen$)(SBAwayController*, SEL, BOOL); static void _logos_method$_ungrouped$SBAwayController$undimScreen$(SBAwayController*, SEL, BOOL); static void (*_logos_orig$_ungrouped$SBAwayController$dimScreen$)(SBAwayController*, SEL, BOOL); static void _logos_method$_ungrouped$SBAwayController$dimScreen$(SBAwayController*, SEL, BOOL); static id _logos_meta_method$_ungrouped$BBServer$IS2_sharedInstance(Class, SEL); static id (*_logos_orig$_ungrouped$BBServer$init)(BBServer*, SEL); static id _logos_method$_ungrouped$BBServer$init(BBServer*, SEL); static void (*_logos_orig$_ungrouped$BBServer$publishBulletin$destinations$alwaysToLockScreen$)(BBServer*, SEL, __unsafe_unretained BBBulletin*, unsigned long long, _Bool); static void _logos_method$_ungrouped$BBServer$publishBulletin$destinations$alwaysToLockScreen$(BBServer*, SEL, __unsafe_unretained BBBulletin*, unsigned long long, _Bool); static void (*_logos_orig$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shouldSync$)(BBServer*, SEL, __unsafe_unretained NSSet*, unsigned long long, _Bool); static void _logos_method$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shouldSync$(BBServer*, SEL, __unsafe_unretained NSSet*, unsigned long long, _Bool); 
 
-#line 104 "/Users/Matt/iOS/Projects/InfoStats2/InfoStats2/InfoStats2.xm"
+#line 122 "/Users/Matt/iOS/Projects/InfoStats2/InfoStats2/InfoStats2.xm"
 
 
 static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView* self, SEL _cmd, CGRect frame) {
@@ -127,12 +145,14 @@ static id _logos_method$_ungrouped$UIWebView$initWithFrame$(UIWebView* self, SEL
     return original;
 }
 
+
 static void _logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$(UIWebView* self, SEL _cmd, WebView * view, NSDictionary * message) {
     NSLog(@"[InfoStats2] :: addMessageToConsole: %@", message);
     
     if ([UIWebView instancesRespondToSelector:@selector(webView:addMessageToConsole:)])
         _logos_orig$_ungrouped$UIWebView$webView$addMessageToConsole$(self, _cmd, view, message);
 }
+
 
 static void _logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$(UIWebView* self, SEL _cmd, WebView * webview, WebScriptObject * window, WebFrame * frame) {
     
@@ -324,7 +344,7 @@ static void _logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAn
 
 
 
-
+ 
 
 static void _logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForAdditionOfItem$(SBLockScreenNotificationListController* self, SEL _cmd, SBAwayBulletinListItem * listItem) {
     
@@ -380,6 +400,10 @@ static void _logos_method$_ungrouped$SBAwayController$_releaseAwayView(SBAwayCon
 
 
 static BBServer *sharedServer;
+
+
+
+
 
 
 
@@ -465,6 +489,12 @@ static void _logos_method$_ungrouped$SBAwayController$dimScreen$(SBAwayControlle
 #pragma mark Hooks into libcycript ( :( )
 
 
+
+
+
+
+
+
 static bool (*ori_All_hasProperty)(JSContextRef, JSObjectRef, JSStringRef);
 
 MSHook(bool, All_hasProperty, JSContextRef context, JSObjectRef object, JSStringRef property) {
@@ -474,6 +504,7 @@ MSHook(bool, All_hasProperty, JSContextRef context, JSObjectRef object, JSString
         NSLog(@"*** [InfoStats2 | Warning] :: Caught bad_cast in All_hasProperty");
         return false;
     } catch (...) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught unknown exception in All_hasProperty");
         return false;
     }
 }
@@ -500,6 +531,7 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
         
         return CYJSNull(context);
     } catch (...) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught unknown exception in CYCallAsFunction");
         
         
         JSValueRef (*CYJSNull)(JSContextRef) = (JSValueRef(*)(JSContextRef))MSFindSymbol(NULL, "__Z8CYJSNullPK15OpaqueJSContext");
@@ -510,11 +542,12 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
 
 #pragma mark Constructor
 
-static __attribute__((constructor)) void _logosLocalCtor_5f73d052() {
+static __attribute__((constructor)) void _logosLocalCtor_a3dd7f6c() {
     
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
     
     {Class _logos_class$_ungrouped$UIWebView = objc_getClass("UIWebView"); MSHookMessageEx(_logos_class$_ungrouped$UIWebView, @selector(initWithFrame:), (IMP)&_logos_method$_ungrouped$UIWebView$initWithFrame$, (IMP*)&_logos_orig$_ungrouped$UIWebView$initWithFrame$);MSHookMessageEx(_logos_class$_ungrouped$UIWebView, @selector(webView:addMessageToConsole:), (IMP)&_logos_method$_ungrouped$UIWebView$webView$addMessageToConsole$, (IMP*)&_logos_orig$_ungrouped$UIWebView$webView$addMessageToConsole$);MSHookMessageEx(_logos_class$_ungrouped$UIWebView, @selector(webView:didClearWindowObject:forFrame:), (IMP)&_logos_method$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$, (IMP*)&_logos_orig$_ungrouped$UIWebView$webView$didClearWindowObject$forFrame$);Class _logos_class$_ungrouped$IWWidget = objc_getClass("IWWidget"); MSHookMessageEx(_logos_class$_ungrouped$IWWidget, @selector(webView:didClearWindowObject:forFrame:), (IMP)&_logos_method$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$, (IMP*)&_logos_orig$_ungrouped$IWWidget$webView$didClearWindowObject$forFrame$);Class _logos_class$_ungrouped$UIView = objc_getClass("UIView"); { char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = 'i'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$UIView, @selector(_newCloseBoxOfType:), (IMP)&_logos_method$_ungrouped$UIView$_newCloseBoxOfType$, _typeEncoding); }Class _logos_class$_ungrouped$SpringBoard = objc_getClass("SpringBoard"); MSHookMessageEx(_logos_class$_ungrouped$SpringBoard, @selector(applicationDidFinishLaunching:), (IMP)&_logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$, (IMP*)&_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$);Class _logos_class$_ungrouped$SBMediaController = objc_getClass("SBMediaController"); MSHookMessageEx(_logos_class$_ungrouped$SBMediaController, @selector(_nowPlayingInfoChanged), (IMP)&_logos_method$_ungrouped$SBMediaController$_nowPlayingInfoChanged, (IMP*)&_logos_orig$_ungrouped$SBMediaController$_nowPlayingInfoChanged);Class _logos_class$_ungrouped$MPUNowPlayingController = objc_getClass("MPUNowPlayingController"); Class _logos_metaclass$_ungrouped$MPUNowPlayingController = object_getClass(_logos_class$_ungrouped$MPUNowPlayingController); MSHookMessageEx(_logos_class$_ungrouped$MPUNowPlayingController, @selector(init), (IMP)&_logos_method$_ungrouped$MPUNowPlayingController$init, (IMP*)&_logos_orig$_ungrouped$MPUNowPlayingController$init);MSHookMessageEx(_logos_class$_ungrouped$MPUNowPlayingController, @selector(_updateCurrentNowPlaying), (IMP)&_logos_method$_ungrouped$MPUNowPlayingController$_updateCurrentNowPlaying, (IMP*)&_logos_orig$_ungrouped$MPUNowPlayingController$_updateCurrentNowPlaying);{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'd'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$MPUNowPlayingController, @selector(_is2_elapsedTime), (IMP)&_logos_meta_method$_ungrouped$MPUNowPlayingController$_is2_elapsedTime, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'd'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$MPUNowPlayingController, @selector(_is2_currentDuration), (IMP)&_logos_meta_method$_ungrouped$MPUNowPlayingController$_is2_currentDuration, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(BOOL), strlen(@encode(BOOL))); i += strlen(@encode(BOOL)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$MPUNowPlayingController, @selector(_is2_currentNowPlayingAppIsRunning), (IMP)&_logos_meta_method$_ungrouped$MPUNowPlayingController$_is2_currentNowPlayingAppIsRunning, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$MPUNowPlayingController, @selector(_is2_nowPlayingAppDisplayID), (IMP)&_logos_meta_method$_ungrouped$MPUNowPlayingController$_is2_nowPlayingAppDisplayID, _typeEncoding); }Class _logos_class$_ungrouped$SBApplication = objc_getClass("SBApplication"); MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(setBadge:), (IMP)&_logos_method$_ungrouped$SBApplication$setBadge$, (IMP*)&_logos_orig$_ungrouped$SBApplication$setBadge$);Class _logos_class$_ungrouped$SBApplicationIcon = objc_getClass("SBApplicationIcon"); MSHookMessageEx(_logos_class$_ungrouped$SBApplicationIcon, @selector(setBadge:), (IMP)&_logos_method$_ungrouped$SBApplicationIcon$setBadge$, (IMP*)&_logos_orig$_ungrouped$SBApplicationIcon$setBadge$);Class _logos_class$_ungrouped$SBAwayBulletinListController = objc_getClass("SBAwayBulletinListController"); MSHookMessageEx(_logos_class$_ungrouped$SBAwayBulletinListController, @selector(_updateModelAndTableViewForAddition:), (IMP)&_logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForAddition$, (IMP*)&_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForAddition$);MSHookMessageEx(_logos_class$_ungrouped$SBAwayBulletinListController, @selector(_updateModelAndTableViewForModification:originalHeight:), (IMP)&_logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForModification$originalHeight$, (IMP*)&_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForModification$originalHeight$);MSHookMessageEx(_logos_class$_ungrouped$SBAwayBulletinListController, @selector(_updateModelAndTableViewForRemoval:originalHeight:), (IMP)&_logos_method$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForRemoval$originalHeight$, (IMP*)&_logos_orig$_ungrouped$SBAwayBulletinListController$_updateModelAndTableViewForRemoval$originalHeight$);Class _logos_class$_ungrouped$SBLockScreenNotificationListController = objc_getClass("SBLockScreenNotificationListController"); MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenNotificationListController, @selector(_updateModelAndViewForAdditionOfItem:), (IMP)&_logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForAdditionOfItem$, (IMP*)&_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForAdditionOfItem$);MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenNotificationListController, @selector(_updateModelAndViewForReplacingItem:withNewItem:), (IMP)&_logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForReplacingItem$withNewItem$, (IMP*)&_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForReplacingItem$withNewItem$);MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenNotificationListController, @selector(_updateModelAndViewForModificationOfItem:), (IMP)&_logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForModificationOfItem$, (IMP*)&_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelAndViewForModificationOfItem$);MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenNotificationListController, @selector(_updateModelForRemovalOfItem:updateView:), (IMP)&_logos_method$_ungrouped$SBLockScreenNotificationListController$_updateModelForRemovalOfItem$updateView$, (IMP*)&_logos_orig$_ungrouped$SBLockScreenNotificationListController$_updateModelForRemovalOfItem$updateView$);Class _logos_class$_ungrouped$SBLockScreenViewController = objc_getClass("SBLockScreenViewController"); MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenViewController, @selector(_releaseLockScreenView), (IMP)&_logos_method$_ungrouped$SBLockScreenViewController$_releaseLockScreenView, (IMP*)&_logos_orig$_ungrouped$SBLockScreenViewController$_releaseLockScreenView);MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenViewController, @selector(_handleDisplayTurnedOnWhileUILocked:), (IMP)&_logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOnWhileUILocked$, (IMP*)&_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOnWhileUILocked$);MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenViewController, @selector(_handleDisplayTurnedOn), (IMP)&_logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOn, (IMP*)&_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOn);MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenViewController, @selector(_handleDisplayTurnedOff), (IMP)&_logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff, (IMP*)&_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff);Class _logos_class$_ungrouped$SBAwayController = objc_getClass("SBAwayController"); MSHookMessageEx(_logos_class$_ungrouped$SBAwayController, @selector(_releaseAwayView), (IMP)&_logos_method$_ungrouped$SBAwayController$_releaseAwayView, (IMP*)&_logos_orig$_ungrouped$SBAwayController$_releaseAwayView);MSHookMessageEx(_logos_class$_ungrouped$SBAwayController, @selector(undimScreen), (IMP)&_logos_method$_ungrouped$SBAwayController$undimScreen, (IMP*)&_logos_orig$_ungrouped$SBAwayController$undimScreen);MSHookMessageEx(_logos_class$_ungrouped$SBAwayController, @selector(undimScreen:), (IMP)&_logos_method$_ungrouped$SBAwayController$undimScreen$, (IMP*)&_logos_orig$_ungrouped$SBAwayController$undimScreen$);MSHookMessageEx(_logos_class$_ungrouped$SBAwayController, @selector(dimScreen:), (IMP)&_logos_method$_ungrouped$SBAwayController$dimScreen$, (IMP*)&_logos_orig$_ungrouped$SBAwayController$dimScreen$);Class _logos_class$_ungrouped$BBServer = objc_getClass("BBServer"); Class _logos_metaclass$_ungrouped$BBServer = object_getClass(_logos_class$_ungrouped$BBServer); { char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$BBServer, @selector(IS2_sharedInstance), (IMP)&_logos_meta_method$_ungrouped$BBServer$IS2_sharedInstance, _typeEncoding); }MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(init), (IMP)&_logos_method$_ungrouped$BBServer$init, (IMP*)&_logos_orig$_ungrouped$BBServer$init);MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(publishBulletin:destinations:alwaysToLockScreen:), (IMP)&_logos_method$_ungrouped$BBServer$publishBulletin$destinations$alwaysToLockScreen$, (IMP*)&_logos_orig$_ungrouped$BBServer$publishBulletin$destinations$alwaysToLockScreen$);MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(_sendRemoveBulletins:toFeeds:shouldSync:), (IMP)&_logos_method$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shouldSync$, (IMP*)&_logos_orig$_ungrouped$BBServer$_sendRemoveBulletins$toFeeds$shouldSync$);}
+    
     
     dlopen("/usr/lib/libcycript.dylib", RTLD_NOW);
     MSImageRef Cycript(MSGetImageByName("/usr/lib/libcycript.dylib"));
@@ -531,6 +564,7 @@ static __attribute__((constructor)) void _logosLocalCtor_5f73d052() {
     if (CYCallAsFunction_sym != NULL) {
         MSHookFunction(CYCallAsFunction_sym, $CYCallAsFunction, &ori_CYCallAsFunction);
     }
+    
     
     [IS2Private setupForTweakLoaded];
 }
