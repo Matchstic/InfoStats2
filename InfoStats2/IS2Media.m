@@ -189,7 +189,34 @@ static char encodingTable[64] = {
 
 @end
 
+static IS2Media *sharedWotsit;
+
 @implementation IS2Media
+
++(void)setupAfterSpringBoardLaunched {
+    sharedWotsit = [[IS2Media alloc] init];
+}
+
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        // Register ourselves for updates from MediaRemote.framework.
+        MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center addObserverForName:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
+                            object:nil
+                             queue:[NSOperationQueue mainQueue]
+                        usingBlock:^(NSNotification *notification) {
+                            
+                            // Get new media data!
+                            [IS2Media nowPlayingDataDidUpdate];
+                            
+                        }];
+    }
+    
+    return self;
+}
 
 #pragma mark Private methods
 

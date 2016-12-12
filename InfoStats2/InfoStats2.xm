@@ -214,7 +214,7 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 #pragma mark Media
 
-%hook SBMediaController
+/*%hook SBMediaController
 
 // Only needed for iOS 6 to update when media data changes.
 -(void)_nowPlayingInfoChanged {
@@ -225,7 +225,7 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
     }
 }
 
-%end
+%end*/
 
 static MPUNowPlayingController * __weak globalMPUNowPlaying;
 
@@ -240,11 +240,11 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
     return orig;
 }
 
-- (void)_updateCurrentNowPlaying {
+/*- (void)_updateCurrentNowPlaying {
     %orig;
     
     [IS2Media nowPlayingDataDidUpdate];
-}
+}*/
 
 %new
 +(double)_is2_elapsedTime {
@@ -502,6 +502,21 @@ MSHook(bool, All_hasProperty, JSContextRef context, JSObjectRef object, JSString
     }
 }
 
+// Another bad_cast may occur here.
+static JSObjectRef (*ori_CYCastJSObject)(JSContextRef, JSValueRef);
+
+MSHook(JSObjectRef, CYCastJSObject, JSContextRef context, JSValueRef value) {
+    try {
+        return ori_CYCastJSObject(context, value);
+    } catch (std::bad_cast& bc) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught bad_cast in CYCastJSObject");
+        return JSObjectMake(context, NULL, NULL);
+    } catch (...) {
+        NSLog(@"*** [InfoStats2 | Warning] :: Caught unknown exception in CYCastJSObject");
+        return JSObjectMake(context, NULL, NULL);
+    }
+}
+
 static JSValueRef (*ori_CYCallAsFunction)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]);
 
 MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function, JSObjectRef _this, size_t count, const JSValueRef arguments[]) {
@@ -549,15 +564,21 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
     
     JSValueRef (*CYCallAsFunction_sym)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]) = (JSValueRef(*)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]))MSFindSymbol(Cycript, "__Z16CYCallAsFunctionPK15OpaqueJSContextP13OpaqueJSValueS3_mPKPKS2_");
     
+    JSObjectRef (*CYCastJSObject_sym)(JSContextRef, JSValueRef) = (JSObjectRef(*)(JSContextRef, JSValueRef))MSFindSymbol(Cycript, "__Z14CYCastJSObjectPK15OpaqueJSContextPK13OpaqueJSValue");
+    
     // Load hooks into libcycript.
     if (All_hasProperty_sym != NULL) {
         MSHookFunction(All_hasProperty_sym, $All_hasProperty, &ori_All_hasProperty);
     }
     
+    if (CYCastJSObject_sym != NULL) {
+        MSHookFunction(CYCastJSObject_sym, $CYCastJSObject, &ori_CYCastJSObject);
+    }
+    
+    
     if (CYCallAsFunction_sym != NULL) {
         MSHookFunction(CYCallAsFunction_sym, $CYCallAsFunction, &ori_CYCallAsFunction);
     }
-    
     // And finally, setup the API for whatever can load *before* applicationDidFinishLaunching:
     [IS2Private setupForTweakLoaded];
 }

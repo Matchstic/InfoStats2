@@ -32,6 +32,10 @@
 +(void)setupAfterTweakLoaded;
 @end
 
+@interface IS2Media : NSObject
++(void)setupAfterSpringBoardLaunched;
+@end
+
 @interface IS2Pedometer : NSObject
 +(void)setupAfterSpringBoardLaunched;
 +(void)setupAfterTweakLoaded;
@@ -79,6 +83,8 @@ static int displayToken;
     // Force IS1 support to begin running.
     [[IS2Private sharedInstance] updateIS1AfterSleep];
 #endif
+    
+    [IS2Media setupAfterSpringBoardLaunched];
 }
 
 +(NSString*)JSONescapedStringForString:(NSString*)input {

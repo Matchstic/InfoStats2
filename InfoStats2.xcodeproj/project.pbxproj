@@ -25,6 +25,7 @@
 		C9372A291B557DDB00592CCF /* IS2Telephony.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A271B557DDB00592CCF /* IS2Telephony.m */; };
 		C9372A2C1B557DEA00592CCF /* IS2System.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A2A1B557DEA00592CCF /* IS2System.h */; };
 		C9372A2D1B557DEA00592CCF /* IS2System.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A2B1B557DEA00592CCF /* IS2System.m */; };
+		C94D37641DFF09B30043D315 /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94D37631DFF09B20043D315 /* Weather.framework */; };
 		C97B8CC51C31A40200525449 /* IS2WorkaroundDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */; };
 		C97B8CC61C31A40200525449 /* IS2WorkaroundDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */; };
 		C98A1EB71D6E4A5C0067D3F3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98A1EB61D6E4A5C0067D3F3 /* WebKit.framework */; };
@@ -48,7 +49,6 @@
 		C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9E1B1DCE5F00C44076 /* libWebCycript */; settings = {ATTRIBUTES = (Required, ); }; };
 		C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72AA01B1DCE8600C44076 /* UIKit.framework */; };
 		C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A51B1F7D97006E70BE /* CoreLocation.framework */; };
-		C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A71B1F7DD8006E70BE /* Weather.framework */; };
 		C9EA1D791B5FF13500DCEF75 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C9EA1D771B5FF13500DCEF75 /* Reachability.h */; };
 		C9EA1D7A1B5FF13500DCEF75 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C9EA1D781B5FF13500DCEF75 /* Reachability.m */; };
 		C9F191161C8CBFE6006DF5B4 /* IS2LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F191151C8CBFE6006DF5B4 /* IS2LocationManager.m */; };
@@ -81,6 +81,7 @@
 		C9372A271B557DDB00592CCF /* IS2Telephony.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2Telephony.m; sourceTree = "<group>"; };
 		C9372A2A1B557DEA00592CCF /* IS2System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2System.h; sourceTree = "<group>"; };
 		C9372A2B1B557DEA00592CCF /* IS2System.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2System.m; sourceTree = "<group>"; };
+		C94D37631DFF09B20043D315 /* Weather.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Weather.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/PrivateFrameworks/Weather.framework; sourceTree = DEVELOPER_DIR; };
 		C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WorkaroundDictionary.h; sourceTree = "<group>"; };
 		C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WorkaroundDictionary.m; sourceTree = "<group>"; };
 		C98A1EB61D6E4A5C0067D3F3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -149,6 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C94D37641DFF09B30043D315 /* Weather.framework in Frameworks */,
 				C91FE0691D8DF87300C69709 /* BackBoardServices.framework in Frameworks */,
 				C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */,
 				C9CF50A71D6FB40E0000666B /* CoreFoundation.framework in Frameworks */,
@@ -162,7 +164,6 @@
 				C92838A31C4E88F00019ABEC /* AudioToolbox.framework in Frameworks */,
 				C9C70E0D1C348F7C00546F68 /* EventKit.framework in Frameworks */,
 				C9372A1D1B557D3F00592CCF /* MediaRemote.framework in Frameworks */,
-				C9E040A81B1F7DD8006E70BE /* Weather.framework in Frameworks */,
 				C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,6 +349,7 @@
 		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C94D37631DFF09B20043D315 /* Weather.framework */,
 				C91FE0681D8DF87300C69709 /* BackBoardServices.framework */,
 				C9CF50A61D6FB40E0000666B /* CoreFoundation.framework */,
 				C9CF50A41D6FAB9C0000666B /* WebCore.framework */,
@@ -648,6 +650,7 @@
 				);
 				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = infostats2d;
+				SDKROOT = iphoneos9.2;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
@@ -683,6 +686,7 @@
 				);
 				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = infostats2d;
+				SDKROOT = iphoneos9.2;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
@@ -699,6 +703,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(iOSOpenDevPath)/frameworks/**",
@@ -719,7 +724,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos9.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 				iOSOpenDevPath = /opt/iOSOpenDev;
@@ -731,6 +736,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(iOSOpenDevPath)/frameworks/**",
@@ -743,7 +749,7 @@
 				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos9.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				iOSOpenDevPath = /opt/iOSOpenDev;
@@ -771,6 +777,7 @@
 				);
 				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos8.4;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
@@ -802,6 +809,7 @@
 				);
 				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos8.4;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";

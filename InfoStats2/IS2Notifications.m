@@ -103,7 +103,7 @@ static int notificationPublishedCount = 0;
 #pragma mark Private methods
 
 // From Protean: https://github.com/mlnlover11/Protean/blob/master/PRStatusApps.mm
-inline int bestCountForApp(NSString *identifier) {
+int bestCountForApp(NSString *identifier) {
     if (identifier == nil || [identifier isEqualToString:@""]) return 0;
     
     int ncCount = [ncNotificationCounts[identifier] intValue];

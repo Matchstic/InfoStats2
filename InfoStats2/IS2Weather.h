@@ -64,6 +64,8 @@
  @return Whether wind data is measured in mph or km/h.
  */
 +(BOOL)isWindSpeedMph;
+
+
 +(NSString*)translatedWindSpeedUnits;
 
 /** @name Current Data
