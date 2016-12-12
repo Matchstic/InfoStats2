@@ -214,6 +214,7 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 
 #pragma mark Media
 
+// TODO: Leaving present since we haven't tested the non-requirement of this yet.
 /*%hook SBMediaController
 
 // Only needed for iOS 6 to update when media data changes.
@@ -239,12 +240,6 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
     
     return orig;
 }
-
-/*- (void)_updateCurrentNowPlaying {
-    %orig;
-    
-    [IS2Media nowPlayingDataDidUpdate];
-}*/
 
 %new
 +(double)_is2_elapsedTime {
@@ -562,9 +557,9 @@ MSHook(JSValueRef, CYCallAsFunction, JSContextRef context, JSObjectRef function,
     
     bool (*All_hasProperty_sym)(JSContextRef, JSObjectRef, JSStringRef) = (bool(*)(JSContextRef, JSObjectRef, JSStringRef))MSFindSymbol(Cycript, "__ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSString");
     
-    JSValueRef (*CYCallAsFunction_sym)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]) = (JSValueRef(*)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]))MSFindSymbol(Cycript, "__Z16CYCallAsFunctionPK15OpaqueJSContextP13OpaqueJSValueS3_mPKPKS2_");
-    
     JSObjectRef (*CYCastJSObject_sym)(JSContextRef, JSValueRef) = (JSObjectRef(*)(JSContextRef, JSValueRef))MSFindSymbol(Cycript, "__Z14CYCastJSObjectPK15OpaqueJSContextPK13OpaqueJSValue");
+    
+    JSValueRef (*CYCallAsFunction_sym)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]) = (JSValueRef(*)(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef[]))MSFindSymbol(Cycript, "__Z16CYCallAsFunctionPK15OpaqueJSContextP13OpaqueJSValueS3_mPKPKS2_");
     
     // Load hooks into libcycript.
     if (All_hasProperty_sym != NULL) {
