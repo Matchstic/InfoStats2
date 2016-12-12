@@ -61,6 +61,12 @@
 -(void)registerForMessageName:(NSString*)messageName target:(id)target selector:(SEL)selector;
 @end
 
+@interface IS2System : NSObject
++(BOOL)isDeviceIn24Time;
++(NSString*)translatedAMString;
++(NSString*)translatedPMString;
+@end
+
 void rocketbootstrap_distributedmessagingcenter_apply(CPDistributedMessagingCenter *messaging_center);
 
 NSString *WeatherWindSpeedUnitForCurrentLocale();
@@ -166,108 +172,6 @@ int firstUpdate = 0;
 }
 
 #pragma mark Translations
-
-/*-(NSString*)nameForCondition:(int)condition {
-    switch (condition) {
-        case 0:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionTornado" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 1:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionTropicalStorm" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 2:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHurricane" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 3:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSevereThunderstorm" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 4:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionThunderstorm" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 5:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMixedRainAndSnow" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 6:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMixedRainAndSleet" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 7:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMixedSnowAndSleet" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 8:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionFreezingDrizzle" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 9:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionDrizzle" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 10:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionFreezingRain" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 11:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionShowers1" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 12:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionRain" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 13:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSnowFlurries" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 14:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSnowShowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 15:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionBlowingSnow" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 16:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSnow" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 17:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHail" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 18:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSleet" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 19:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionDust" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 20:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionFog" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 21:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHaze" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 22:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSmoky" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 23:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionFrigid" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 24:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionWindy" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 25:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionFrigid" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 26:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionCloudy" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 27:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMostlyCloudyNight" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 28:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMostlyCloudyDay" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 29:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionPartlyCloudyNight" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 30:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionPartlyCloudyDay" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 32:
-        case 31:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionClearNight" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 33:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMostlySunnyNight" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 34:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionMostlySunnyDay" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 35:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHail" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 36:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHot" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 37:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionIsolatedThunderstorms" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 38:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionScatteredThunderstorms" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 39:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHeavyRain" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 40:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionScatteredShowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 41:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHeavySnow" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 42:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionScatteredSnowShowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 43:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionHeavySnow" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 44:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionPartlyCloudyDay" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 45:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionIsolatedThundershowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 46:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionSnowShowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        case 47:
-            return [self.weatherFrameworkBundle localizedStringForKey:@"WeatherConditionIsolatedThundershowers" value:@"" table:@"WeatherFrameworkLocalizableStrings"];
-        default:
-        return @"";
-    }
-}*/
 
 // Thanks to Andrew Wiik for this function.
 // TODO: Need to verify it back to iOS 6.
@@ -449,9 +353,46 @@ int firstUpdate = 0;
         string = [NSString stringWithFormat:@"%d", input];
     }
     
+    char one, two, three, four;
+    one = [string characterAtIndex:0];
+    two = [string characterAtIndex:1];
+    three = [string characterAtIndex:2];
+    four = [string characterAtIndex:3];
+    
+    NSString *suffix = @"";
+    
+    // Convert to 12hr if required by current locale.
+    // Yes, I know this is horrid. Oh well.
+    if (![IS2System isDeviceIn24Time]) {
+        
+        if (one == '1' && two > '2') {
+            one = '0';
+            two -= 2;
+            
+            suffix = [IS2System translatedPMString];
+        } else if (one == '2') {
+            // Handle 20 and 21 first.
+            if (two == '0') {
+                one = '0';
+                two = '8';
+            } else if (two == '1') {
+                one = '0';
+                two = '9';
+            } else {
+                one = '1';
+                two -= 2;
+            }
+            
+            suffix = [IS2System translatedPMString];
+        } else {
+            suffix = [IS2System translatedAMString];
+        }
+        
+    }
+    
     // Split string, and insert :
     
-    string = [NSString stringWithFormat:@"%c%c:%c%c", [string characterAtIndex:0], [string characterAtIndex:1], [string characterAtIndex:2], [string characterAtIndex:3]];
+    string = [NSString stringWithFormat:@"%c%c:%c%c%@", one, two, three, four, suffix];
     
     return string;
 }

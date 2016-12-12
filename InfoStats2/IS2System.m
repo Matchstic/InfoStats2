@@ -152,6 +152,9 @@ static mach_msg_type_number_t numCpuInfo, numPrevCpuInfo;
 static unsigned numCPUs;
 static NSLock *CPUUsageLock;
 
+// For 24hr time.
+static NSDateFormatter *cachedFormatter;
+
 // For network data.
 static NetSample lastNetSample;
 static NSTimer *netUpdater;
@@ -174,6 +177,8 @@ static PLWallpaperImageViewController *cachedLockscreenWallpaper;
     CPUUsageLock = [[NSLock alloc] init];
     
     [self _startUpdatingNetwork];
+    
+    cachedFormatter = [NSDateFormatter new];
 }
 
 +(void)setupAfterSpringBoardLoaded {
@@ -418,14 +423,25 @@ static PLWallpaperImageViewController *cachedLockscreenWallpaper;
 }
 
 +(BOOL)isDeviceIn24Time {
-    NSDateFormatter *formatter = [NSDateFormatter new];
-    [formatter setDateStyle:NSDateFormatterNoStyle];
-    [formatter setTimeStyle:NSDateFormatterShortStyle];
-    NSString *dateString = [formatter stringFromDate:[NSDate date]];
-    NSRange amRange = [dateString rangeOfString:[formatter AMSymbol]];
-    NSRange pmRange = [dateString rangeOfString:[formatter PMSymbol]];
+    if (!cachedFormatter) {
+        cachedFormatter = [NSDateFormatter new];
+    }
+    
+    [cachedFormatter setDateStyle:NSDateFormatterNoStyle];
+    [cachedFormatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *dateString = [cachedFormatter stringFromDate:[NSDate date]];
+    NSRange amRange = [dateString rangeOfString:[cachedFormatter AMSymbol]];
+    NSRange pmRange = [dateString rangeOfString:[cachedFormatter PMSymbol]];
     BOOL is24Hour = amRange.location == NSNotFound && pmRange.location == NSNotFound;
     return is24Hour;
+}
+
++(NSString*)translatedAMString {
+    return [cachedFormatter AMSymbol];
+}
+
++(NSString*)translatedPMString {
+    return [cachedFormatter PMSymbol];
 }
 
 #pragma mark System functions
