@@ -38,6 +38,7 @@
 @interface SBApplication : NSObject
 -(void)setBadge:(id)arg1;
 -(id)badgeNumberOrString;
+-(id)displayName;
 @end
 
 @interface SBBannerController : NSObject
@@ -313,7 +314,7 @@ int bestCountForApp(NSString *identifier) {
 }
 
 +(NSString*)notificationsJSONForApplication:(NSString*)bundleIdentifier {
-    NSMutableString *string = [@"[" mutableCopy];
+    NSMutableString *string = [NSMutableString stringWithString:@"["];
     
     NSArray *entries = [IS2Notifications notificationsForApplication:bundleIdentifier];
     
@@ -322,7 +323,21 @@ int bestCountForApp(NSString *identifier) {
         i++;
         [string appendString:@"{"];
         
-        [string appendFormat:@"\"title\":\"%@\",", [IS2Private JSONescapedStringForString:bulletin.title]];
+        // On non-stock apps, the title field WILL be nil. Check for that, and handle as appropriate.
+        if (bulletin.title) {
+            [string appendFormat:@"\"title\":\"%@\",", [IS2Private JSONescapedStringForString:bulletin.title]];
+        } else {
+            id cls = [objc_getClass("SBApplicationController") sharedInstance];
+            
+            SBApplication *app = nil;
+            if ([cls respondsToSelector:@selector(applicationWithDisplayIdentifier:)])
+                app = [cls applicationWithDisplayIdentifier:bulletin.sectionID];
+            else
+                app = [cls applicationWithBundleIdentifier:bulletin.sectionID];
+            
+            [string appendFormat:@"\"title\":\"%@\",", [app displayName]];
+        }
+        
         [string appendFormat:@"\"message\":\"%@\",", [IS2Private JSONescapedStringForString:bulletin.message]];
         [string appendFormat:@"\"bundleIdentifier\":\"%@\",", bulletin.sectionID];
         [string appendFormat:@"\"timeFired\":%ld", (time_t)bulletin.date.timeIntervalSince1970 * 1000];

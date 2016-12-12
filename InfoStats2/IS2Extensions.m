@@ -88,6 +88,10 @@ static int displayToken;
 }
 
 +(NSString*)JSONescapedStringForString:(NSString*)input {
+    if (!input) {
+        return @"";
+    }
+    
     NSMutableString *s = [NSMutableString stringWithString:input];
     [s replaceOccurrencesOfString:@"\"" withString:@"\\\"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
     [s replaceOccurrencesOfString:@"/" withString:@"\\/" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [s length])];
