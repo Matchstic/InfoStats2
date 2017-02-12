@@ -478,10 +478,10 @@ static PLWallpaperImageViewController *cachedLockscreenWallpaper;
 }
 
 +(void)openSiri {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    if ([[objc_getClass("SBAssistantController") sharedInstance] respondsToSelector:@selector(_activateSiriForPPT)]) {
         [[objc_getClass("SBAssistantController") sharedInstance] _activateSiriForPPT];
-    else {
-        // TODO: Test this for iOS 6
+    } else {
+        // TODO: Test this for iOS 6 and 10 (uh... alrighty)
         [[objc_getClass("SBAssistantController") sharedInstance] activateIgnoringTouches];
     }
 }
