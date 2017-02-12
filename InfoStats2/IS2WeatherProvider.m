@@ -468,19 +468,32 @@ int firstUpdate = 0;
         [string appendFormat:@"\"dayOfWeek\":%d,", forecast.dayOfWeek];
         [string appendFormat:@"\"condition\":%d,", forecast.icon];
         
-        // Convert high and low to farenheit as needed
-        int lattemp;
-        if ([[WeatherPreferences sharedPreferences] isCelsius])
-            lattemp = [forecast.high intValue];
-        else
-            lattemp = (([forecast.high intValue]*9)/5) + 32;
-        [string appendFormat:@"\"high\":%d,", lattemp];
+        // On iOS 10, the forecast object is a WADayForecast, with temperatures
+        // being a WFTemperature. Nothing too taxing.
         
-        if ([[WeatherPreferences sharedPreferences] isCelsius])
-            lattemp = [forecast.low intValue];
-        else
-            lattemp = (([forecast.low intValue]*9)/5) + 32;
-        [string appendFormat:@"\"low\":%d", lattemp];
+        if ([forecast isKindOfClass:objc_getClass("WADayForecast")]) {
+            BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
+            
+            WFTemperature *high = (WFTemperature*)forecast.high;
+            WFTemperature *low = (WFTemperature*)forecast.low;
+            
+            [string appendFormat:@"\"high\":%d,", (int)(isCelsius ? high.celsius : high.fahrenheit)];
+            [string appendFormat:@"\"low\":%d,", (int)(isCelsius ? low.celsius : low.fahrenheit)];
+        } else {
+            // Convert high and low to farenheit as needed
+            int lattemp;
+            if ([[WeatherPreferences sharedPreferences] isCelsius])
+                lattemp = [forecast.high intValue];
+            else
+                lattemp = (([forecast.high intValue]*9)/5) + 32;
+            [string appendFormat:@"\"high\":%d,", lattemp];
+        
+            if ([[WeatherPreferences sharedPreferences] isCelsius])
+                lattemp = [forecast.low intValue];
+            else
+                lattemp = (([forecast.low intValue]*9)/5) + 32;
+            [string appendFormat:@"\"low\":%d", lattemp];
+        }
         
         [string appendFormat:@"}%@", (i == [self dayForecastsForCurrentLocation].count ? @"" : @",")];
     }
@@ -504,21 +517,32 @@ int firstUpdate = 0;
             [string appendFormat:@"\"time\":\"%@\",", forecast.time];
         }
         
-        // Convert temperature to farenheit
-        NSString *detail;
-        if ([forecast respondsToSelector:@selector(temperature)]) {
-            detail = forecast.temperature;
+        // On iOS 10, the forecast object is a WAHourlyForecast, with temperatures
+        // being a WFTemperature. Nothing too taxing.
+        
+        if ([forecast isKindOfClass:objc_getClass("WAHourlyForecast")]) {
+            BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
+            
+            WFTemperature *temp = (WFTemperature*)forecast.temperature;
+            [string appendFormat:@"\"temperature\":%d,", (int)(isCelsius ? temp.celsius : temp.fahrenheit)];
         } else {
-            detail = forecast.detail;
+            // Convert temperature to farenheit
+            NSString *detail;
+            if ([forecast respondsToSelector:@selector(temperature)]) {
+                detail = forecast.temperature;
+            } else {
+                detail = forecast.detail;
+            }
+        
+            int lattemp;
+            if ([[WeatherPreferences sharedPreferences] isCelsius])
+                lattemp = [detail intValue];
+            else
+                lattemp = (([detail intValue]*9)/5) + 32;
+        
+            [string appendFormat:@"\"temperature\":%d,", lattemp];
         }
         
-        int lattemp;
-        if ([[WeatherPreferences sharedPreferences] isCelsius])
-            lattemp = [detail intValue];
-        else
-            lattemp = (([detail intValue]*9)/5) + 32;
-        
-        [string appendFormat:@"\"temperature\":%d,", lattemp];
         [string appendFormat:@"\"condition\":%d,", forecast.conditionCode];
         [string appendFormat:@"\"percentPrecipitation\":%d", (int)forecast.percentPrecipitation];
         
