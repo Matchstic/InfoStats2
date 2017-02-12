@@ -263,13 +263,21 @@ int firstUpdate = 0;
 
 -(int)calculateAverageTempIsHigh:(BOOL)isHigh {
     DayForecast *forecast = [[currentCity dayForecasts] firstObject];
-    int temp = [(isHigh ? forecast.high : forecast.low) intValue];
     
-    // Need to convert to Farenheit ourselves annoyingly
-    if (![[WeatherPreferences sharedPreferences] isCelsius])
-        temp = ((temp*9)/5) + 32;
+    if ([forecast isKindOfClass:objc_getClass("WADayForecast")]) {
+        BOOL isCelsius = [[WeatherPreferences sharedPreferences] isCelsius];
+        
+        WFTemperature *temp = (WFTemperature*)(isHigh ? forecast.high : forecast.low);
+        return isCelsius ? temp.celsius : temp.fahrenheit;
+    } else {
+        int temp = [(isHigh ? forecast.high : forecast.low) intValue];
     
-    return temp;
+        // Need to convert to Farenheit ourselves annoyingly
+        if (![[WeatherPreferences sharedPreferences] isCelsius])
+            temp = ((temp*9)/5) + 32;
+    
+        return temp;
+    }
 }
 
 -(int)currentWindSpeed {
