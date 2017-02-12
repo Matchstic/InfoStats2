@@ -84,8 +84,14 @@
 -(void)observer:(id)arg1 addBulletin:(BBBulletin*)arg2 forFeed:(int)arg3 playLightsAndSirens:(BOOL)arg4 withReply:(id)arg5;
 @end
 
-@interface SBLockScreenViewController : NSObject
+@interface SBLockScreenViewControllerBase : NSObject
 - (_Bool)lockScreenIsShowingBulletins;
+@end
+
+@interface SBLockScreenViewController : SBLockScreenViewControllerBase
+@end
+
+@interface SBDashBoardViewController : SBLockScreenViewControllerBase
 @end
 
 @interface SBLockScreenManager : NSObject
@@ -281,7 +287,14 @@ int bestCountForApp(NSString *identifier) {
 }
 
 +(bool)lockScreenIsShowingBulletins {
-    return [[[objc_getClass("SBLockScreenManager") sharedInstance] lockScreenViewController] lockScreenIsShowingBulletins];
+    // On iOS 10, the lockscreenViewController is in-fact the SBDashBoardViewController for the majority of cases.
+    
+    SBLockScreenViewControllerBase *base = [[objc_getClass("SBLockScreenManager") sharedInstance] lockScreenViewController];
+    
+    if ([base isKindOfClass:objc_getClass("SBLockScreenViewController")])
+        return [base lockScreenIsShowingBulletins];
+    else
+        return lockscreenBulletins.count > 1; // >1 to remove count dictionary
 }
 
 +(int)totalNotificationCountOnLockScreenOnly:(BOOL)onLockscreenOnly {

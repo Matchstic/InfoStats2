@@ -77,6 +77,10 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 @property(strong) BBBulletin *activeBulletin;
 @end
 
+@interface NCNotificationRequest : NSObject
+@property (nonatomic, readonly) BBBulletin *bulletin;
+@end
+
 @interface BBServer : NSObject
 - (id)allBulletinIDsForSectionID:(id)arg1;
 @end
@@ -332,7 +336,7 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
 
 %end
 
-%hook SBLockScreenNotificationListController // iOS 7
+%hook SBLockScreenNotificationListController // iOS 7-9
 
 -(void)_updateModelAndViewForAdditionOfItem:(SBAwayBulletinListItem *)listItem {
     // Update IS2Notifications
@@ -367,7 +371,26 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
 
 %end
 
-// Notify that unlocking has occured
+%hook SBDashBoardViewController // iOS 10+
+
+- (void)postNotificationRequest:(NCNotificationRequest*)arg1 forCoalescedNotification:(id)arg2 {
+    [IS2Notifications updateLockscreenCountWithBulletin:arg1.bulletin isRemoval:NO isModification:NO];
+    %orig;
+}
+
+- (void)updateNotificationRequest:(NCNotificationRequest*)arg1 forCoalescedNotification:(id)arg2 {
+    [IS2Notifications updateLockscreenCountWithBulletin:arg1.bulletin isRemoval:NO isModification:YES];
+    %orig;
+}
+
+- (void)withdrawNotificationRequest:(NCNotificationRequest*)arg1 forCoalescedNotification:(id)arg2 {
+    [IS2Notifications updateLockscreenCountWithBulletin:arg1.bulletin isRemoval:YES isModification:NO];
+    %orig;
+}
+
+%end
+
+#pragma mark Notify that unlocking has occured
 
 %hook SBLockScreenViewController
 
@@ -381,6 +404,15 @@ static MPUNowPlayingController * __weak globalMPUNowPlaying;
 %hook SBAwayController
 
 - (void)_releaseAwayView {
+    %orig;
+    [IS2Notifications removeLockscreenCountsForUnlock];
+}
+
+%end
+
+%hook SBDashBoardViewController
+
+- (void)deactivate {
     %orig;
     [IS2Notifications removeLockscreenCountsForUnlock];
 }
@@ -426,9 +458,19 @@ static BBServer *sharedServer;
 
 %end
 
-// Display status...
+#pragma mark Display status
 
-// iOS 7+
+// iOS 10+
+%hook SBDashBoardViewController
+
+- (void)setInScreenOffMode:(_Bool)arg1 forAutoUnlock:(_Bool)arg2 {
+    [[IS2Private sharedInstance] setScreenOffState:NO];
+    %orig;
+}
+
+%end
+
+// iOS 7-9
 %hook SBLockScreenViewController
 
 - (void)_handleDisplayTurnedOnWhileUILocked:(id)locked {
