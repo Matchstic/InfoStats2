@@ -173,20 +173,6 @@ static City *currentCity;
 #pragma mark Backend
 
 -(void)fullUpdate {
-    if (deviceVersion >= 8.0) {
-        //if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setLocationTrackingReady:activelyTracking:)]) {
-        //    [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO];
-        //} else {
-        //    [(WeatherLocationManager*)[WeatherLocationManager sharedWeatherLocationManager] setDelegate:self.locationManager];
-        //    [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:([self.locationManager currentAuthorisationStatus] != kCLAuthorizationStatusAuthorized ? NO : YES) activelyTracking:NO watchKitExtension:NO];
-        //}
-        
-        //if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(_setAuthorizationStatus:)])
-        //     [[WeatherLocationManager sharedWeatherLocationManager] _setAuthorizationStatus:[self.locationManager currentAuthorisationStatus]];
-        //else if ([[WeatherLocationManager sharedWeatherLocationManager] respondsToSelector:@selector(setAuthorizationStatus:)])
-        //    [[WeatherLocationManager sharedWeatherLocationManager] setAuthorizationStatus:[self.locationManager currentAuthorisationStatus]];
-    }
-    
     if ([currentCity respondsToSelector:@selector(associateWithDelegate:)])
         [currentCity associateWithDelegate:self];
     else if ([currentCity respondsToSelector:@selector(addUpdateObserver:)])
@@ -202,19 +188,6 @@ static City *currentCity;
         
         // Update to whichever city the user may have set.
         [self configureCurrentCity:self.locationManager.currentAuthorisationStatus];
-        
-        /*if ([currentCity isLocalWeatherCity]) {
-            // Oh for crying out loud, still have old local city in place!
-            if (![[WeatherPreferences sharedPreferences] respondsToSelector:@selector(loadSavedCityAtIndex:)]) {
-                // This is untested; I have no idea if this will work, but I hope so.
-                @try {
-                    currentCity = [[WeatherPreferences sharedPreferences] loadSavedCities][1];
-                } @catch (NSException *e) {
-                    NSLog(@"[InfoStats2d | Weather] :: Failed to load first city in Weather.app for reason:\n%@", e);
-                }
-            } else
-                currentCity = [[WeatherPreferences sharedPreferences] loadSavedCityAtIndex:1];
-        }*/
         
         [self updateCurrentCityWithoutLocation];
     }

@@ -51,6 +51,7 @@
 - (id)naturalLanguageDescription;
 - (int)precipitationForecast;
 +(id)descriptionForWeatherUpdateDetail:(unsigned)arg1;
+@property(assign, nonatomic) id feelsLike;	// G=0x1f61; S=0x1f71; @synthesize=_feelsLike
 @end
 
 @interface CPDistributedMessagingCenter : NSObject
@@ -59,6 +60,12 @@
 -(void)runServerOnCurrentThread;
 -(void)stopServer;
 -(void)registerForMessageName:(NSString*)messageName target:(id)target selector:(SEL)selector;
+@end
+
+@interface WFTemperature : NSObject
+@property (nonatomic) double celsius;
+@property (nonatomic) double fahrenheit;
+@property (nonatomic) double kelvin;
 @end
 
 @interface IS2System : NSObject
@@ -192,13 +199,19 @@ int firstUpdate = 0;
 #pragma mark Data access
 
 -(int)currentTemperature {
-    int temp = [currentCity.temperature intValue];
+    // On iOS 10 and higher, the temperature is of class WFTemperature.
+    if ([currentCity.temperature isKindOfClass:objc_getClass("WFTemperature")]) {
+        WFTemperature *temp = (WFTemperature*)currentCity.temperature;
+        return [[WeatherPreferences sharedPreferences] isCelsius] ? (int)temp.celsius : (int)temp.fahrenheit;
+    } else {
+        int temp = [currentCity.temperature intValue];
     
-    // Need to convert to Farenheit ourselves annoyingly
-    if (![[WeatherPreferences sharedPreferences] isCelsius])
-        temp = ((temp*9)/5) + 32;
+        // Need to convert to Farenheit ourselves annoyingly
+        if (![[WeatherPreferences sharedPreferences] isCelsius])
+            temp = ((temp*9)/5) + 32;
     
-    return temp;
+        return temp;
+    }
 }
 
 -(NSString*)currentLocation {
@@ -335,12 +348,18 @@ int firstUpdate = 0;
 }
 
 -(int)currentlyFeelsLike {
-    int temp = (int)currentCity.feelsLike;
+    // On iOS 10 and higher, this is a WFTemperature
+    if (deviceVersion >= 10.0) {
+        WFTemperature *feelsLike = currentCity.feelsLike;
+        return [[WeatherPreferences sharedPreferences] isCelsius] ? feelsLike.celsius : feelsLike.fahrenheit;
+    } else {
+        int temp = (int)currentCity.feelsLike;
     
-    if (![[WeatherPreferences sharedPreferences] isCelsius])
-        temp = ((temp*9)/5) + 32;
+        if (![[WeatherPreferences sharedPreferences] isCelsius])
+            temp = ((temp*9)/5) + 32;
     
-    return temp;
+        return temp;
+    }
 }
 
 -(NSString*)intTimeToString:(int)input {
