@@ -173,7 +173,7 @@
 
 /** @name Forecasts */
 
-/** Gives an array of HourlyForecast objects ( https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.framework/HourlyForecast.h ) representing the forecast for the next few hours. It's not recommendeded to use this method if you are iterfacing with this API via JavaScript.
+/** Gives an array of HourlyForecast objects on iOS 6.0 to 9.3 ( https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.framework/HourlyForecast.h ), and WAHourlyForecast on iOS 10 onwards, representing the forecast for the next few hours. It's not recommendeded to use this method if you are iterfacing with this API via JavaScript.
  @return An array of hourly forecasts
  */
 +(NSArray*)hourlyForecastsForCurrentLocation;
@@ -194,7 +194,7 @@
  */
 +(NSString*)hourlyForecastsForCurrentLocationJSON;
 
-/** Gives an array of daily forecasts. These are in the form of DayForecast objects ( https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.framework/DayForecast.h ) - It's not recommendeded to use this method if you are iterfacing with this API via JavaScript.
+/** Gives an array of daily forecasts. These are in the form of DayForecast objects on iOS 6.0 to 9.3 ( https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/Weather.framework/DayForecast.h ), and WADayForecast for iOS 10 onwards - It's not recommendeded to use this method if you are iterfacing with this API via JavaScript.
  @return An array of daily forecasts
  */
 +(NSArray*)dayForecastsForCurrentLocation;
