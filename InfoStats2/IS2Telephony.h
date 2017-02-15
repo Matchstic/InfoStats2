@@ -4,13 +4,11 @@
 //
 //  Created by Matt Clarke on 14/07/2015.
 //
-//
+//  Tested iOS 6.1 -> iOS 10.2
 
 #import <Foundation/Foundation.h>
 
 /** IS2Telephony is used to access data for both baseband information, and WiFi data. For functions relating to modifying the state of telephony related items, please see IS2System, as that contains the functions for toggling various system settings.
- 
- Please be aware this is currently untested.
  */
 
 @interface IS2Telephony : NSObject
