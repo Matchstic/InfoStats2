@@ -99,6 +99,11 @@ typedef struct {
 - (_Bool)isPasscodeLockVisible;
 @end
 
+@interface SBUIPluginManager : NSObject
++ (id)sharedInstance;
+- (_Bool)handleActivationEvent:(int)arg1 eventSource:(int)arg2 withContext:(id)arg3;
+@end
+
 @interface SBLockScreenManager : NSObject
 +(id)sharedInstance;
 @property(readonly, nonatomic) SBLockScreenViewController *lockScreenViewController;
@@ -480,8 +485,14 @@ static PLWallpaperImageViewController *cachedLockscreenWallpaper;
 +(void)openSiri {
     if ([[objc_getClass("SBAssistantController") sharedInstance] respondsToSelector:@selector(_activateSiriForPPT)]) {
         [[objc_getClass("SBAssistantController") sharedInstance] _activateSiriForPPT];
+    } else if ([[objc_getClass("SBUIPluginManager") sharedInstance] respondsToSelector:@selector(handleActivationEvent:eventSource:withContext:)]) {
+        // This handles iOS 10, and perhaps anything else in the future.
+        [[objc_getClass("SBUIPluginManager") sharedInstance] handleActivationEvent:1 eventSource:1 withContext:nil];
+        
+        // Note that in Apple's implementation of handling the Home button being held, the Voice Command UI displays if the above
+        // returns NO.
     } else {
-        // TODO: Test this for iOS 6 and 10 (uh... alrighty)
+        // TODO: Test this for iOS 6
         [[objc_getClass("SBAssistantController") sharedInstance] activateIgnoringTouches];
     }
 }
