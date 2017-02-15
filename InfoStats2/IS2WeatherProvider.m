@@ -486,7 +486,7 @@ int firstUpdate = 0;
             WFTemperature *low = (WFTemperature*)forecast.low;
             
             [string appendFormat:@"\"high\":%d,", (int)(isCelsius ? high.celsius : high.fahrenheit)];
-            [string appendFormat:@"\"low\":%d,", (int)(isCelsius ? low.celsius : low.fahrenheit)];
+            [string appendFormat:@"\"low\":%d", (int)(isCelsius ? low.celsius : low.fahrenheit)];
         } else {
             // Convert high and low to farenheit as needed
             int lattemp;

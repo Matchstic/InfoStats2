@@ -4,7 +4,7 @@
 //
 //  Created by Matt Clarke on 14/07/2015.
 //
-//
+//  Tested iOS 6.1 -> iOS 10.2
 
 #import <Foundation/Foundation.h>
 
