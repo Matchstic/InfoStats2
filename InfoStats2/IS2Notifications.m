@@ -239,6 +239,8 @@ int bestCountForApp(NSString *identifier) {
     if (onLockscreen) {
         [[objc_getClass("BBServer") IS2_sharedInstance] publishBulletin:bulletin destinations:4 alwaysToLockScreen:YES];
     } else {
+        
+        // This is only applicable for iOS 6 to 9.3.3. iOS 10 has a new UI for notifications.
         SBBannerController *controller = [objc_getClass("SBBannerController") sharedInstance];
         if ([controller isShowingBanner]) { // Don't do anything if there is already a banner showing.
             return;
@@ -269,7 +271,7 @@ int bestCountForApp(NSString *identifier) {
     }
     
     if (callbackBlock && identifier) {
-        [notificationUpdateQueue addObject:callbackBlock forKey:identifier];
+        [notificationUpdateQueue addObject:[callbackBlock copy] forKey:identifier];
     }
 }
 

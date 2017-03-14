@@ -295,7 +295,7 @@ static IS2Media *sharedWotsit;
     }
     
     if (callbackBlock && identifier) {
-        [mediaUpdateBlockQueue addObject:callbackBlock forKey:identifier];
+        [mediaUpdateBlockQueue addObject:[callbackBlock copy] forKey:identifier];
     }
 }
 

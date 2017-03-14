@@ -205,7 +205,7 @@ static time_t lastUpdateTime;
     }
     
     if (callbackBlock && identifier) {
-        [locationUpdateBlockQueue addObject:callbackBlock forKey:identifier];
+        [locationUpdateBlockQueue addObject:[callbackBlock copy] forKey:identifier];
     }
 }
 

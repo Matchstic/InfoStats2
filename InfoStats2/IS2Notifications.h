@@ -4,7 +4,9 @@
 //
 //  Created by Matt Clarke on 23/07/2015.
 //
-//
+//  Tested iOS 6.1 -> 10.2.
+//  Known Issues:
+//    Anything lockscreen related is non-functional on iOS 10.
 
 #import <Foundation/Foundation.h>
 

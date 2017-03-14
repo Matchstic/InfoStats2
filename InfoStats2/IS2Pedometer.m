@@ -107,7 +107,7 @@ NSDate *startOfTodayDate() {
     }
     
     if (callbackBlock && identifier) {
-        [pedUpdateBlockQueue addObject:callbackBlock forKey:identifier];
+        [pedUpdateBlockQueue addObject:[callbackBlock copy] forKey:identifier];
     }
     
     if ([pedUpdateBlockQueue allKeys].count == 1) {

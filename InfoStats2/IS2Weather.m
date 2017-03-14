@@ -178,7 +178,7 @@ static inline void buildRequestersDictionary() {
     }
     
     if (callbackBlock && identifier) {
-        [weatherUpdateBlockQueueTest addObject:callbackBlock forKey:identifier];
+        [weatherUpdateBlockQueueTest addObject:[callbackBlock copy] forKey:identifier];
         // Auto-update when a new widget adds itself.
         [self setWeatherUpdateTimeInterval:DEFAULT_WEATHER_UPDATE_INTERVAL forRequester:identifier];
     }

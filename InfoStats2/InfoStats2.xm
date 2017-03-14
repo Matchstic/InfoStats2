@@ -461,11 +461,23 @@ static BBServer *sharedServer;
 #pragma mark Display status
 
 // iOS 10+
-%hook SBDashBoardViewController
+%hook SBLockScreenManager
 
-- (void)setInScreenOffMode:(_Bool)arg1 forAutoUnlock:(_Bool)arg2 {
-    [[IS2Private sharedInstance] setScreenOffState:NO];
+- (void)_handleBacklightLevelChanged:(NSNotification*)arg1 {
     %orig;
+    
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        NSDictionary *userInfo = arg1.userInfo;
+        
+        CGFloat newBacklight = [[userInfo objectForKey:@"SBBacklightNewFactorKey"] floatValue];
+        CGFloat oldBacklight = [[userInfo objectForKey:@"SBBacklightOldFactorKey"] floatValue];
+        
+        if (newBacklight == 0.0) {
+            [[IS2Private sharedInstance] setScreenOffState:YES];
+        } else if (oldBacklight == 0.0 && newBacklight > 0.0) {
+            [[IS2Private sharedInstance] setScreenOffState:NO];
+        }
+    }
 }
 
 %end

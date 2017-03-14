@@ -138,7 +138,7 @@ static IS2WorkaroundDictionary *calendarUpdateBlockQueue;
     }
     
     if (callbackBlock && identifier) {
-        [calendarUpdateBlockQueue addObject:callbackBlock forKey:identifier];
+        [calendarUpdateBlockQueue addObject:[callbackBlock copy] forKey:identifier];
     }
 }
 

@@ -1,6 +1,6 @@
 //
 //  IS2Pedometer.h
-//  
+//  InfoStats2
 //
 //  Created by Matt Clarke on 02/06/2016.
 //

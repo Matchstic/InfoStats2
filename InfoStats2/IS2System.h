@@ -4,7 +4,8 @@
 //
 //  Created by Matt Clarke on 14/07/2015.
 //
-//  Tested iOS 6.1 -> iOS 10.2
+//  Tested iOS 6.1 -> iOS 10.2.
+//  No known issues.
 
 #import <Foundation/Foundation.h>
 

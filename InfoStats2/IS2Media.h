@@ -1,10 +1,12 @@
-/*
- * IS2Media.h
- * InfoStats2
- *
- * Created by Matt Clarke on 14/07/2015.
- *
-*/
+//
+//  IS2Media.h
+//  InfoStats2
+//
+//  Created by Matt Clarke on 14/07/2015.
+//
+//  Tested iOS 6.1 -> 10.2.
+//  Known Issues:
+//    -elapsedTrackLength is non-functional on iOS 10.
 
 // TODO: Playlist support
 
@@ -109,6 +111,7 @@
 /** Gives the position in the current track that has been played to, which measured in seconds.
  @return The current track's elapsed time
  @warning This function will return 0 if no media has played since SpringBoard was last launched.
+ @warning Doesn't work on iOS 10 it seems.
  */
 +(double)elapsedTrackLength;
 
