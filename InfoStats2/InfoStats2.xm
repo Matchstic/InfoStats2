@@ -105,6 +105,15 @@ static bool _ZL15All_hasPropertyPK15OpaqueJSContextP13OpaqueJSValueP14OpaqueJSSt
 ////////////////////////////////////////////////////////////////////////////////
 // Begin actual code
 
+static void showAlert(NSString *message) {
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"IS2"
+                                                 message:message
+                                                delegate:nil
+                                       cancelButtonTitle:@"OK"
+                                       otherButtonTitles:nil];
+    [av show];
+}
+
 #pragma mark Injection of Cycript into WebViews
 
 // Supports LockHTML, and anything else hopefully

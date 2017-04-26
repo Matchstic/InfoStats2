@@ -26,10 +26,26 @@
 		C9372A2C1B557DEA00592CCF /* IS2System.h in Headers */ = {isa = PBXBuildFile; fileRef = C9372A2A1B557DEA00592CCF /* IS2System.h */; };
 		C9372A2D1B557DEA00592CCF /* IS2System.m in Sources */ = {isa = PBXBuildFile; fileRef = C9372A2B1B557DEA00592CCF /* IS2System.m */; };
 		C94D37641DFF09B30043D315 /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94D37631DFF09B20043D315 /* Weather.framework */; };
+		C960EEF51E95A045009F5F9C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
+		C960EEF61E95A045009F5F9C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C960EEDE1E9596C4009F5F9C /* UIKit.framework */; };
+		C960EF121E95A079009F5F9C /* CydgetCGIURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = C960EF091E95A079009F5F9C /* CydgetCGIURLProtocol.h */; };
+		C960EF131E95A079009F5F9C /* CydgetCGIURLProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = C960EF0A1E95A079009F5F9C /* CydgetCGIURLProtocol.mm */; };
+		C960EF141E95A079009F5F9C /* CydgetURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = C960EF0B1E95A079009F5F9C /* CydgetURLProtocol.h */; };
+		C960EF151E95A079009F5F9C /* CydgetURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = C960EF0C1E95A079009F5F9C /* CydgetURLProtocol.m */; };
+		C960EF161E95A079009F5F9C /* include.h in Headers */ = {isa = PBXBuildFile; fileRef = C960EF0D1E95A079009F5F9C /* include.h */; };
+		C960EF171E95A079009F5F9C /* WebCycript.h in Headers */ = {isa = PBXBuildFile; fileRef = C960EF0E1E95A079009F5F9C /* WebCycript.h */; };
+		C960EF181E95A079009F5F9C /* yieldToSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = C960EF101E95A079009F5F9C /* yieldToSelector.h */; };
+		C960EF191E95A079009F5F9C /* yieldToSelector.mm in Sources */ = {isa = PBXBuildFile; fileRef = C960EF111E95A079009F5F9C /* yieldToSelector.mm */; };
+		C960EF1C1E95A0CE009F5F9C /* WebCycript.mm in Sources */ = {isa = PBXBuildFile; fileRef = C960EF1B1E95A0CE009F5F9C /* WebCycript.mm */; };
+		C960EF1D1E95A0F4009F5F9C /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C960EEE01E9596C9009F5F9C /* JavaScriptCore.framework */; };
+		C960EF1E1E95A0F8009F5F9C /* WebCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C960EEE21E9596CC009F5F9C /* WebCore.framework */; };
+		C960EF1F1E95A113009F5F9C /* CydiaSubstrate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C960EECB1E95870F009F5F9C /* CydiaSubstrate.framework */; };
+		C960EF201E95A123009F5F9C /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C960EEE41E9596D3009F5F9C /* WebKit.framework */; };
 		C97B8CC51C31A40200525449 /* IS2WorkaroundDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */; };
 		C97B8CC61C31A40200525449 /* IS2WorkaroundDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */; };
 		C98A1EB71D6E4A5C0067D3F3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98A1EB61D6E4A5C0067D3F3 /* WebKit.framework */; };
 		C98A1EB91D6E4A610067D3F3 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98A1EB81D6E4A610067D3F3 /* JavaScriptCore.framework */; };
+		C9911DE11E96C90300F19040 /* libWebCycript.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C960EEF41E95A045009F5F9C /* libWebCycript.dylib */; };
 		C9AA288C1B24BAE8005846FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9AA289E1B24BDF1005846FE /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9AA289D1B24BDF1005846FE /* main.mm */; };
 		C9AA28A31B24BE13005846FE /* IS2WeatherProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AA28A01B24BE13005846FE /* IS2WeatherProvider.m */; };
@@ -46,7 +62,6 @@
 		C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A7C1B1DC99300C44076 /* Foundation.framework */; };
 		C9D72A881B1DC99300C44076 /* InfoStats2.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9D72A871B1DC99300C44076 /* InfoStats2.mm */; };
 		C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9C1B1DCE5100C44076 /* libsubstrate.dylib */; };
-		C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72A9E1B1DCE5F00C44076 /* libWebCycript */; settings = {ATTRIBUTES = (Required, ); }; };
 		C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D72AA01B1DCE8600C44076 /* UIKit.framework */; };
 		C9E040A61B1F7D97006E70BE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E040A51B1F7D97006E70BE /* CoreLocation.framework */; };
 		C9EA1D791B5FF13500DCEF75 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C9EA1D771B5FF13500DCEF75 /* Reachability.h */; };
@@ -82,6 +97,28 @@
 		C9372A2A1B557DEA00592CCF /* IS2System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2System.h; sourceTree = "<group>"; };
 		C9372A2B1B557DEA00592CCF /* IS2System.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2System.m; sourceTree = "<group>"; };
 		C94D37631DFF09B20043D315 /* Weather.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Weather.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/PrivateFrameworks/Weather.framework; sourceTree = DEVELOPER_DIR; };
+		C960EECB1E95870F009F5F9C /* CydiaSubstrate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CydiaSubstrate.framework; path = ../../../../../opt/iOSOpenDev/lib/CydiaSubstrate.framework; sourceTree = "<group>"; };
+		C960EEDE1E9596C4009F5F9C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		C960EEE01E9596C9009F5F9C /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		C960EEE21E9596CC009F5F9C /* WebCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/PrivateFrameworks/WebCore.framework; sourceTree = DEVELOPER_DIR; };
+		C960EEE41E9596D3009F5F9C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
+		C960EEE61E9597D3009F5F9C /* WebCycript.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = WebCycript.dylib; path = ../../../../../opt/iOSOpenDev/lib/WebCycript.framework/WebCycript.dylib; sourceTree = "<group>"; };
+		C960EEF41E95A045009F5F9C /* libWebCycript.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libWebCycript.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C960EEFB1E95A045009F5F9C /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
+		C960EEFD1E95A045009F5F9C /* PackageVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PackageVersion.plist; sourceTree = "<group>"; };
+		C960EEFE1E95A045009F5F9C /* WebCycript-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebCycript-Prefix.pch"; sourceTree = "<group>"; };
+		C960EF051E95A045009F5F9C /* 0xdeadfa11 */ = {isa = PBXFileReference; lastKnownFileType = text; name = 0xdeadfa11; path = Package/usr/lib/0xdeadfa11; sourceTree = "<group>"; };
+		C960EF091E95A079009F5F9C /* CydgetCGIURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CydgetCGIURLProtocol.h; sourceTree = "<group>"; };
+		C960EF0A1E95A079009F5F9C /* CydgetCGIURLProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CydgetCGIURLProtocol.mm; sourceTree = "<group>"; };
+		C960EF0B1E95A079009F5F9C /* CydgetURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CydgetURLProtocol.h; sourceTree = "<group>"; };
+		C960EF0C1E95A079009F5F9C /* CydgetURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CydgetURLProtocol.m; sourceTree = "<group>"; };
+		C960EF0D1E95A079009F5F9C /* include.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = include.h; sourceTree = "<group>"; };
+		C960EF0E1E95A079009F5F9C /* WebCycript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebCycript.h; sourceTree = "<group>"; };
+		C960EF0F1E95A079009F5F9C /* WebCycript.xm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebCycript.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		C960EF101E95A079009F5F9C /* yieldToSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yieldToSelector.h; sourceTree = "<group>"; };
+		C960EF111E95A079009F5F9C /* yieldToSelector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yieldToSelector.mm; sourceTree = "<group>"; };
+		C960EF1B1E95A0CE009F5F9C /* WebCycript.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebCycript.mm; sourceTree = "<group>"; };
+		C960EF221E95A310009F5F9C /* libWebCycript.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libWebCycript.dylib; path = ../../../../../opt/iOSOpenDev/lib/libWebCycript.dylib; sourceTree = "<group>"; };
 		C97B8CC31C31A40200525449 /* IS2WorkaroundDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IS2WorkaroundDictionary.h; sourceTree = "<group>"; };
 		C97B8CC41C31A40200525449 /* IS2WorkaroundDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IS2WorkaroundDictionary.m; sourceTree = "<group>"; };
 		C98A1EB61D6E4A5C0067D3F3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -133,6 +170,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C960EEF01E95A045009F5F9C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C960EF201E95A123009F5F9C /* WebKit.framework in Frameworks */,
+				C960EF1E1E95A0F8009F5F9C /* WebCore.framework in Frameworks */,
+				C960EF1D1E95A0F4009F5F9C /* JavaScriptCore.framework in Frameworks */,
+				C960EEF51E95A045009F5F9C /* Foundation.framework in Frameworks */,
+				C960EEF61E95A045009F5F9C /* UIKit.framework in Frameworks */,
+				C960EF1F1E95A113009F5F9C /* CydiaSubstrate.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9AA28881B24BAE8005846FE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -150,12 +200,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9911DE11E96C90300F19040 /* libWebCycript.dylib in Frameworks */,
 				C94D37641DFF09B30043D315 /* Weather.framework in Frameworks */,
 				C91FE0691D8DF87300C69709 /* BackBoardServices.framework in Frameworks */,
 				C9D72A7D1B1DC99300C44076 /* Foundation.framework in Frameworks */,
 				C9CF50A71D6FB40E0000666B /* CoreFoundation.framework in Frameworks */,
 				C9D72AA11B1DCE8600C44076 /* UIKit.framework in Frameworks */,
-				C9D72A9F1B1DCE5F00C44076 /* libWebCycript in Frameworks */,
 				C9D72A9D1B1DCE5100C44076 /* libsubstrate.dylib in Frameworks */,
 				C98A1EB91D6E4A610067D3F3 /* JavaScriptCore.framework in Frameworks */,
 				C98A1EB71D6E4A5C0067D3F3 /* WebKit.framework in Frameworks */,
@@ -187,6 +237,75 @@
 				C9FAC32D1B605AC800199CAC /* IS2Calendar.m */,
 			);
 			name = Calendar;
+			sourceTree = "<group>";
+		};
+		C960EEF71E95A045009F5F9C /* WebCycript */ = {
+			isa = PBXGroup;
+			children = (
+				C960EF211E95A13D009F5F9C /* URL Protocols */,
+				C960EF101E95A079009F5F9C /* yieldToSelector.h */,
+				C960EF111E95A079009F5F9C /* yieldToSelector.mm */,
+				C960EF0D1E95A079009F5F9C /* include.h */,
+				C960EF0E1E95A079009F5F9C /* WebCycript.h */,
+				C960EF0F1E95A079009F5F9C /* WebCycript.xm */,
+				C960EF1B1E95A0CE009F5F9C /* WebCycript.mm */,
+				C960EEF81E95A045009F5F9C /* Package */,
+				C960EEFC1E95A045009F5F9C /* Supporting Files */,
+			);
+			path = WebCycript;
+			sourceTree = "<group>";
+		};
+		C960EEF81E95A045009F5F9C /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				C960EEF91E95A045009F5F9C /* DEBIAN */,
+				C960EF031E95A045009F5F9C /* usr */,
+			);
+			name = Package;
+			sourceTree = "<group>";
+		};
+		C960EEF91E95A045009F5F9C /* DEBIAN */ = {
+			isa = PBXGroup;
+			children = (
+				C960EEFB1E95A045009F5F9C /* control */,
+			);
+			name = DEBIAN;
+			sourceTree = "<group>";
+		};
+		C960EEFC1E95A045009F5F9C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C960EEFD1E95A045009F5F9C /* PackageVersion.plist */,
+				C960EEFE1E95A045009F5F9C /* WebCycript-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C960EF031E95A045009F5F9C /* usr */ = {
+			isa = PBXGroup;
+			children = (
+				C960EF041E95A045009F5F9C /* lib */,
+			);
+			name = usr;
+			sourceTree = "<group>";
+		};
+		C960EF041E95A045009F5F9C /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				C960EF051E95A045009F5F9C /* 0xdeadfa11 */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		C960EF211E95A13D009F5F9C /* URL Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				C960EF091E95A079009F5F9C /* CydgetCGIURLProtocol.h */,
+				C960EF0A1E95A079009F5F9C /* CydgetCGIURLProtocol.mm */,
+				C960EF0B1E95A079009F5F9C /* CydgetURLProtocol.h */,
+				C960EF0C1E95A079009F5F9C /* CydgetURLProtocol.m */,
+			);
+			name = "URL Protocols";
 			sourceTree = "<group>";
 		};
 		C978133A1BD0006000A8CEC4 /* Location Services */ = {
@@ -332,6 +451,7 @@
 			isa = PBXGroup;
 			children = (
 				C9D72A7E1B1DC99300C44076 /* InfoStats2 */,
+				C960EEF71E95A045009F5F9C /* WebCycript */,
 				C9D72A7B1B1DC99300C44076 /* Frameworks */,
 				C9D72A7A1B1DC99300C44076 /* Products */,
 			);
@@ -342,6 +462,7 @@
 			children = (
 				C9D72A791B1DC99300C44076 /* InfoStats2.dylib */,
 				C9AA288B1B24BAE8005846FE /* infostats2d */,
+				C960EEF41E95A045009F5F9C /* libWebCycript.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -349,6 +470,13 @@
 		C9D72A7B1B1DC99300C44076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C960EF221E95A310009F5F9C /* libWebCycript.dylib */,
+				C960EEE61E9597D3009F5F9C /* WebCycript.dylib */,
+				C960EEE41E9596D3009F5F9C /* WebKit.framework */,
+				C960EEE21E9596CC009F5F9C /* WebCore.framework */,
+				C960EEE01E9596C9009F5F9C /* JavaScriptCore.framework */,
+				C960EEDE1E9596C4009F5F9C /* UIKit.framework */,
+				C960EECB1E95870F009F5F9C /* CydiaSubstrate.framework */,
 				C94D37631DFF09B20043D315 /* Weather.framework */,
 				C91FE0681D8DF87300C69709 /* BackBoardServices.framework */,
 				C9CF50A61D6FB40E0000666B /* CoreFoundation.framework */,
@@ -457,6 +585,18 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		C960EEF11E95A045009F5F9C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C960EF141E95A079009F5F9C /* CydgetURLProtocol.h in Headers */,
+				C960EF171E95A079009F5F9C /* WebCycript.h in Headers */,
+				C960EF181E95A079009F5F9C /* yieldToSelector.h in Headers */,
+				C960EF121E95A079009F5F9C /* CydgetCGIURLProtocol.h in Headers */,
+				C960EF161E95A079009F5F9C /* include.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9D72A761B1DC99300C44076 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -480,6 +620,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		C960EEF31E95A045009F5F9C /* WebCycript */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C960EF061E95A045009F5F9C /* Build configuration list for PBXNativeTarget "WebCycript" */;
+			buildPhases = (
+				C960EEF21E95A045009F5F9C /* ShellScript */,
+				C960EEEF1E95A045009F5F9C /* Sources */,
+				C960EEF01E95A045009F5F9C /* Frameworks */,
+				C960EEF11E95A045009F5F9C /* Headers */,
+				C960EF1A1E95A0A6009F5F9C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WebCycript;
+			productName = WebCycript;
+			productReference = C960EEF41E95A045009F5F9C /* libWebCycript.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
 		C9AA288A1B24BAE8005846FE /* IS2WeatherDaemon */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C9AA289C1B24BAE8005846FE /* Build configuration list for PBXNativeTarget "IS2WeatherDaemon" */;
@@ -523,6 +682,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0510;
+				TargetAttributes = {
+					C960EEF31E95A045009F5F9C = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = C9D72A721B1DC99300C44076 /* Build configuration list for PBXProject "InfoStats2" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -538,11 +703,38 @@
 			targets = (
 				C9D72A781B1DC99300C44076 /* InfoStats2 */,
 				C9AA288A1B24BAE8005846FE /* IS2WeatherDaemon */,
+				C960EEF31E95A045009F5F9C /* WebCycript */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		C960EEF21E95A045009F5F9C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp";
+		};
+		C960EF1A1E95A0A6009F5F9C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp-logos";
+		};
 		C9AA28891B24BAE8005846FE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -585,6 +777,17 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C960EEEF1E95A045009F5F9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C960EF151E95A079009F5F9C /* CydgetURLProtocol.m in Sources */,
+				C960EF1C1E95A0CE009F5F9C /* WebCycript.mm in Sources */,
+				C960EF191E95A079009F5F9C /* yieldToSelector.mm in Sources */,
+				C960EF131E95A079009F5F9C /* CydgetCGIURLProtocol.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9AA28871B24BAE8005846FE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -622,6 +825,66 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		C960EF071E95A045009F5F9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_EXTENSION = dylib;
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					/opt/iOSOpenDev/lib,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WebCycript/WebCycript-Prefix.pch";
+				INSTALL_PATH = /usr/lib;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LD_DYLIB_INSTALL_NAME = /usr/lib/libWebCycript.dylib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos8.4;
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = NO;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Debug;
+		};
+		C960EF081E95A045009F5F9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_EXTENSION = dylib;
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					/opt/iOSOpenDev/lib,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WebCycript/WebCycript-Prefix.pch";
+				INSTALL_PATH = /usr/lib;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LD_DYLIB_INSTALL_NAME = /usr/lib/libWebCycript.dylib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos8.4;
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = NO;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Release;
+		};
 		C9AA289A1B24BAE8005846FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -650,7 +913,7 @@
 				);
 				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = infostats2d;
-				SDKROOT = iphoneos9.2;
+				SDKROOT = iphoneos8.4;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
@@ -686,7 +949,7 @@
 				);
 				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = infostats2d;
-				SDKROOT = iphoneos9.2;
+				SDKROOT = iphoneos8.4;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
@@ -724,7 +987,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos9.2;
+				SDKROOT = iphoneos9.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 				iOSOpenDevPath = /opt/iOSOpenDev;
@@ -749,7 +1012,7 @@
 				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
-				SDKROOT = iphoneos9.2;
+				SDKROOT = iphoneos9.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				iOSOpenDevPath = /opt/iOSOpenDev;
@@ -774,6 +1037,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/iOSOpenDev/lib,
+					/opt/iOSOpenDev/lib/WebCycript.framework,
 				);
 				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -806,6 +1070,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/iOSOpenDev/lib,
+					/opt/iOSOpenDev/lib/WebCycript.framework,
 				);
 				OTHER_LDFLAGS = "-Wl,-segalign,4000";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -823,6 +1088,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C960EF061E95A045009F5F9C /* Build configuration list for PBXNativeTarget "WebCycript" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C960EF071E95A045009F5F9C /* Debug */,
+				C960EF081E95A045009F5F9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C9AA289C1B24BAE8005846FE /* Build configuration list for PBXNativeTarget "IS2WeatherDaemon" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

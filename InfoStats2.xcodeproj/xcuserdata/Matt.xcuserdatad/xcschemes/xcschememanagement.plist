@@ -14,10 +14,35 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>WebCycript.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>C960EEB11E958580009F5F9C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C960EEF31E95A045009F5F9C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>C9AA288A1B24BAE8005846FE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C9B192D81E95822B006316D8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C9B192E51E958247006316D8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
