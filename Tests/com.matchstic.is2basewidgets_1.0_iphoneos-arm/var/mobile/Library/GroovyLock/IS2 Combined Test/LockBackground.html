@@ -1,0 +1,111 @@
+<html>
+<head>
+	<title>Combined Test</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+     <link rel="stylesheet" media="screen" href="css/main.css" type="text/css" />
+     <script type="text/cycript" src="js/main.js"></script>
+</head>
+
+<body onload="didLoadPage()">
+  <div id="wrap">
+    <section id="time">
+      <div>
+        <p id="timeP">00:00</p>
+      </div>
+    </section>
+    
+    <section id="weather">
+      <div style="float:right">
+        <p style="width:100%;" align="right"><span id="temperature">10</span><span style="font-size:0.75em;vertical-align:5;">&deg;</span>
+      </div>
+      <div style="float:right;width:50px;">
+        <img id="weatherImg" src="img/flat_white/0.png" />
+      </div>
+    </section>
+    
+    <section id="date">
+      <p id="timeDay">Thursday</p>
+      <p id="timeRest">November 15</p>
+    </section>
+    
+    <section id="calendar">
+      <div id="noEvents">
+        <p>No upcoming events</p>
+      </div>
+      <div id="eventsExist" style="display:none;">
+        <p id="eventTitle">Example event title</p>
+        <p id="eventLocation">Example event location</p>
+        <p id="eventTime">Today: 11:00 to 15:00</p>
+      </div>
+    </section>
+    
+    <section id="notifications">
+      <!-- One div per application to be displayed in the notification section. -->
+      <div id="phone" style="float:left;width:20%;">
+        <center>
+          <img src="img/phone.png" />
+          <p id="phoneNotifCount">2</p>
+        </center>
+      </div>
+      
+      <div id="messages" style="float:left;width:20%;">
+        <center>
+          <img src="img/messages.png" />
+          <p id="messagesNotifCount">5</p>
+        </center>
+      </div>
+      
+      <div id="mail" style="float:left;width:20%;">
+        <center>
+          <img src="img/mail.png" />
+          <p id="mailNotifCount">1</p>
+        </center>
+      </div>
+    </section>
+  </div>
+  
+  <script type="text/cycript">
+     
+     var widgetIdentifier = "com.matchstic.LS-Combined-Test";
+	
+	function didLoadPage() {
+     	[IS2Weather registerForWeatherUpdatesWithIdentifier:widgetIdentifier andCallback:^ void () {
+              updateWeatherValues();
+          }];
+	
+     	[IS2Notifications registerForBulletinNotificationsWithIdentifier:widgetIdentifier andCallback:^ void () {
+           	updateNotificationValues();
+     	}];
+	
+     	[IS2Calendar registerForCalendarNotificationsWithIdentifier:widgetIdentifier andCallback:^ void () {
+           	updateCalendarValues();
+     	}];
+	
+	   // Grab current values
+        updateWeatherValues();
+        updateCalendarValues();
+        updateNotificationValues();
+        updateClock();
+        
+        // Setup auto-updating of weather.
+        // See http://incendo.ws/projects/InfoStats2/Classes/IS2Weather.html#//api/name/setWeatherUpdateTimeInterval:forRequester: for all
+        // the available values that can be set here.
+        // Defaulting to updating weather every 30 minutes.
+        [IS2Weather setWeatherUpdateTimeInterval:30 forRequester:widgetIdentifier];
+        
+        // Setup timer to refresh clock.
+        setInterval(updateClock, 1000);
+	}
+	
+	// Make sure to unregister ourselves from notifications, else InfoStats 2 will try to send updates to this webpage after its unloaded.
+	window.onunload = function(){ 
+     	[IS2Weather unregisterForUpdatesWithIdentifier:widgetIdentifier]; 
+     	[IS2Weather removeRequesterForWeatherTimeInterval:widgetIdentifier];
+     	[IS2Notifications unregisterForNotificationsWithIdentifier:widgetIdentifier];
+     	[IS2Calendar unregisterForNotificationsWithIdentifier:widgetIdentifier];
+     	
+     	return null; 
+     };
+	</script>
+</body>
+</html>

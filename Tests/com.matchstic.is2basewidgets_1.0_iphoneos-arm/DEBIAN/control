@@ -1,0 +1,14 @@
+Package: com.matchstic.is2basewidgets
+Name: InfoStats 2 Base Widgets
+Version: 1.0
+Description: Widgets for JavaScript developers to base their work upon.
+Section: System
+Depends: com.matchstic.InfoStats2
+Replaces: com.matchstic.TestLockscreens, com.matchstic.TestWidgets
+Provides: com.matchstic.TestLockscreens, com.matchstic.TestWidgets
+Conflicts: com.matchstic.TestLockscreens, com.matchstic.TestWidgets
+Priority: extra
+Architecture: iphoneos-arm
+Author: Matt Clarke <matt@incendo.ws>
+dev: Matt Clarke <matt@incendo.ws>
+Maintainer: Matt Clarke <matt@incendo.ws>
