@@ -1,0 +1,14 @@
+Package: com.matchstic.WebCycript
+Name: WebCycript
+Version: 0.1
+Description: Unofficial build of WebCycript
+Section: System
+Depends: firmware (>= 6.0), cycript
+Conflicts: 
+Replaces: com.saurik.webcycript
+Priority: optional
+Architecture: iphoneos-arm
+Author: Matt Clarke <matt@incendo.ws>
+dev: Matt Clarke <matt@incendo.ws>
+Maintainer: Matt Clarke <matt@incendo.ws>
+
